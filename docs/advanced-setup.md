@@ -1,4 +1,4 @@
-# OpenClaude Advanced Setup
+# XETH--7 Advanced Setup
 
 This guide is for users who want source builds, Bun workflows, provider profiles, diagnostics, or more control over runtime behavior.
 
@@ -15,8 +15,8 @@ npm install -g @gitlawb/openclaude
 Use Bun `1.3.11` or newer for source builds on Windows. Older Bun versions can fail during `bun run build`.
 
 ```bash
-git clone https://node.gitlawb.com/z6MkqDnb7Siv3Cwj7pGJq4T5EsUisECqR8KpnDLwcaZq5TPr/openclaude.git
-cd openclaude
+git clone https://github.com/EstarinAzx/XETH--7.git
+cd XETH--7
 
 bun install
 bun run build
@@ -26,8 +26,8 @@ npm link
 ### Option C: Run directly with Bun
 
 ```bash
-git clone https://node.gitlawb.com/z6MkqDnb7Siv3Cwj7pGJq4T5EsUisECqR8KpnDLwcaZq5TPr/openclaude.git
-cd openclaude
+git clone https://github.com/EstarinAzx/XETH--7.git
+cd XETH--7
 
 bun install
 bun run dev
@@ -48,9 +48,9 @@ export OPENAI_MODEL=gpt-4o
 `codexplan` maps to GPT-5.4 on the Codex backend with high reasoning.
 `codexspark` maps to GPT-5.3 Codex Spark for faster loops.
 
-If you use the in-app provider wizard, choose `Codex OAuth` to open ChatGPT sign-in in your browser and let OpenClaude store Codex credentials securely.
+If you use the in-app provider wizard, choose `Codex OAuth` to open ChatGPT sign-in in your browser and let XETH--7 store Codex credentials securely.
 
-If you already use the Codex CLI, OpenClaude reads `~/.codex/auth.json` automatically. You can also point it elsewhere with `CODEX_AUTH_JSON_PATH` or override the token directly with `CODEX_API_KEY`.
+If you already use the Codex CLI, XETH--7 reads `~/.codex/auth.json` automatically. You can also point it elsewhere with `CODEX_AUTH_JSON_PATH` or override the token directly with `CODEX_API_KEY`.
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -59,7 +59,7 @@ export OPENAI_MODEL=codexplan
 # optional if you do not already have ~/.codex/auth.json
 export CODEX_API_KEY=...
 
-openclaude
+xeth7
 ```
 
 ### DeepSeek
@@ -87,7 +87,7 @@ OpenRouter model availability changes over time. If a model stops working, try a
 Using `ollama launch` (recommended if you have Ollama installed):
 
 ```bash
-ollama launch openclaude --model llama3.3:70b
+ollama launch xeth7 --model llama3.3:70b
 ```
 
 This handles all environment setup automatically — no env vars needed. Works with any local or cloud model available in your Ollama instance.

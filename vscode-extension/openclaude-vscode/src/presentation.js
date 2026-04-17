@@ -33,7 +33,7 @@ function buildActionModel({ canLaunchInWorkspaceRoot, workspaceProfilePath } = {
   return {
     primary: {
       id: 'launch',
-      label: 'Launch OpenClaude',
+      label: 'Launch XETH--7',
       detail: 'Use the resolved project-aware launch directory',
       tone: 'accent',
       disabled: false,
@@ -108,8 +108,8 @@ function buildControlCenterViewModel(status = {}) {
 
   return {
     header: {
-      eyebrow: 'OpenClaude Control Center',
-      title: 'Project-aware OpenClaude companion',
+      eyebrow: 'XETH--7 Control Center',
+      title: 'Project-aware XETH--7 companion',
       subtitle:
         'Useful local status, predictable launch behavior, and quick access to the workflows you actually use.',
     },
@@ -176,7 +176,7 @@ function buildControlCenterViewModel(status = {}) {
         rows: [
           {
             key: 'runtime',
-            label: 'OpenClaude executable',
+            label: 'XETH--7 executable',
             summary: runtimeSummary,
             detail: runtimeDetail,
             tone: getRuntimeTone(status.installed),

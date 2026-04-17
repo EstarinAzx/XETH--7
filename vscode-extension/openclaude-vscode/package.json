@@ -1,7 +1,7 @@
 {
   "name": "openclaude-vscode",
-  "displayName": "OpenClaude",
-  "description": "Practical VS Code companion for OpenClaude with project-aware launch behavior and a real Control Center.",
+  "displayName": "XETH--7",
+  "description": "Practical VS Code companion for XETH--7 with project-aware launch behavior and a real Control Center.",
   "version": "0.2.0",
   "publisher": "devnull-bootloader",
   "engines": {
@@ -40,60 +40,60 @@
     "commands": [
       {
         "command": "openclaude.start",
-        "title": "OpenClaude: Launch in Terminal",
-        "category": "OpenClaude"
+        "title": "XETH--7: Launch in Terminal",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.startInWorkspaceRoot",
-        "title": "OpenClaude: Launch in Workspace Root",
-        "category": "OpenClaude"
+        "title": "XETH--7: Launch in Workspace Root",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.openDocs",
-        "title": "OpenClaude: Open Repository",
-        "category": "OpenClaude"
+        "title": "XETH--7: Open Repository",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.openSetupDocs",
-        "title": "OpenClaude: Open Setup Guide",
-        "category": "OpenClaude"
+        "title": "XETH--7: Open Setup Guide",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.openWorkspaceProfile",
-        "title": "OpenClaude: Open Workspace Profile",
-        "category": "OpenClaude"
+        "title": "XETH--7: Open Workspace Profile",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.openControlCenter",
-        "title": "OpenClaude: Open Control Center",
-        "category": "OpenClaude"
+        "title": "XETH--7: Open Control Center",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.newChat",
-        "title": "OpenClaude: New Chat",
-        "category": "OpenClaude"
+        "title": "XETH--7: New Chat",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.openChat",
-        "title": "OpenClaude: Open Chat Panel",
-        "category": "OpenClaude"
+        "title": "XETH--7: Open Chat Panel",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.resumeSession",
-        "title": "OpenClaude: Resume Session",
-        "category": "OpenClaude"
+        "title": "XETH--7: Resume Session",
+        "category": "XETH--7"
       },
       {
         "command": "openclaude.abortChat",
-        "title": "OpenClaude: Abort Generation",
-        "category": "OpenClaude"
+        "title": "XETH--7: Abort Generation",
+        "category": "XETH--7"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
           "id": "openclaude",
-          "title": "OpenClaude",
+          "title": "XETH--7",
           "icon": "media/openclaude.svg"
         }
       ]
@@ -120,22 +120,22 @@
       }
     ],
     "configuration": {
-      "title": "OpenClaude",
+      "title": "XETH--7",
       "properties": {
         "openclaude.launchCommand": {
           "type": "string",
-          "default": "openclaude",
-          "description": "Command run in the integrated terminal when launching OpenClaude."
+          "default": "xeth7",
+          "description": "Command run in the integrated terminal when launching XETH--7."
         },
         "openclaude.terminalName": {
           "type": "string",
-          "default": "OpenClaude",
-          "description": "Integrated terminal tab name for OpenClaude sessions."
+          "default": "XETH--7",
+          "description": "Integrated terminal tab name for XETH--7 sessions."
         },
         "openclaude.useOpenAIShim": {
           "type": "boolean",
           "default": false,
-          "description": "Optionally set CLAUDE_CODE_USE_OPENAI=1 in launched OpenClaude terminals."
+          "description": "Optionally set CLAUDE_CODE_USE_OPENAI=1 in launched XETH--7 terminals."
         },
         "openclaude.permissionMode": {
           "type": "string",
@@ -153,7 +153,7 @@
     },
     "themes": [
       {
-        "label": "OpenClaude Terminal Black",
+        "label": "XETH--7 Terminal Black",
         "uiTheme": "vs-dark",
         "path": "./themes/OpenClaude-Terminal-Black.json"
       }
@@ -165,7 +165,7 @@
     "package": "npx @vscode/vsce package --no-dependencies"
   },
   "keywords": [
-    "openclaude",
+    "xeth7",
     "terminal",
     "theme",
     "cli",
@@ -173,7 +173,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gitlawb/openclaude"
+    "url": "https://github.com/EstarinAzx/XETH--7"
   },
   "license": "MIT"
 }

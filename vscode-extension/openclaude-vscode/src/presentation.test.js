@@ -50,7 +50,7 @@ test('buildActionModel hides workspace-profile action when no profile exists', (
 
   assert.deepEqual(model.primary, {
     id: 'launch',
-    label: 'Launch OpenClaude',
+    label: 'Launch XETH--7',
     detail: 'Use the resolved project-aware launch directory',
     tone: 'accent',
     disabled: false,
@@ -78,9 +78,9 @@ test('buildActionModel includes workspace-profile action when a profile exists',
 function createStatus(overrides = {}) {
   return {
     installed: true,
-    executable: 'openclaude',
-    launchCommand: 'openclaude --project-aware',
-    terminalName: 'OpenClaude',
+    executable: 'xeth7',
+    launchCommand: 'xeth7 --project-aware',
+    terminalName: 'XETH--7',
     shimEnabled: false,
     workspaceFolder: '/workspace/openclaude',
     workspaceSourceLabel: 'active editor workspace',
@@ -183,9 +183,9 @@ test('buildControlCenterViewModel uses a concise project summary before full pat
       rows: [
         {
           key: 'runtime',
-          label: 'OpenClaude executable',
+            label: 'XETH--7 executable',
           summary: 'Installed',
-          detail: 'openclaude',
+            detail: 'xeth7',
           tone: 'positive',
         },
         {
@@ -208,8 +208,8 @@ test('buildControlCenterViewModel keeps launch command only in summary cards', (
   assert.deepEqual(viewModel.summaryCards.find(card => card.key === 'launchCommand'), {
     key: 'launchCommand',
     label: 'Launch command',
-    value: 'openclaude --project-aware',
-    detail: 'Integrated terminal: OpenClaude',
+    value: 'xeth7 --project-aware',
+    detail: 'Integrated terminal: XETH--7',
   });
 
   assert.equal(

@@ -1,4 +1,4 @@
-# OpenClaude Quick Start for Windows
+# XETH--7 Quick Start for Windows
 
 This guide uses Windows PowerShell.
 
@@ -15,7 +15,7 @@ node --version
 npm --version
 ```
 
-## 2. Install OpenClaude
+## 2. Install XETH--7
 
 ```powershell
 npm install -g @gitlawb/openclaude
@@ -32,7 +32,7 @@ $env:CLAUDE_CODE_USE_OPENAI="1"
 $env:OPENAI_API_KEY="sk-your-key-here"
 $env:OPENAI_MODEL="gpt-4o"
 
-openclaude
+xeth7
 ```
 
 ### Option B: DeepSeek
@@ -43,7 +43,7 @@ $env:OPENAI_API_KEY="sk-your-key-here"
 $env:OPENAI_BASE_URL="https://api.deepseek.com/v1"
 $env:OPENAI_MODEL="deepseek-chat"
 
-openclaude
+xeth7
 ```
 
 ### Option C: Ollama
@@ -61,7 +61,7 @@ $env:CLAUDE_CODE_USE_OPENAI="1"
 $env:OPENAI_BASE_URL="http://localhost:11434/v1"
 $env:OPENAI_MODEL="llama3.1:8b"
 
-openclaude
+xeth7
 ```
 
 No API key is needed for Ollama local models.
@@ -86,19 +86,19 @@ $env:OPENAI_BASE_URL="http://localhost:1234/v1"
 $env:OPENAI_MODEL="your-model-name"
 # $env:OPENAI_API_KEY="lmstudio"  # optional: some users need a dummy key
 
-openclaude
+xeth7
 ```
 
 Replace `your-model-name` with the model name shown in LM Studio.
 
 No API key is needed for LM Studio local models (but uncomment the `OPENAI_API_KEY` line if you hit auth errors).
 
-## 4. If `openclaude` Is Not Found
+## 4. If `xeth7` Is Not Found
 
 Close PowerShell, open a new one, and try again:
 
 ```powershell
-openclaude
+xeth7
 ```
 
 ## 5. If Your Provider Fails
@@ -124,13 +124,13 @@ Check the basics:
 - make sure a model is loaded in LM Studio
 - make sure the model name matches what you set in `OPENAI_MODEL`
 
-## 6. Updating OpenClaude
+## 6. Updating XETH--7
 
 ```powershell
 npm install -g @gitlawb/openclaude@latest
 ```
 
-## 7. Uninstalling OpenClaude
+## 7. Uninstalling XETH--7
 
 ```powershell
 npm uninstall -g @gitlawb/openclaude

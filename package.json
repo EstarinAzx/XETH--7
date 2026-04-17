@@ -1,7 +1,7 @@
 {
   "name": "@gitlawb/openclaude",
   "version": "0.3.0",
-  "description": "Claude Code opened to any LLM — OpenAI, Gemini, DeepSeek, Ollama, and 200+ models",
+  "description": "XETH--7 is a cyberpunk coding-agent CLI for cloud and local model providers",
   "type": "module",
   "bin": {
     "openclaude": "./bin/openclaude",
@@ -141,7 +141,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gitlawb/openclaude.git"
+    "url": "https://github.com/EstarinAzx/XETH--7.git"
   },
   "keywords": [
     "claude-code",

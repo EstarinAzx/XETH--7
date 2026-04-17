@@ -16,8 +16,8 @@ const { ChatController, OpenClaudeChatViewProvider, OpenClaudeChatPanelManager }
 const { SessionManager } = require('./chat/sessionManager');
 const { DiffContentProvider, SCHEME: DIFF_SCHEME } = require('./chat/diffController');
 
-const OPENCLAUDE_REPO_URL = 'https://github.com/Gitlawb/openclaude';
-const OPENCLAUDE_SETUP_URL = 'https://github.com/Gitlawb/openclaude/blob/main/README.md#quick-start';
+const OPENCLAUDE_REPO_URL = 'https://github.com/EstarinAzx/XETH--7';
+const OPENCLAUDE_SETUP_URL = 'https://github.com/EstarinAzx/XETH--7/blob/main/README.md#quick-start';
 const PROFILE_FILE_NAME = '.openclaude-profile.json';
 
 function escapeHtml(value) {
@@ -205,8 +205,8 @@ function readWorkspaceProfile(profilePath) {
 
 async function collectControlCenterState() {
   const configured = vscode.workspace.getConfiguration('openclaude');
-  const launchCommand = configured.get('launchCommand', 'openclaude');
-  const terminalName = configured.get('terminalName', 'OpenClaude');
+  const launchCommand = configured.get('launchCommand', 'xeth7');
+  const terminalName = configured.get('terminalName', 'XETH--7');
   const shimEnabled = configured.get('useOpenAIShim', false);
   const executable = getExecutableFromCommand(launchCommand);
   const launchWorkspace = resolveLaunchWorkspace();
@@ -265,8 +265,8 @@ async function collectControlCenterState() {
 async function launchOpenClaude(options = {}) {
   const { requireWorkspace = false } = options;
   const configured = vscode.workspace.getConfiguration('openclaude');
-  const launchCommand = configured.get('launchCommand', 'openclaude');
-  const terminalName = configured.get('terminalName', 'OpenClaude');
+  const launchCommand = configured.get('launchCommand', 'xeth7');
+  const terminalName = configured.get('terminalName', 'XETH--7');
   const shimEnabled = configured.get('useOpenAIShim', false);
   const executable = getExecutableFromCommand(launchCommand);
   const launchWorkspace = resolveLaunchWorkspace();
@@ -291,7 +291,7 @@ async function launchOpenClaude(options = {}) {
 
   if (!installed) {
     const action = await vscode.window.showErrorMessage(
-      `OpenClaude command not found: ${executable}. Install it with: npm install -g @gitlawb/openclaude`,
+      `XETH--7 command not found: ${executable}. Build the repo and make sure the xeth7 launcher is on PATH.`,
       'Open Setup Guide',
       'Open Repository',
     );
@@ -423,7 +423,7 @@ function getWorkspaceRootActionDetail(status, fallbackDetail) {
   }
 
   if (status.launchActionsShareTargetReason === 'relative-launch-command') {
-    return `Same workspace-root target as Launch OpenClaude because the relative command resolves from the workspace root · ${status.workspaceRootCwdLabel}`;
+    return `Same workspace-root target as Launch XETH--7 because the relative command resolves from the workspace root · ${status.workspaceRootCwdLabel}`;
   }
 
   return `Always starts at the workspace root · ${status.workspaceRootCwdLabel}`;
@@ -841,7 +841,7 @@ function renderControlCenterHtml(status, options = {}) {
         <div class="hero-top">
           <div class="brand">
             <div class="eyebrow">${escapeHtml(viewModel.header.eyebrow)}</div>
-            <div class="wordmark" aria-label="OpenClaude wordmark">Open<span class="wordmark-accent">Claude</span></div>
+              <div class="wordmark" aria-label="XETH--7 wordmark">XETH<span class="wordmark-accent">--7</span></div>
             <div class="headline">
               <h1 class="headline-title" id="control-center-title">${escapeHtml(viewModel.header.title)}</h1>
               <p class="headline-subtitle">${escapeHtml(viewModel.header.subtitle)}</p>
@@ -881,11 +881,11 @@ function renderControlCenterHtml(status, options = {}) {
             </button>
             <button class="support-link" id="repo" type="button">
               <span class="support-link-label">Open Repository</span>
-              <span class="summary-detail">Browse the upstream OpenClaude project.</span>
+              <span class="summary-detail">Browse the XETH--7 project.</span>
             </button>
             <button class="support-link" id="commands" type="button">
               <span class="support-link-label">Open Command Palette</span>
-              <span class="summary-detail">Access VS Code and OpenClaude commands quickly.</span>
+              <span class="summary-detail">Access VS Code and XETH--7 commands quickly.</span>
             </button>
           </div>
         </section>
@@ -1073,24 +1073,24 @@ function activate(context) {
     vscode.StatusBarAlignment.Right,
     100,
   );
-  statusBarItem.text = '$(comment-discussion) OpenClaude';
-  statusBarItem.tooltip = 'Open OpenClaude Chat';
+  statusBarItem.text = '$(comment-discussion) XETH--7';
+  statusBarItem.tooltip = 'Open XETH--7 Chat';
   statusBarItem.command = 'openclaude.openChat';
   statusBarItem.show();
 
   chatController.onDidChangeState((state) => {
     switch (state) {
       case 'streaming':
-        statusBarItem.text = '$(sync~spin) OpenClaude';
-        statusBarItem.tooltip = 'OpenClaude is generating...';
+        statusBarItem.text = '$(sync~spin) XETH--7';
+        statusBarItem.tooltip = 'XETH--7 is generating...';
         break;
       case 'connected':
-        statusBarItem.text = '$(comment-discussion) OpenClaude';
-        statusBarItem.tooltip = 'OpenClaude connected';
+        statusBarItem.text = '$(comment-discussion) XETH--7';
+        statusBarItem.tooltip = 'XETH--7 connected';
         break;
       default:
-        statusBarItem.text = '$(comment-discussion) OpenClaude';
-        statusBarItem.tooltip = 'Open OpenClaude Chat';
+        statusBarItem.text = '$(comment-discussion) XETH--7';
+        statusBarItem.tooltip = 'Open XETH--7 Chat';
         break;
     }
   });
