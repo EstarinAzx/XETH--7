@@ -26,9 +26,9 @@ test('scanMemoryFiles finds .md files at shallow depth', async () => {
   expect(result[0].filename).toBe('note.md')
 })
 
-test('scanMemoryFiles ignores MEMORY.md', async () => {
+test('scanMemoryFiles ignores index.md', async () => {
   tempDir = await mkdtemp(join(tmpdir(), 'memoryScan-'))
-  await writeFile(join(tempDir, 'MEMORY.md'), '# index')
+  await writeFile(join(tempDir, 'index.md'), '# index')
   await writeFile(join(tempDir, 'user_role.md'), '---\nname: role\ntype: user\n---\nContent')
 
   const controller = new AbortController()
@@ -36,6 +36,25 @@ test('scanMemoryFiles ignores MEMORY.md', async () => {
 
   expect(result.length).toBe(1)
   expect(result[0].filename).toBe('user_role.md')
+})
+
+test('scanMemoryFiles includes knowledge notes and ignores daily logs', async () => {
+  tempDir = await mkdtemp(join(tmpdir(), 'memoryScan-'))
+  await mkdir(join(tempDir, 'knowledge', 'concepts'), { recursive: true })
+  await mkdir(join(tempDir, 'daily'), { recursive: true })
+  await writeFile(
+    join(tempDir, 'knowledge', 'concepts', 'branch-workflow.md'),
+    '---\ntitle: Branch Workflow\ndescription: Work stays on xeth-7-dev\ntype: feedback\n---\nContent',
+  )
+  await writeFile(join(tempDir, 'daily', '2026-04-17.md'), '- learned something')
+
+  const controller = new AbortController()
+  const result = await scanMemoryFiles(tempDir, controller.signal)
+
+  expect(result.map(r => r.filename)).toContain(
+    join('knowledge', 'concepts', 'branch-workflow.md'),
+  )
+  expect(result.map(r => r.filename)).not.toContain(join('daily', '2026-04-17.md'))
 })
 
 test('scanMemoryFiles does not return .md files nested beyond max depth', async () => {

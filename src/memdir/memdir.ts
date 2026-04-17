@@ -1,7 +1,11 @@
 import { feature } from 'bun:bundle'
 import { join } from 'path'
 import { getFsImplementation } from '../utils/fsOperations.js'
-import { getAutoMemPath, isAutoMemoryEnabled } from './paths.js'
+import {
+  AUTO_MEM_KNOWLEDGE_CATEGORIES,
+  getAutoMemPath,
+  isAutoMemoryEnabled,
+} from './paths.js'
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 const teamMemPaths = feature('TEAMMEM')
@@ -24,14 +28,19 @@ import { formatFileSize } from '../utils/format.js'
 import { getProjectDir } from '../utils/sessionStorage.js'
 import { getInitialSettings } from '../utils/settings/settings.js'
 import {
+  DIRECT_MEMORY_WRITE_WORKFLOW_SECTION,
+  KNOWLEDGE_ARTICLE_FORMAT_SECTION,
+  KNOWLEDGE_GRAPH_STRUCTURE_SECTION,
+  KNOWLEDGE_ROUTING_SECTION,
   MEMORY_FRONTMATTER_EXAMPLE,
+  REMEMBER_FORGET_BEHAVIOR_SECTION,
   TRUSTING_RECALL_SECTION,
   TYPES_SECTION_INDIVIDUAL,
   WHAT_NOT_TO_SAVE_SECTION,
   WHEN_TO_ACCESS_SECTION,
 } from './memoryTypes.js'
 
-export const ENTRYPOINT_NAME = 'MEMORY.md'
+export const ENTRYPOINT_NAME = 'index.md'
 export const MAX_ENTRYPOINT_LINES = 200
 // ~125 chars/line at 200 lines. At p97 today; catches long-line indexes that
 // slip past the line cap (p100 observed: 197KB under 200 lines).
@@ -114,9 +123,17 @@ const teamMemPrompts = feature('TEAMMEM')
  * Harness guarantees the directory exists via ensureMemoryDirExists().
  */
 export const DIR_EXISTS_GUIDANCE =
-  'This directory already exists — write to it directly with the Write tool (do not run mkdir or check for its existence).'
+  'This directory already exists — write to it directly with the Write tool. Do NOT run Bash to ls/test/stat it, and do NOT run mkdir or any existence-check command first.'
 export const DIRS_EXIST_GUIDANCE =
-  'Both directories already exist — write to them directly with the Write tool (do not run mkdir or check for their existence).'
+  'Both directories already exist — write to them directly with the Write tool. Do NOT run Bash to ls/test/stat them, and do NOT run mkdir or any existence-check command first.'
+
+function getEntrypointPath(memoryDir: string): string {
+  return join(memoryDir, ENTRYPOINT_NAME)
+}
+
+function getDailyPathPattern(memoryDir: string): string {
+  return join(memoryDir, 'daily', 'YYYY-MM-DD.md')
+}
 
 /**
  * Ensure a memory directory exists. Idempotent — called from loadMemoryPrompt
@@ -128,8 +145,16 @@ export const DIRS_EXIST_GUIDANCE =
  */
 export async function ensureMemoryDirExists(memoryDir: string): Promise<void> {
   const fs = getFsImplementation()
+  const dirs = [
+    memoryDir,
+    join(memoryDir, 'daily'),
+    join(memoryDir, 'knowledge'),
+    ...AUTO_MEM_KNOWLEDGE_CATEGORIES.map(category =>
+      join(memoryDir, 'knowledge', category),
+    ),
+  ]
   try {
-    await fs.mkdir(memoryDir)
+    await Promise.all(dirs.map(dir => fs.mkdir(dir)))
   } catch (e) {
     // fs.mkdir already handles EEXIST internally. Anything reaching here is
     // a real problem (EACCES/EPERM/EROFS) — log so --debug shows why. Prompt
@@ -202,14 +227,20 @@ export function buildMemoryLines(
   extraGuidelines?: string[],
   skipIndex = false,
 ): string[] {
+  const knowledgeDir = join(memoryDir, 'knowledge')
+  const dailyPathPattern = getDailyPathPattern(memoryDir)
   const howToSave = skipIndex
     ? [
         '## How to save memories',
         '',
-        'Write each memory to its own file (e.g., `user_role.md`, `feedback_testing.md`) using this frontmatter format:',
+        `Write each durable memory as its own knowledge note inside \`${knowledgeDir}\` using this frontmatter format:`,
         '',
         ...MEMORY_FRONTMATTER_EXAMPLE,
         '',
+        `- Place the note in the best matching category folder under \`${knowledgeDir}\``,
+        `- Update \`${ENTRYPOINT_NAME}\` with a one-line wikilink to the note, for example: \`- [[knowledge/concepts/branch-workflow]] — ongoing work stays on xeth-7-dev\``,
+        `- Append a short bullet to today's daily log at \`${dailyPathPattern}\``,
+        '- Use wikilinks in note bodies to connect related ideas for Obsidian graph view',
         '- Keep the name, description, and type fields in memory files up-to-date with the content',
         '- Organize memory semantically by topic, not chronologically',
         '- Update or remove memories that turn out to be wrong or outdated',
@@ -218,15 +249,18 @@ export function buildMemoryLines(
     : [
         '## How to save memories',
         '',
-        'Saving a memory is a two-step process:',
+        'Saving a memory is a three-step process:',
         '',
-        '**Step 1** — write the memory to its own file (e.g., `user_role.md`, `feedback_testing.md`) using this frontmatter format:',
+        `**Step 1** — write the durable knowledge note to the best matching folder under \`${knowledgeDir}\` using this frontmatter format:`,
         '',
         ...MEMORY_FRONTMATTER_EXAMPLE,
         '',
-        `**Step 2** — add a pointer to that file in \`${ENTRYPOINT_NAME}\`. \`${ENTRYPOINT_NAME}\` is an index, not a memory — each entry should be one line, under ~150 characters: \`- [Title](file.md) — one-line hook\`. It has no frontmatter. Never write memory content directly into \`${ENTRYPOINT_NAME}\`.`,
+        `**Step 2** — add a pointer to that note in \`${ENTRYPOINT_NAME}\`. \`${ENTRYPOINT_NAME}\` is an index, not a memory — each entry should be one line, under ~150 characters, and should use a wikilink such as \`- [[knowledge/concepts/branch-workflow]] — ongoing work stays on xeth-7-dev\`. Never write full memory content directly into \`${ENTRYPOINT_NAME}\`.`,
+        '',
+        `**Step 3** — append a brief note to today's daily log at \`${dailyPathPattern}\` so the raw chronology is preserved.`,
         '',
         `- \`${ENTRYPOINT_NAME}\` is always loaded into your conversation context — lines after ${MAX_ENTRYPOINT_LINES} will be truncated, so keep the index concise`,
+        '- Use wikilinks in note bodies to connect related ideas for Obsidian graph view',
         '- Keep the name, description, and type fields in memory files up-to-date with the content',
         '- Organize memory semantically by topic, not chronologically',
         '- Update or remove memories that turn out to be wrong or outdated',
@@ -244,6 +278,12 @@ export function buildMemoryLines(
     '',
     ...TYPES_SECTION_INDIVIDUAL,
     ...WHAT_NOT_TO_SAVE_SECTION,
+    '',
+    ...KNOWLEDGE_GRAPH_STRUCTURE_SECTION,
+    ...KNOWLEDGE_ROUTING_SECTION,
+    ...KNOWLEDGE_ARTICLE_FORMAT_SECTION,
+    ...REMEMBER_FORGET_BEHAVIOR_SECTION,
+    ...DIRECT_MEMORY_WRITE_WORKFLOW_SECTION,
     '',
     ...howToSave,
     '',
@@ -266,7 +306,7 @@ export function buildMemoryLines(
 }
 
 /**
- * Build the typed-memory prompt with MEMORY.md content included.
+ * Build the typed-memory prompt with index.md content included.
  * Used by agent memory (which has no getClaudeMds() equivalent).
  */
 export function buildMemoryPrompt(params: {
@@ -276,7 +316,7 @@ export function buildMemoryPrompt(params: {
 }): string {
   const { displayName, memoryDir, extraGuidelines } = params
   const fs = getFsImplementation()
-  const entrypoint = memoryDir + ENTRYPOINT_NAME
+  const entrypoint = getEntrypointPath(memoryDir)
 
   // Directory creation is the caller's responsibility (loadMemoryPrompt /
   // loadAgentMemoryPrompt). Builders only read, they don't mkdir.
@@ -308,7 +348,7 @@ export function buildMemoryPrompt(params: {
     lines.push(
       `## ${ENTRYPOINT_NAME}`,
       '',
-      `Your ${ENTRYPOINT_NAME} is currently empty. When you save new memories, they will appear here.`,
+      `Your ${ENTRYPOINT_NAME} is currently empty. When you save new memories, add short wikilinks to durable knowledge notes here.`,
     )
   }
 
@@ -319,9 +359,9 @@ export function buildMemoryPrompt(params: {
  * Assistant-mode daily-log prompt. Gated behind feature('KAIROS').
  *
  * Assistant sessions are effectively perpetual, so the agent writes memories
- * append-only to a date-named log file rather than maintaining MEMORY.md as
+ * append-only to a date-named log file rather than maintaining index.md as
  * a live index. A separate nightly /dream skill distills logs into topic
- * files + MEMORY.md. MEMORY.md is still loaded into context (via claudemd.ts)
+ * files + index.md. index.md is still loaded into context (via claudemd.ts)
  * as the distilled index — this prompt only changes where NEW memories go.
  */
 function buildAssistantDailyLogPrompt(skipIndex = false): string {
@@ -332,7 +372,7 @@ function buildAssistantDailyLogPrompt(skipIndex = false): string {
   // date_change attachment (appended at the tail on midnight rollover) rather
   // than the user-context message — the latter is intentionally left stale to
   // preserve the prompt cache prefix across midnight.
-  const logPathPattern = join(memoryDir, 'logs', 'YYYY', 'MM', 'YYYY-MM-DD.md')
+  const logPathPattern = getDailyPathPattern(memoryDir)
 
   const lines: string[] = [
     '# auto memory',
@@ -345,7 +385,7 @@ function buildAssistantDailyLogPrompt(skipIndex = false): string {
     '',
     "Substitute today's date (from `currentDate` in your context) for `YYYY-MM-DD`. When the date rolls over mid-session, start appending to the new day's file.",
     '',
-    'Write each entry as a short timestamped bullet. Create the file (and parent directories) on first write if it does not exist. Do not rewrite or reorganize the log — it is append-only. A separate nightly process distills these logs into `MEMORY.md` and topic files.',
+    'Write each entry as a short timestamped bullet. Create the file on first write if it does not exist. Do not rewrite or reorganize the log — it is append-only. A separate nightly process distills these logs into `index.md` and durable knowledge notes under `knowledge/`.',
     '',
     '## What to log',
     '- User corrections and preferences ("use bun, not npm"; "stop summarizing diffs")',
@@ -383,21 +423,30 @@ export function buildSearchingPastContextSection(autoMemDir: string): string[] {
   // calls them from inside REPL scripts, so the grep shell form is what it
   // will write in the script anyway.
   const embedded = hasEmbeddedSearchTools() || isReplModeEnabled()
-  const memSearch = embedded
-    ? `grep -rn "<search term>" ${autoMemDir} --include="*.md"`
-    : `${GREP_TOOL_NAME} with pattern="<search term>" path="${autoMemDir}" glob="*.md"`
+  const knowledgeDir = join(autoMemDir, 'knowledge')
+  const dailyDir = join(autoMemDir, 'daily')
+  const knowledgeSearch = embedded
+    ? `grep -rn "<search term>" "${knowledgeDir}" --include="*.md"`
+    : `${GREP_TOOL_NAME} with pattern="<search term>" path="${knowledgeDir}" glob="*.md"`
+  const dailySearch = embedded
+    ? `grep -rn "<search term>" "${dailyDir}" --include="*.md"`
+    : `${GREP_TOOL_NAME} with pattern="<search term>" path="${dailyDir}" glob="*.md"`
   const transcriptSearch = embedded
-    ? `grep -rn "<search term>" ${projectDir}/ --include="*.jsonl"`
+    ? `grep -rn "<search term>" "${projectDir}/" --include="*.jsonl"`
     : `${GREP_TOOL_NAME} with pattern="<search term>" path="${projectDir}/" glob="*.jsonl"`
   return [
     '## Searching past context',
     '',
     'When looking for past context:',
-    '1. Search topic files in your memory directory:',
+    '1. Search durable knowledge notes first:',
     '```',
-    memSearch,
+    knowledgeSearch,
     '```',
-    '2. Session transcript logs (last resort — large files, slow):',
+    '2. Check daily logs if you need chronology or very recent context:',
+    '```',
+    dailySearch,
+    '```',
+    '3. Session transcript logs (last resort — large files, slow):',
     '```',
     transcriptSearch,
     '```',
@@ -430,6 +479,7 @@ export async function loadMemoryPrompt(): Promise<string | null> {
   // means the !autoEnabled case falls through to the tengu_memdir_disabled
   // telemetry block below, matching the non-KAIROS path.
   if (feature('KAIROS') && autoEnabled && getKairosActive()) {
+    await ensureMemoryDirExists(getAutoMemPath())
     logMemoryDirCounts(getAutoMemPath(), {
       memory_type:
         'auto' as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS,

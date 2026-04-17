@@ -460,7 +460,7 @@ export function initExtractMemories(): void {
         logForDebugging('[extractMemories] no memories saved this run')
       }
 
-      // Index file updates are mechanical — the agent touches MEMORY.md to add
+      // Index file updates are mechanical — the agent touches index.md to add
       // a topic link, but the user-visible "memory" is the topic file itself.
       const memoryPaths = writtenPaths.filter(
         p => basename(p) !== ENTRYPOINT_NAME,

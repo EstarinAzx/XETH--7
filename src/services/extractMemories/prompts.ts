@@ -11,7 +11,12 @@
 
 import { feature } from 'bun:bundle'
 import {
+  DIRECT_MEMORY_WRITE_WORKFLOW_SECTION,
+  KNOWLEDGE_ARTICLE_FORMAT_SECTION,
+  KNOWLEDGE_GRAPH_STRUCTURE_SECTION,
+  KNOWLEDGE_ROUTING_SECTION,
   MEMORY_FRONTMATTER_EXAMPLE,
+  REMEMBER_FORGET_BEHAVIOR_SECTION,
   TYPES_SECTION_COMBINED,
   TYPES_SECTION_INDIVIDUAL,
   WHAT_NOT_TO_SAVE_SECTION,
@@ -38,6 +43,8 @@ function opener(newMessageCount: number, existingMemories: string): string {
     '',
     `You have a limited turn budget. ${FILE_EDIT_TOOL_NAME} requires a prior ${FILE_READ_TOOL_NAME} of the same file, so the efficient strategy is: turn 1 — issue all ${FILE_READ_TOOL_NAME} calls in parallel for every file you might update; turn 2 — issue all ${FILE_WRITE_TOOL_NAME}/${FILE_EDIT_TOOL_NAME} calls in parallel. Do not interleave reads and writes across multiple turns.`,
     '',
+    `Do NOT use ${BASH_TOOL_NAME} to check whether memory files or directories exist. Never run shell probes like ls/test/stat/printf yes-no against the memory paths. If you need to inspect a known note, use ${FILE_READ_TOOL_NAME}. If a file should be created, use ${FILE_WRITE_TOOL_NAME} directly.`,
+    '',
     `You MUST only use content from the last ~${newMessageCount} messages to update your persistent memories. Do not waste any turns attempting to investigate or verify that content further — no grepping source files, no reading code to confirm a pattern exists, no git commands.` +
       manifest,
   ].join('\n')
@@ -52,14 +59,20 @@ export function buildExtractAutoOnlyPrompt(
   existingMemories: string,
   skipIndex = false,
 ): string {
+  const knowledgeDir = 'knowledge/'
+  const dailyPath = 'daily/YYYY-MM-DD.md'
   const howToSave = skipIndex
     ? [
         '## How to save memories',
         '',
-        'Write each memory to its own file (e.g., `user_role.md`, `feedback_testing.md`) using this frontmatter format:',
+        `Write each durable memory as its own knowledge note under \`${knowledgeDir}\` using this frontmatter format:`,
         '',
         ...MEMORY_FRONTMATTER_EXAMPLE,
         '',
+        `- Place the note in the best matching category folder under \`${knowledgeDir}\``,
+        '- Update `index.md` with a one-line wikilink to the note',
+        `- Append a short bullet to today's daily log at \`${dailyPath}\``,
+        '- Use wikilinks in note bodies to connect related ideas for Obsidian graph view',
         '- Organize memory semantically by topic, not chronologically',
         '- Update or remove memories that turn out to be wrong or outdated',
         '- Do not write duplicate memories. First check if there is an existing memory you can update before writing a new one.',
@@ -67,15 +80,18 @@ export function buildExtractAutoOnlyPrompt(
     : [
         '## How to save memories',
         '',
-        'Saving a memory is a two-step process:',
+        'Saving a memory is a three-step process:',
         '',
-        '**Step 1** — write the memory to its own file (e.g., `user_role.md`, `feedback_testing.md`) using this frontmatter format:',
+        `**Step 1** — write the durable knowledge note to the best matching folder under \`${knowledgeDir}\` using this frontmatter format:`,
         '',
         ...MEMORY_FRONTMATTER_EXAMPLE,
         '',
-        '**Step 2** — add a pointer to that file in `MEMORY.md`. `MEMORY.md` is an index, not a memory — each entry should be one line, under ~150 characters: `- [Title](file.md) — one-line hook`. It has no frontmatter. Never write memory content directly into `MEMORY.md`.',
+        '**Step 2** — add a pointer to that note in `index.md`. `index.md` is an index, not a memory — each entry should be one line, under ~150 characters, and should use a wikilink such as `- [[knowledge/concepts/branch-workflow]] — ongoing work stays on xeth-7-dev`.',
         '',
-        '- `MEMORY.md` is always loaded into your system prompt — lines after 200 will be truncated, so keep the index concise',
+        `**Step 3** — append a brief note to today's daily log at \`${dailyPath}\` so the raw chronology is preserved.`,
+        '',
+        '- `index.md` is always loaded into your system prompt — lines after 200 will be truncated, so keep the index concise',
+        '- Use wikilinks in note bodies to connect related ideas for Obsidian graph view',
         '- Organize memory semantically by topic, not chronologically',
         '- Update or remove memories that turn out to be wrong or outdated',
         '- Do not write duplicate memories. First check if there is an existing memory you can update before writing a new one.',
@@ -88,6 +104,12 @@ export function buildExtractAutoOnlyPrompt(
     '',
     ...TYPES_SECTION_INDIVIDUAL,
     ...WHAT_NOT_TO_SAVE_SECTION,
+    '',
+    ...KNOWLEDGE_GRAPH_STRUCTURE_SECTION,
+    ...KNOWLEDGE_ROUTING_SECTION,
+    ...KNOWLEDGE_ARTICLE_FORMAT_SECTION,
+    ...REMEMBER_FORGET_BEHAVIOR_SECTION,
+    ...DIRECT_MEMORY_WRITE_WORKFLOW_SECTION,
     '',
     ...howToSave,
   ].join('\n')
@@ -111,14 +133,19 @@ export function buildExtractCombinedPrompt(
     )
   }
 
+  const knowledgeDir = 'knowledge/'
+  const dailyPath = 'daily/YYYY-MM-DD.md'
   const howToSave = skipIndex
     ? [
         '## How to save memories',
         '',
-        "Write each memory to its own file in the chosen directory (private or team, per the type's scope guidance) using this frontmatter format:",
+        `Write each durable memory as its own knowledge note under the chosen directory's \`${knowledgeDir}\` subtree (private or team, per the type's scope guidance) using this frontmatter format:`,
         '',
         ...MEMORY_FRONTMATTER_EXAMPLE,
         '',
+        '- Update the matching `index.md` with a one-line wikilink to the note',
+        `- Append a short bullet to today's daily log at \`${dailyPath}\` in the same memory root`,
+        '- Use wikilinks in note bodies to connect related ideas for Obsidian graph view',
         '- Organize memory semantically by topic, not chronologically',
         '- Update or remove memories that turn out to be wrong or outdated',
         '- Do not write duplicate memories. First check if there is an existing memory you can update before writing a new one.',
@@ -126,15 +153,18 @@ export function buildExtractCombinedPrompt(
     : [
         '## How to save memories',
         '',
-        'Saving a memory is a two-step process:',
+        'Saving a memory is a three-step process:',
         '',
-        "**Step 1** — write the memory to its own file in the chosen directory (private or team, per the type's scope guidance) using this frontmatter format:",
+        `**Step 1** — write the durable knowledge note to the best matching folder under the chosen directory's \`${knowledgeDir}\` subtree (private or team, per the type's scope guidance) using this frontmatter format:`,
         '',
         ...MEMORY_FRONTMATTER_EXAMPLE,
         '',
-        "**Step 2** — add a pointer to that file in the same directory's `MEMORY.md`. Each directory (private and team) has its own `MEMORY.md` index — each entry should be one line, under ~150 characters: `- [Title](file.md) — one-line hook`. They have no frontmatter. Never write memory content directly into a `MEMORY.md`.",
+        "**Step 2** — add a pointer to that note in the same directory's `index.md`. Each directory (private and team) has its own `index.md` index — each entry should be one line, under ~150 characters, and should use a wikilink such as `- [[knowledge/connections/order-payment-flow]] — ties checkout failures to payment retries`. Never write full memory content directly into an index.",
         '',
-        '- Both `MEMORY.md` indexes are loaded into your system prompt — lines after 200 will be truncated, so keep them concise',
+        `**Step 3** — append a brief note to today's daily log at \`${dailyPath}\` in the same memory root.`,
+        '',
+        '- Both `index.md` indexes are loaded into your system prompt — lines after 200 will be truncated, so keep them concise',
+        '- Use wikilinks in note bodies to connect related ideas for Obsidian graph view',
         '- Organize memory semantically by topic, not chronologically',
         '- Update or remove memories that turn out to be wrong or outdated',
         '- Do not write duplicate memories. First check if there is an existing memory you can update before writing a new one.',
@@ -148,6 +178,12 @@ export function buildExtractCombinedPrompt(
     ...TYPES_SECTION_COMBINED,
     ...WHAT_NOT_TO_SAVE_SECTION,
     '- You MUST avoid saving sensitive data within shared team memories. For example, never save API keys or user credentials.',
+    '',
+    ...KNOWLEDGE_GRAPH_STRUCTURE_SECTION,
+    ...KNOWLEDGE_ROUTING_SECTION,
+    ...KNOWLEDGE_ARTICLE_FORMAT_SECTION,
+    ...REMEMBER_FORGET_BEHAVIOR_SECTION,
+    ...DIRECT_MEMORY_WRITE_WORKFLOW_SECTION,
     '',
     ...howToSave,
   ].join('\n')

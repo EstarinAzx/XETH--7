@@ -195,6 +195,101 @@ export const WHAT_NOT_TO_SAVE_SECTION: readonly string[] = [
 ]
 
 /**
+ * Obsidian-friendly knowledge graph storage guidance.
+ */
+export const KNOWLEDGE_GRAPH_STRUCTURE_SECTION: readonly string[] = [
+  '## Knowledge base structure',
+  '',
+  'Organize memories as an Obsidian-friendly knowledge graph rather than a pile of loose markdown files.',
+  '',
+  'Use this directory layout inside the memory directory:',
+  '```text',
+  'memory/',
+  '├── index.md',
+  '├── daily/',
+  '│   └── YYYY-MM-DD.md',
+  '└── knowledge/',
+  '    ├── concepts/',
+  '    ├── connections/',
+  '    ├── people/',
+  '    ├── decisions/',
+  '    ├── qa/',
+  '    └── tools/',
+  '```',
+  '',
+  '- `index.md` is the top-level map of durable knowledge worth recalling later.',
+  '- `daily/YYYY-MM-DD.md` is a lightweight activity log for today\'s new learnings and confirmations.',
+  '- `knowledge/` stores the durable notes that should form backlinks and graph edges in Obsidian.',
+  '- Prefer updating an existing knowledge note over creating another overlapping one.',
+]
+
+export const KNOWLEDGE_ROUTING_SECTION: readonly string[] = [
+  '## Routing rules — classify before you save',
+  '',
+  'Choose the FIRST category that fits:',
+  '1. Person-specific context → `knowledge/people/`',
+  '2. Tool/library/service context → `knowledge/tools/`',
+  '3. How-to / runbook / direct answer → `knowledge/qa/`',
+  '4. Decision with tradeoffs → `knowledge/decisions/`',
+  '5. Reusable pattern or technique → `knowledge/concepts/`',
+  '6. Cross-cutting insight linking multiple ideas → `knowledge/connections/`',
+  '7. If nothing else fits, use `knowledge/concepts/` as the catch-all',
+  '',
+  'Use kebab-case filenames such as `branch-workflow.md` or `provider-routing.md`.',
+]
+
+export const KNOWLEDGE_ARTICLE_FORMAT_SECTION: readonly string[] = [
+  '## Knowledge article format',
+  '',
+  'Durable knowledge notes should use YAML frontmatter plus wikilinks:',
+  '```markdown',
+  '---',
+  'title: XETH--7 Branch Workflow',
+  'description: Ongoing XETH--7 work should continue on xeth-7-dev instead of main.',
+  'type: feedback',
+  'created: 2026-04-17',
+  'updated: 2026-04-17',
+  'tags: [xeth-7, workflow, git]',
+  '---',
+  '',
+  '# XETH--7 Branch Workflow',
+  '',
+  'Development should continue on `xeth-7-dev`, not `main`.',
+  '',
+  'Related: [[xethryon-vs-xeth-7-bases]], [[xeth-7-local-testing-workflow]]',
+  '```',
+  '',
+  '- Always include `title`, `description`, `type`, `created`, and `updated` in frontmatter.',
+  '- Add `tags` when they help cluster related notes in Obsidian.',
+  '- Use `[[wikilinks]]` in the body to connect related notes so the graph view stays useful.',
+]
+
+export const REMEMBER_FORGET_BEHAVIOR_SECTION: readonly string[] = [
+  '## Remember / forget behavior',
+  '',
+  'When the user wants something remembered:',
+  '- Update the best existing knowledge note if one already covers the topic.',
+  '- Otherwise create a new durable note in the right category, link it from `index.md`, and append a short line to today\'s daily log.',
+  '- Prefer notes that will still make sense weeks later when seen in Obsidian on their own.',
+  '',
+  'When the user wants something forgotten or corrected:',
+  '- Find the durable knowledge note that currently carries the fact.',
+  '- Remove or rewrite the stale content at the source instead of only promising to ignore it.',
+  '- Update or remove the matching `index.md` line if needed.',
+  '- Daily logs are historical raw notes; do not rewrite old daily logs unless the user explicitly asks. Instead fix the durable note and, if useful, append a correction note to today\'s log.',
+]
+
+export const DIRECT_MEMORY_WRITE_WORKFLOW_SECTION: readonly string[] = [
+  '## Direct memory-write workflow',
+  '',
+  '- Never use Bash to probe the memory directory with commands like `ls`, `test -f`, `stat`, or `printf yes/no` before saving a memory. That creates unnecessary approval prompts and slows everything down.',
+  '- If you need to inspect an existing memory note, use the Read tool on the exact file path.',
+  '- If Read fails because the file does not exist, create it directly with the Write tool.',
+  '- For new memories, prefer Write directly. For updates, do one Read followed by Edit. Do not bounce through shell commands first.',
+  '- The index and daily-log paths are known in advance; update them directly instead of checking whether they exist.',
+]
+
+/**
  * Recall-side drift caveat. Single bullet under `## When to access memories`.
  * Proactive: verify memory against current state before answering.
  */
@@ -217,7 +312,7 @@ export const WHEN_TO_ACCESS_SECTION: readonly string[] = [
   '## When to access memories',
   '- When memories seem relevant, or the user references prior-conversation work.',
   '- You MUST access memory when the user explicitly asks you to check, recall, or remember.',
-  '- If the user says to *ignore* or *not use* memory: proceed as if MEMORY.md were empty. Do not apply remembered facts, cite, compare against, or mention memory content.',
+  '- If the user says to *ignore* or *not use* memory: proceed as if the memory index were empty. Do not apply remembered facts, cite, compare against, or mention memory content.',
   MEMORY_DRIFT_CAVEAT,
 ]
 

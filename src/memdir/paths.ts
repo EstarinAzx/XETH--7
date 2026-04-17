@@ -90,7 +90,18 @@ export function getMemoryBaseDir(): string {
 }
 
 const AUTO_MEM_DIRNAME = 'memory'
-const AUTO_MEM_ENTRYPOINT_NAME = 'MEMORY.md'
+const AUTO_MEM_ENTRYPOINT_NAME = 'index.md'
+const AUTO_MEM_KNOWLEDGE_DIRNAME = 'knowledge'
+const AUTO_MEM_DAILY_DIRNAME = 'daily'
+
+export const AUTO_MEM_KNOWLEDGE_CATEGORIES = [
+  'concepts',
+  'connections',
+  'people',
+  'decisions',
+  'qa',
+  'tools',
+] as const
 
 /**
  * Normalize and validate a candidate auto-memory directory path.
@@ -236,22 +247,32 @@ export const getAutoMemPath = memoize(
 
 /**
  * Returns the daily log file path for the given date (defaults to today).
- * Shape: <autoMemPath>/logs/YYYY/MM/YYYY-MM-DD.md
+ * Shape: <autoMemPath>/daily/YYYY-MM-DD.md
  *
  * Used by assistant mode (feature('KAIROS')): rather than maintaining
- * MEMORY.md as a live index, the agent appends to a date-named log file
+ * index.md as a live index, the agent appends to a date-named log file
  * as it works. A separate nightly /dream skill distills these logs into
- * topic files + MEMORY.md.
+ * durable knowledge notes + index.md.
  */
 export function getAutoMemDailyLogPath(date: Date = new Date()): string {
   const yyyy = date.getFullYear().toString()
-  const mm = (date.getMonth() + 1).toString().padStart(2, '0')
   const dd = date.getDate().toString().padStart(2, '0')
-  return join(getAutoMemPath(), 'logs', yyyy, mm, `${yyyy}-${mm}-${dd}.md`)
+  const mm = (date.getMonth() + 1).toString().padStart(2, '0')
+  return join(getAutoMemPath(), AUTO_MEM_DAILY_DIRNAME, `${yyyy}-${mm}-${dd}.md`)
+}
+
+export function getAutoMemKnowledgeDir(): string {
+  return join(getAutoMemPath(), AUTO_MEM_KNOWLEDGE_DIRNAME)
+}
+
+export function getAutoMemKnowledgeCategoryDirs(): string[] {
+  return AUTO_MEM_KNOWLEDGE_CATEGORIES.map(category =>
+    join(getAutoMemKnowledgeDir(), category),
+  )
 }
 
 /**
- * Returns the auto-memory entrypoint (MEMORY.md inside the auto-memory dir).
+ * Returns the auto-memory entrypoint (index.md inside the auto-memory dir).
  * Follows the same resolution order as getAutoMemPath().
  */
 export function getAutoMemEntrypoint(): string {

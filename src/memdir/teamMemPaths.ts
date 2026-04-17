@@ -86,11 +86,11 @@ export function getTeamMemPath(): string {
 }
 
 /**
- * Returns the team memory entrypoint: <memoryBase>/projects/<sanitized-project-root>/memory/team/MEMORY.md
+ * Returns the team memory entrypoint: <memoryBase>/projects/<sanitized-project-root>/memory/team/index.md
  * Lives as a subdirectory of the auto-memory directory, scoped per-project.
  */
 export function getTeamMemEntrypoint(): string {
-  return join(getAutoMemPath(), 'team', 'MEMORY.md')
+  return join(getAutoMemPath(), 'team', 'index.md')
 }
 
 /**
