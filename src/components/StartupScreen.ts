@@ -1,5 +1,5 @@
 /**
- * OpenClaude startup screen — filled-block text logo with sunset gradient.
+ * XETH--7 startup screen — neon cyberpunk splash.
  * Called once at CLI startup before the Ink UI renders.
  *
  * Addresses: https://github.com/Gitlawb/openclaude/issues/55
@@ -48,18 +48,17 @@ function paintLine(text: string, stops: RGB[], lineT: number): string {
 // ─── Colors ───────────────────────────────────────────────────────────────────
 
 const SUNSET_GRAD: RGB[] = [
-  [255, 180, 100],
-  [240, 140, 80],
-  [217, 119, 87],
-  [193, 95, 60],
-  [160, 75, 55],
-  [130, 60, 50],
+  [255, 74, 214],
+  [214, 92, 255],
+  [132, 116, 255],
+  [76, 240, 255],
+  [114, 255, 184],
 ]
 
-const ACCENT: RGB = [240, 148, 100]
-const CREAM: RGB = [220, 195, 170]
-const DIMCOL: RGB = [120, 100, 82]
-const BORDER: RGB = [100, 80, 65]
+const ACCENT: RGB = [255, 74, 214]
+const CREAM: RGB = [196, 244, 255]
+const DIMCOL: RGB = [137, 110, 184]
+const BORDER: RGB = [92, 58, 148]
 
 // ─── Filled Block Text Logo ───────────────────────────────────────────────────
 
@@ -190,7 +189,7 @@ export function printStartupScreen(): void {
   out.push('')
 
   // Tagline
-  out.push(`  ${rgb(...ACCENT)}\u2726${RESET} ${rgb(...CREAM)}Any model. Every tool. Zero limits.${RESET} ${rgb(...ACCENT)}\u2726${RESET}`)
+  out.push(`  ${rgb(...ACCENT)}\u2726${RESET} ${rgb(...CREAM)}XETH--7 // cyberpunk shell // jack in.${RESET} ${rgb(...ACCENT)}\u2726${RESET}`)
   out.push('')
 
   // Provider info box
@@ -214,12 +213,12 @@ export function printStartupScreen(): void {
 
   const sC: RGB = p.isLocal ? [130, 175, 130] : ACCENT
   const sL = p.isLocal ? 'local' : 'cloud'
-  const sRow = ` ${rgb(...sC)}\u25cf${RESET} ${DIM}${rgb(...DIMCOL)}${sL}${RESET}    ${DIM}${rgb(...DIMCOL)}Ready \u2014 type ${RESET}${rgb(...ACCENT)}/help${RESET}${DIM}${rgb(...DIMCOL)} to begin${RESET}`
-  const sLen = ` \u25cf ${sL}    Ready \u2014 type /help to begin`.length
+  const sRow = ` ${rgb(...sC)}\u25cf${RESET} ${DIM}${rgb(...DIMCOL)}${sL}${RESET}    ${DIM}${rgb(...DIMCOL)}Ready \u2014 type ${RESET}${rgb(...ACCENT)}/help${RESET}${DIM}${rgb(...DIMCOL)} to jack in${RESET}`
+  const sLen = ` \u25cf ${sL}    Ready \u2014 type /help to jack in`.length
   out.push(boxRow(sRow, W, sLen))
 
   out.push(`${rgb(...BORDER)}\u255a${'\u2550'.repeat(W - 2)}\u255d${RESET}`)
-  out.push(`  ${DIM}${rgb(...DIMCOL)}openclaude ${RESET}${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET}`)
+  out.push(`  ${DIM}${rgb(...DIMCOL)}xeth--7 ${RESET}${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET}`)
   out.push('')
 
   process.stdout.write(out.join('\n') + '\n')

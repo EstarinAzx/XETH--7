@@ -278,23 +278,23 @@ const lightAnsiTheme: Theme = {
 const darkAnsiTheme: Theme = {
   autoAccept: 'ansi:magentaBright',
   bashBorder: 'ansi:magentaBright',
-  claude: 'ansi:redBright',
-  claudeShimmer: 'ansi:yellowBright',
-  claudeBlue_FOR_SYSTEM_SPINNER: 'ansi:blueBright',
-  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'ansi:blueBright',
-  permission: 'ansi:blueBright',
-  permissionShimmer: 'ansi:blueBright',
+  claude: 'ansi:cyanBright',
+  claudeShimmer: 'ansi:whiteBright',
+  claudeBlue_FOR_SYSTEM_SPINNER: 'ansi:cyanBright',
+  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'ansi:whiteBright',
+  permission: 'ansi:cyanBright',
+  permissionShimmer: 'ansi:whiteBright',
   planMode: 'ansi:cyanBright',
   ide: 'ansi:blue',
-  promptBorder: 'ansi:white',
-  promptBorderShimmer: 'ansi:whiteBright',
+  promptBorder: 'ansi:magentaBright',
+  promptBorderShimmer: 'ansi:cyanBright',
   text: 'ansi:whiteBright',
   inverseText: 'ansi:black',
   inactive: 'ansi:white',
   inactiveShimmer: 'ansi:whiteBright',
   subtle: 'ansi:white',
-  suggestion: 'ansi:blueBright',
-  remember: 'ansi:blueBright',
+  suggestion: 'ansi:cyanBright',
+  remember: 'ansi:cyanBright',
   background: 'ansi:cyanBright',
   success: 'ansi:greenBright',
   error: 'ansi:redBright',
@@ -321,7 +321,7 @@ const darkAnsiTheme: Theme = {
   // Chrome colors
   chromeYellow: 'ansi:yellowBright', // Chrome yellow
   // TUI V2 colors
-  clawd_body: 'ansi:redBright',
+  clawd_body: 'ansi:magentaBright',
   clawd_background: 'ansi:black',
   userMessageBackground: 'ansi:blackBright',
   userMessageBackgroundHover: 'ansi:white',
@@ -330,12 +330,12 @@ const darkAnsiTheme: Theme = {
   bashMessageBackgroundColor: 'ansi:black',
 
   memoryBackgroundColor: 'ansi:blackBright',
-  rate_limit_fill: 'ansi:yellow',
+  rate_limit_fill: 'ansi:cyanBright',
   rate_limit_empty: 'ansi:white',
-  fastMode: 'ansi:redBright',
-  fastModeShimmer: 'ansi:redBright',
-  briefLabelYou: 'ansi:blueBright',
-  briefLabelClaude: 'ansi:redBright',
+  fastMode: 'ansi:yellowBright',
+  fastModeShimmer: 'ansi:yellowBright',
+  briefLabelYou: 'ansi:cyanBright',
+  briefLabelClaude: 'ansi:magentaBright',
   rainbow_red: 'ansi:red',
   rainbow_orange: 'ansi:redBright',
   rainbow_yellow: 'ansi:yellow',
@@ -438,80 +438,75 @@ const lightDaltonizedTheme: Theme = {
  * from users' custom terminal ANSI color definitions
  */
 const darkTheme: Theme = {
-  autoAccept: 'rgb(175,135,255)', // Electric violet
-  bashBorder: 'rgb(253,93,177)', // Bright pink
-  claude: 'rgb(215,119,87)', // Claude orange
-  claudeShimmer: 'rgb(235,159,127)', // Lighter claude orange for shimmer effect
-  claudeBlue_FOR_SYSTEM_SPINNER: 'rgb(147,165,255)', // Blue for system spinner
-  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'rgb(177,195,255)', // Lighter blue for system spinner shimmer
-  permission: 'rgb(177,185,249)', // Light blue-purple
-  permissionShimmer: 'rgb(207,215,255)', // Lighter blue-purple for shimmer
-  planMode: 'rgb(72,150,140)', // Muted sage green
-  ide: 'rgb(71,130,200)', // Muted blue
-  promptBorder: 'rgb(136,136,136)', // Medium gray
-  promptBorderShimmer: 'rgb(166,166,166)', // Lighter gray for shimmer
-  text: 'rgb(255,255,255)', // White
-  inverseText: 'rgb(0,0,0)', // Black
-  inactive: 'rgb(153,153,153)', // Light gray
-  inactiveShimmer: 'rgb(193,193,193)', // Lighter gray for shimmer effect
-  subtle: 'rgb(80,80,80)', // Dark gray
-  suggestion: 'rgb(177,185,249)', // Light blue-purple
-  remember: 'rgb(177,185,249)', // Light blue-purple
-  background: 'rgb(0,204,204)', // Bright cyan
-  success: 'rgb(78,186,101)', // Bright green
-  error: 'rgb(255,107,128)', // Bright red
-  warning: 'rgb(255,193,7)', // Bright amber
-  merged: 'rgb(175,135,255)', // Electric violet (matches autoAccept)
-  warningShimmer: 'rgb(255,223,57)', // Lighter amber for shimmer
-  diffAdded: 'rgb(34,92,43)', // Dark green
-  diffRemoved: 'rgb(122,41,54)', // Dark red
-  diffAddedDimmed: 'rgb(71,88,74)', // Very dark green
-  diffRemovedDimmed: 'rgb(105,72,77)', // Very dark red
-  diffAddedWord: 'rgb(56,166,96)', // Medium green
-  diffRemovedWord: 'rgb(179,89,107)', // Softer red (less intense than bright red)
-  // Agent colors
-  red_FOR_SUBAGENTS_ONLY: 'rgb(220,38,38)', // Red 600
-  blue_FOR_SUBAGENTS_ONLY: 'rgb(37,99,235)', // Blue 600
-  green_FOR_SUBAGENTS_ONLY: 'rgb(22,163,74)', // Green 600
-  yellow_FOR_SUBAGENTS_ONLY: 'rgb(202,138,4)', // Yellow 600
-  purple_FOR_SUBAGENTS_ONLY: 'rgb(147,51,234)', // Purple 600
-  orange_FOR_SUBAGENTS_ONLY: 'rgb(234,88,12)', // Orange 600
-  pink_FOR_SUBAGENTS_ONLY: 'rgb(219,39,119)', // Pink 600
-  cyan_FOR_SUBAGENTS_ONLY: 'rgb(8,145,178)', // Cyan 600
-  // Grove colors
-  professionalBlue: 'rgb(106,155,204)',
-  // Chrome colors
-  chromeYellow: 'rgb(251,188,4)', // Chrome yellow
-  // TUI V2 colors
-  clawd_body: 'rgb(215,119,87)',
-  clawd_background: 'rgb(0,0,0)',
-  userMessageBackground: 'rgb(55, 55, 55)', // Lighter grey for better visual contrast
-  userMessageBackgroundHover: 'rgb(70, 70, 70)',
-  messageActionsBackground: 'rgb(44, 50, 62)', // cool gray, slight blue
-  selectionBg: 'rgb(38, 79, 120)', // classic dark-mode selection blue (VS Code dark default); light fgs stay readable
-  bashMessageBackgroundColor: 'rgb(65, 60, 65)',
-
-  memoryBackgroundColor: 'rgb(55, 65, 70)',
-  rate_limit_fill: 'rgb(177,185,249)', // Light blue-purple
-  rate_limit_empty: 'rgb(80,83,112)', // Medium blue-purple
-  fastMode: 'rgb(255,120,20)', // Electric orange for dark bg
-  fastModeShimmer: 'rgb(255,165,70)', // Lighter orange for shimmer
-  briefLabelYou: 'rgb(122,180,232)', // Light blue
-  briefLabelClaude: 'rgb(215,119,87)', // Brand orange
-  rainbow_red: 'rgb(235,95,87)',
-  rainbow_orange: 'rgb(245,139,87)',
-  rainbow_yellow: 'rgb(250,195,95)',
-  rainbow_green: 'rgb(145,200,130)',
-  rainbow_blue: 'rgb(130,170,220)',
-  rainbow_indigo: 'rgb(155,130,200)',
-  rainbow_violet: 'rgb(200,130,180)',
-  rainbow_red_shimmer: 'rgb(250,155,147)',
-  rainbow_orange_shimmer: 'rgb(255,185,137)',
-  rainbow_yellow_shimmer: 'rgb(255,225,155)',
-  rainbow_green_shimmer: 'rgb(185,230,180)',
-  rainbow_blue_shimmer: 'rgb(180,205,240)',
-  rainbow_indigo_shimmer: 'rgb(195,180,230)',
-  rainbow_violet_shimmer: 'rgb(230,180,210)',
+  autoAccept: 'rgb(187,108,255)',
+  bashBorder: 'rgb(255,74,214)',
+  claude: 'rgb(76,240,255)',
+  claudeShimmer: 'rgb(164,248,255)',
+  claudeBlue_FOR_SYSTEM_SPINNER: 'rgb(94,160,255)',
+  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'rgb(154,205,255)',
+  permission: 'rgb(76,240,255)',
+  permissionShimmer: 'rgb(164,248,255)',
+  planMode: 'rgb(114,255,184)',
+  ide: 'rgb(94,160,255)',
+  promptBorder: 'rgb(183,90,255)',
+  promptBorderShimmer: 'rgb(76,240,255)',
+  text: 'rgb(240,246,255)',
+  inverseText: 'rgb(6,6,16)',
+  inactive: 'rgb(145,152,184)',
+  inactiveShimmer: 'rgb(191,198,230)',
+  subtle: 'rgb(49,28,68)',
+  suggestion: 'rgb(76,240,255)',
+  remember: 'rgb(255,74,214)',
+  background: 'rgb(76,240,255)',
+  success: 'rgb(114,255,184)',
+  error: 'rgb(255,92,146)',
+  warning: 'rgb(255,202,92)',
+  merged: 'rgb(255,74,214)',
+  warningShimmer: 'rgb(255,226,148)',
+  diffAdded: 'rgb(16,74,58)',
+  diffRemoved: 'rgb(106,26,70)',
+  diffAddedDimmed: 'rgb(36,57,54)',
+  diffRemovedDimmed: 'rgb(74,45,73)',
+  diffAddedWord: 'rgb(72,255,170)',
+  diffRemovedWord: 'rgb(255,110,175)',
+  red_FOR_SUBAGENTS_ONLY: 'rgb(255,92,146)',
+  blue_FOR_SUBAGENTS_ONLY: 'rgb(94,160,255)',
+  green_FOR_SUBAGENTS_ONLY: 'rgb(114,255,184)',
+  yellow_FOR_SUBAGENTS_ONLY: 'rgb(255,202,92)',
+  purple_FOR_SUBAGENTS_ONLY: 'rgb(183,90,255)',
+  orange_FOR_SUBAGENTS_ONLY: 'rgb(255,142,76)',
+  pink_FOR_SUBAGENTS_ONLY: 'rgb(255,74,214)',
+  cyan_FOR_SUBAGENTS_ONLY: 'rgb(76,240,255)',
+  professionalBlue: 'rgb(94,160,255)',
+  chromeYellow: 'rgb(255,202,92)',
+  clawd_body: 'rgb(255,74,214)',
+  clawd_background: 'rgb(12,8,28)',
+  userMessageBackground: 'rgb(28, 18, 44)',
+  userMessageBackgroundHover: 'rgb(42, 28, 64)',
+  messageActionsBackground: 'rgb(20, 44, 61)',
+  selectionBg: 'rgb(24, 88, 110)',
+  bashMessageBackgroundColor: 'rgb(34, 16, 48)',
+  memoryBackgroundColor: 'rgb(16, 48, 56)',
+  rate_limit_fill: 'rgb(76,240,255)',
+  rate_limit_empty: 'rgb(46,54,86)',
+  fastMode: 'rgb(255,142,76)',
+  fastModeShimmer: 'rgb(255,189,120)',
+  briefLabelYou: 'rgb(76,240,255)',
+  briefLabelClaude: 'rgb(255,74,214)',
+  rainbow_red: 'rgb(255,92,146)',
+  rainbow_orange: 'rgb(255,142,76)',
+  rainbow_yellow: 'rgb(255,202,92)',
+  rainbow_green: 'rgb(114,255,184)',
+  rainbow_blue: 'rgb(94,160,255)',
+  rainbow_indigo: 'rgb(132,116,255)',
+  rainbow_violet: 'rgb(219,110,255)',
+  rainbow_red_shimmer: 'rgb(255,156,189)',
+  rainbow_orange_shimmer: 'rgb(255,195,142)',
+  rainbow_yellow_shimmer: 'rgb(255,229,156)',
+  rainbow_green_shimmer: 'rgb(176,255,214)',
+  rainbow_blue_shimmer: 'rgb(162,205,255)',
+  rainbow_indigo_shimmer: 'rgb(184,176,255)',
+  rainbow_violet_shimmer: 'rgb(235,176,255)',
 }
 
 /**
@@ -519,80 +514,75 @@ const darkTheme: Theme = {
  * to avoid inconsistencies from users' custom terminal ANSI color definitions
  */
 const darkDaltonizedTheme: Theme = {
-  autoAccept: 'rgb(175,135,255)', // Electric violet
-  bashBorder: 'rgb(51,153,255)', // Bright blue
-  claude: 'rgb(255,153,51)', // Orange adjusted for deuteranopia
-  claudeShimmer: 'rgb(255,183,101)', // Lighter orange for shimmer effect
-  claudeBlue_FOR_SYSTEM_SPINNER: 'rgb(153,204,255)', // Light blue for system spinner
-  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'rgb(183,224,255)', // Lighter blue for system spinner shimmer
-  permission: 'rgb(153,204,255)', // Light blue
-  permissionShimmer: 'rgb(183,224,255)', // Lighter blue for shimmer
-  planMode: 'rgb(102,153,153)', // Muted gray-teal (works for color-blind)
-  ide: 'rgb(71,130,200)', // Muted blue
-  promptBorder: 'rgb(136,136,136)', // Medium gray
-  promptBorderShimmer: 'rgb(166,166,166)', // Lighter gray for shimmer
-  text: 'rgb(255,255,255)', // White
-  inverseText: 'rgb(0,0,0)', // Black
-  inactive: 'rgb(153,153,153)', // Light gray
-  inactiveShimmer: 'rgb(193,193,193)', // Lighter gray for shimmer effect
-  subtle: 'rgb(80,80,80)', // Dark gray
-  suggestion: 'rgb(153,204,255)', // Light blue
-  remember: 'rgb(153,204,255)', // Light blue
-  background: 'rgb(0,204,204)', // Bright cyan (color-blind friendly)
-  success: 'rgb(51,153,255)', // Blue instead of green
-  error: 'rgb(255,102,102)', // Bright red
-  warning: 'rgb(255,204,0)', // Yellow-orange for deuteranopia
-  merged: 'rgb(175,135,255)', // Electric violet (matches autoAccept)
-  warningShimmer: 'rgb(255,234,50)', // Lighter yellow-orange for shimmer
-  diffAdded: 'rgb(0,68,102)', // Dark blue
-  diffRemoved: 'rgb(102,0,0)', // Dark red
-  diffAddedDimmed: 'rgb(62,81,91)', // Dimmed blue
-  diffRemovedDimmed: 'rgb(62,44,44)', // Dimmed red
-  diffAddedWord: 'rgb(0,119,179)', // Medium blue
-  diffRemovedWord: 'rgb(179,0,0)', // Medium red
-  // Agent colors (daltonism-friendly, dark mode)
-  red_FOR_SUBAGENTS_ONLY: 'rgb(255,102,102)', // Bright red
-  blue_FOR_SUBAGENTS_ONLY: 'rgb(102,178,255)', // Bright blue
-  green_FOR_SUBAGENTS_ONLY: 'rgb(102,255,102)', // Bright green
-  yellow_FOR_SUBAGENTS_ONLY: 'rgb(255,255,102)', // Bright yellow
-  purple_FOR_SUBAGENTS_ONLY: 'rgb(178,102,255)', // Bright purple
-  orange_FOR_SUBAGENTS_ONLY: 'rgb(255,178,102)', // Bright orange
-  pink_FOR_SUBAGENTS_ONLY: 'rgb(255,153,204)', // Bright pink
-  cyan_FOR_SUBAGENTS_ONLY: 'rgb(102,204,204)', // Bright cyan
-  // Grove colors
-  professionalBlue: 'rgb(106,155,204)',
-  // Chrome colors
-  chromeYellow: 'rgb(251,188,4)', // Chrome yellow
-  // TUI V2 colors
-  clawd_body: 'rgb(215,119,87)',
-  clawd_background: 'rgb(0,0,0)',
-  userMessageBackground: 'rgb(55, 55, 55)', // Lighter grey for better visual contrast
-  userMessageBackgroundHover: 'rgb(70, 70, 70)',
-  messageActionsBackground: 'rgb(44, 50, 62)', // cool gray, slight blue
-  selectionBg: 'rgb(38, 79, 120)', // classic dark-mode selection blue (VS Code dark default); light fgs stay readable
-  bashMessageBackgroundColor: 'rgb(65, 60, 65)',
-
-  memoryBackgroundColor: 'rgb(55, 65, 70)',
-  rate_limit_fill: 'rgb(153,204,255)', // Light blue
-  rate_limit_empty: 'rgb(69,92,115)', // Dark blue
-  fastMode: 'rgb(255,120,20)', // Electric orange for dark bg (color-blind safe)
-  fastModeShimmer: 'rgb(255,165,70)', // Lighter orange for shimmer
-  briefLabelYou: 'rgb(122,180,232)', // Light blue
-  briefLabelClaude: 'rgb(255,153,51)', // Orange adjusted for deuteranopia (matches claude)
-  rainbow_red: 'rgb(235,95,87)',
-  rainbow_orange: 'rgb(245,139,87)',
-  rainbow_yellow: 'rgb(250,195,95)',
-  rainbow_green: 'rgb(145,200,130)',
-  rainbow_blue: 'rgb(130,170,220)',
-  rainbow_indigo: 'rgb(155,130,200)',
-  rainbow_violet: 'rgb(200,130,180)',
-  rainbow_red_shimmer: 'rgb(250,155,147)',
-  rainbow_orange_shimmer: 'rgb(255,185,137)',
-  rainbow_yellow_shimmer: 'rgb(255,225,155)',
-  rainbow_green_shimmer: 'rgb(185,230,180)',
-  rainbow_blue_shimmer: 'rgb(180,205,240)',
-  rainbow_indigo_shimmer: 'rgb(195,180,230)',
-  rainbow_violet_shimmer: 'rgb(230,180,210)',
+  autoAccept: 'rgb(116,168,255)',
+  bashBorder: 'rgb(0,214,255)',
+  claude: 'rgb(255,176,92)',
+  claudeShimmer: 'rgb(255,216,160)',
+  claudeBlue_FOR_SYSTEM_SPINNER: 'rgb(116,168,255)',
+  claudeBlueShimmer_FOR_SYSTEM_SPINNER: 'rgb(176,208,255)',
+  permission: 'rgb(0,214,255)',
+  permissionShimmer: 'rgb(162,244,255)',
+  planMode: 'rgb(130,228,170)',
+  ide: 'rgb(116,168,255)',
+  promptBorder: 'rgb(0,214,255)',
+  promptBorderShimmer: 'rgb(255,176,92)',
+  text: 'rgb(244,247,255)',
+  inverseText: 'rgb(6,8,18)',
+  inactive: 'rgb(156,162,188)',
+  inactiveShimmer: 'rgb(206,212,236)',
+  subtle: 'rgb(42,52,76)',
+  suggestion: 'rgb(0,214,255)',
+  remember: 'rgb(255,176,92)',
+  background: 'rgb(0,214,255)',
+  success: 'rgb(130,228,170)',
+  error: 'rgb(255,120,120)',
+  warning: 'rgb(255,216,92)',
+  merged: 'rgb(116,168,255)',
+  warningShimmer: 'rgb(255,236,156)',
+  diffAdded: 'rgb(12,58,74)',
+  diffRemoved: 'rgb(96,28,40)',
+  diffAddedDimmed: 'rgb(34,58,63)',
+  diffRemovedDimmed: 'rgb(74,48,54)',
+  diffAddedWord: 'rgb(0,214,255)',
+  diffRemovedWord: 'rgb(255,120,120)',
+  red_FOR_SUBAGENTS_ONLY: 'rgb(255,120,120)',
+  blue_FOR_SUBAGENTS_ONLY: 'rgb(116,168,255)',
+  green_FOR_SUBAGENTS_ONLY: 'rgb(130,228,170)',
+  yellow_FOR_SUBAGENTS_ONLY: 'rgb(255,216,92)',
+  purple_FOR_SUBAGENTS_ONLY: 'rgb(186,142,255)',
+  orange_FOR_SUBAGENTS_ONLY: 'rgb(255,176,92)',
+  pink_FOR_SUBAGENTS_ONLY: 'rgb(255,160,214)',
+  cyan_FOR_SUBAGENTS_ONLY: 'rgb(0,214,255)',
+  professionalBlue: 'rgb(116,168,255)',
+  chromeYellow: 'rgb(255,216,92)',
+  clawd_body: 'rgb(0,214,255)',
+  clawd_background: 'rgb(8,12,24)',
+  userMessageBackground: 'rgb(18, 26, 44)',
+  userMessageBackgroundHover: 'rgb(28, 38, 60)',
+  messageActionsBackground: 'rgb(44, 56, 82)',
+  selectionBg: 'rgb(16, 82, 106)',
+  bashMessageBackgroundColor: 'rgb(18, 22, 34)',
+  memoryBackgroundColor: 'rgb(14, 44, 52)',
+  rate_limit_fill: 'rgb(0,214,255)',
+  rate_limit_empty: 'rgb(58,76,104)',
+  fastMode: 'rgb(255,176,92)',
+  fastModeShimmer: 'rgb(255,214,156)',
+  briefLabelYou: 'rgb(116,168,255)',
+  briefLabelClaude: 'rgb(255,176,92)',
+  rainbow_red: 'rgb(255,120,120)',
+  rainbow_orange: 'rgb(255,176,92)',
+  rainbow_yellow: 'rgb(255,216,92)',
+  rainbow_green: 'rgb(130,228,170)',
+  rainbow_blue: 'rgb(116,168,255)',
+  rainbow_indigo: 'rgb(150,152,255)',
+  rainbow_violet: 'rgb(186,142,255)',
+  rainbow_red_shimmer: 'rgb(255,176,176)',
+  rainbow_orange_shimmer: 'rgb(255,214,156)',
+  rainbow_yellow_shimmer: 'rgb(255,236,156)',
+  rainbow_green_shimmer: 'rgb(190,246,210)',
+  rainbow_blue_shimmer: 'rgb(176,208,255)',
+  rainbow_indigo_shimmer: 'rgb(198,200,255)',
+  rainbow_violet_shimmer: 'rgb(220,198,255)',
 }
 
 export function getTheme(themeName: ThemeName): Theme {
