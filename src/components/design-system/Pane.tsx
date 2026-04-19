@@ -39,7 +39,7 @@ export function Pane(t0) {
   if (useIsInsideModal()) {
     let t1;
     if ($[0] !== children) {
-      t1 = <Box flexDirection="column" paddingX={1} flexShrink={0}>{children}</Box>;
+      t1 = <Box flexDirection="column" paddingX={1} flexShrink={0} borderStyle="single" borderColor={color ?? 'promptBorder'} paddingY={0}>{children}</Box>;
       $[0] = children;
       $[1] = t1;
     } else {
@@ -49,7 +49,7 @@ export function Pane(t0) {
   }
   let t1;
   if ($[2] !== color) {
-    t1 = <Divider color={color} />;
+    t1 = <Divider color={color ?? 'promptBorder'} />;
     $[2] = color;
     $[3] = t1;
   } else {
@@ -57,7 +57,7 @@ export function Pane(t0) {
   }
   let t2;
   if ($[4] !== children) {
-    t2 = <Box flexDirection="column" paddingX={2}>{children}</Box>;
+    t2 = <Box flexDirection="column" paddingX={2} borderStyle="single" borderColor={color ?? 'promptBorder'} borderText={{ content: ' BREACH // PANEL ', position: 'top', align: 'start', offset: 1 }} paddingY={0}>{children}</Box>;
     $[4] = children;
     $[5] = t2;
   } else {

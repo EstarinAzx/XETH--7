@@ -69,7 +69,7 @@ export function CoordinatorTaskPanel(): React.ReactNode {
   if (visibleTasks.length === 0) {
     return null;
   }
-  return <Box flexDirection="column" marginTop={1}>
+  return <Box flexDirection="column" marginTop={1} borderStyle="single" borderColor="promptBorder" borderText={{ content: ' BREACH // TASK BUS ', position: 'top', align: 'start', offset: 1 }} paddingX={1}>
       <MainLine isSelected={selectedIndex === 0} isViewed={viewingAgentTaskId === undefined} onClick={() => exitTeammateView(setAppState)} />
       {visibleTasks.map((task, i) => <AgentLine key={task.id} task={task} name={nameByAgentId.get(task.id)} isSelected={selectedIndex === i + 1} isViewed={viewingAgentTaskId === task.id} onClick={() => enterTeammateView(task.id, setAppState)} />)}
     </Box>;

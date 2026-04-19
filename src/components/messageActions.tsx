@@ -314,7 +314,7 @@ export function MessageActionsBar(t0) {
     t5 = 0;
     t6 = 1;
     if ($[10] === Symbol.for("react.memo_cache_sentinel")) {
-      t7 = <Box borderStyle="single" borderTop={true} borderBottom={false} borderLeft={false} borderRight={false} borderDimColor={true} />;
+      t7 = <Box borderStyle="single" borderTop={true} borderBottom={false} borderLeft={false} borderRight={false} borderColor="promptBorder" />;
       $[10] = t7;
     } else {
       t7 = $[10];
@@ -372,7 +372,7 @@ export function MessageActionsBar(t0) {
   }
   let t13;
   if ($[16] !== T0 || $[17] !== t1 || $[18] !== t2 || $[19] !== t3) {
-    t13 = <T0 paddingX={t1} paddingY={t2}>{t3}{t8}{t9}{t10}{t11}{t12}</T0>;
+      t13 = <T0 paddingX={t1} paddingY={t2} borderStyle="single" borderColor="promptBorder" borderText={{ content: ' ACTION // NAV ', position: 'top', align: 'start', offset: 1 }}>{t3}{t8}{t9}{t10}{t11}{t12}</T0>;
     $[16] = T0;
     $[17] = t1;
     $[18] = t2;

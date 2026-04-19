@@ -41,7 +41,7 @@ export function Dialog(t0) {
     inputGuide,
     isCancelActive: t2
   } = t0;
-  const color = t1 === undefined ? "permission" : t1;
+  const color = t1 === undefined ? "promptBorder" : t1;
   const isCancelActive = t2 === undefined ? true : t2;
   const exitState = useExitOnCtrlCDWithKeybindings(undefined, undefined, isCancelActive);
   let t3;
@@ -58,7 +58,7 @@ export function Dialog(t0) {
   useKeybinding("confirm:no", onCancel, t3);
   let t4;
   if ($[2] !== exitState.keyName || $[3] !== exitState.pending) {
-    t4 = exitState.pending ? <Text>Press {exitState.keyName} again to exit</Text> : <Byline><KeyboardShortcutHint shortcut="Enter" action="confirm" /><ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="cancel" /></Byline>;
+    t4 = exitState.pending ? <Text color="error">Press {exitState.keyName} again to close breach</Text> : <Byline><KeyboardShortcutHint shortcut="Enter" action="confirm" /><ConfigurableShortcutHint action="confirm:no" context="Confirmation" fallback="Esc" description="abort" /></Byline>;
     $[2] = exitState.keyName;
     $[3] = exitState.pending;
     $[4] = t4;
@@ -68,7 +68,7 @@ export function Dialog(t0) {
   const defaultInputGuide = t4;
   let t5;
   if ($[5] !== color || $[6] !== title) {
-    t5 = <Text bold={true} color={color}>{title}</Text>;
+    t5 = <Text bold={true} color={color}>BREACH // {title}</Text>;
     $[5] = color;
     $[6] = title;
     $[7] = t5;
@@ -77,7 +77,7 @@ export function Dialog(t0) {
   }
   let t6;
   if ($[8] !== subtitle) {
-    t6 = subtitle && <Text dimColor={true}>{subtitle}</Text>;
+    t6 = subtitle && <Text color="claude">{subtitle}</Text>;
     $[8] = subtitle;
     $[9] = t6;
   } else {
