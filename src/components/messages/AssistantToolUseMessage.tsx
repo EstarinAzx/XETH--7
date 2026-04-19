@@ -271,11 +271,11 @@ export function AssistantToolUseMessage(t0) {
     t14 = $[72];
   }
   let t15;
-  if ($[73] !== t12 || $[74] !== t13 || $[75] !== t14) {
-    t15 = <Box flexDirection="column">{t12}{t13}{t14}</Box>;
-    $[73] = t12;
-    $[74] = t13;
-    $[75] = t14;
+    if ($[73] !== t12 || $[74] !== t13 || $[75] !== t14) {
+      t15 = <Box flexDirection="column" borderStyle="single" borderColor="promptBorder" borderLeft={true} borderTop={false} borderRight={false} borderBottom={false} paddingLeft={1}>{t12}{t13}{t14}</Box>;
+      $[73] = t12;
+      $[74] = t13;
+      $[75] = t14;
     $[76] = t15;
   } else {
     t15 = $[76];

@@ -52,6 +52,14 @@ import {
   type ValidationError,
 } from './validation.js'
 
+type AutonomyMode = 'off' | 'smart' | 'aggressive'
+
+function normalizeAutonomyModeSetting(value: unknown): AutonomyMode {
+  return value === 'smart' || value === 'aggressive' || value === 'off'
+    ? value
+    : 'off'
+}
+
 /**
  * Get the path to the managed settings file based on the current platform
  */
@@ -896,6 +904,7 @@ export function hasSkipDangerousModePermissionPrompt(): boolean {
  */
 export function hasAllowBypassPermissionsMode(): boolean {
   return !!(
+    getAutonomyModeSetting() === 'aggressive' ||
     getSettingsForSource('userSettings')?.permissions
       ?.allowBypassPermissionsMode ||
     getSettingsForSource('localSettings')?.permissions
@@ -914,6 +923,9 @@ export function hasAllowBypassPermissionsMode(): boolean {
  */
 export function hasAutoModeOptIn(): boolean {
   if (feature('TRANSCRIPT_CLASSIFIER')) {
+    if (getAutonomyModeSetting() === 'smart') {
+      return true
+    }
     const user = getSettingsForSource('userSettings')?.skipAutoPermissionPrompt
     const local =
       getSettingsForSource('localSettings')?.skipAutoPermissionPrompt
@@ -927,6 +939,15 @@ export function hasAutoModeOptIn(): boolean {
     return result
   }
   return false
+}
+
+export function getAutonomyModeSetting(): AutonomyMode {
+  return normalizeAutonomyModeSetting(
+    getSettingsForSource('policySettings')?.autonomyMode ??
+      getSettingsForSource('flagSettings')?.autonomyMode ??
+      getSettingsForSource('userSettings')?.autonomyMode ??
+      getSettingsForSource('localSettings')?.autonomyMode,
+  )
 }
 
 /**

@@ -983,6 +983,12 @@ export const SettingsSchema = lazySchema(() =>
         .describe(
           'Enable background memory consolidation (auto-dream). When set, overrides the server-side default.',
         ),
+      autonomyMode: z
+        .enum(['off', 'smart', 'aggressive'])
+        .optional()
+        .describe(
+          'Autonomy policy tier: off = normal approvals, smart = classifier-driven autonomy, aggressive = bypass-style execution.',
+        ),
       showThinkingSummaries: z
         .boolean()
         .optional()

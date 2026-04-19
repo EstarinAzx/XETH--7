@@ -196,6 +196,15 @@ export function PromptInputFooterSuggestions({
     <Box
       flexDirection="column"
       justifyContent={overlay ? undefined : 'flex-end'}
+      borderStyle="single"
+      borderColor="promptBorder"
+      borderText={{
+        content: ' BUFFER // CANDIDATES ',
+        position: 'top',
+        align: 'start',
+        offset: 1,
+      }}
+      paddingX={1}
     >
       {visibleItems.map(item => (
         <SuggestionItemRow

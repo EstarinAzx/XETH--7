@@ -13,6 +13,7 @@ import type { VimMode, PromptInputMode } from '../../types/textInputTypes.js';
 import type { ToolPermissionContext } from '../../Tool.js';
 import { isVimModeEnabled } from './utils.js';
 import { useShortcutDisplay } from '../../keybindings/useShortcutDisplay.js';
+import { autonomyModeColor, autonomyModeTitle } from '../../utils/autonomy.js';
 import { isDefaultMode, permissionModeSymbol, permissionModeTitle, getModeColor } from '../../utils/permissions/PermissionMode.js';
 import { BackgroundTaskStatus } from '../tasks/BackgroundTaskStatus.js';
 import { isBackgroundTask } from '../../tasks/types.js';
@@ -318,6 +319,7 @@ function ModeIndicator({
     return <Text color="bashBorder">! for bash mode</Text>;
   }
   const currentMode = toolPermissionContext?.mode;
+  const autonomyMode = useAppState(s_8 => s_8.settings.autonomyMode ?? 'off');
   const hasActiveMode = !isDefaultMode(currentMode);
   const viewedTask = viewingAgentTaskId ? tasks[viewingAgentTaskId] : undefined;
   const isViewingTeammate = viewSelectionMode === 'viewing-agent' && viewedTask?.type === 'in_process_teammate';
@@ -345,9 +347,14 @@ function ModeIndicator({
   // the local permission mode shown here doesn't reflect the agent's state.
   // Rendered before the tasks pill so a long pill label (e.g. ultraplan URL)
   // doesn't push the mode indicator off-screen.
-  const modePart = currentMode && hasActiveMode && !getIsRemoteMode() ? <Text color={getModeColor(currentMode)} key="mode">
-        {permissionModeSymbol(currentMode)}{' '}
-        {permissionModeTitle(currentMode).toLowerCase()} on
+  const modePart = currentMode && hasActiveMode && !getIsRemoteMode() ? autonomyMode !== 'off' && currentMode !== 'plan' ? <Text color={autonomyModeColor(autonomyMode)} key="mode">
+        [{`BUFFER:${autonomyModeTitle(autonomyMode)}`}]
+        {shouldShowModeHint && <Text dimColor>
+            {' '}
+            <KeyboardShortcutHint shortcut={modeCycleShortcut} action="cycle" parens />
+          </Text>}
+      </Text> : <Text color={getModeColor(currentMode)} key="mode">
+        [{permissionModeSymbol(currentMode)} {permissionModeTitle(currentMode).toUpperCase()}]
         {shouldShowModeHint && <Text dimColor>
             {' '}
             <KeyboardShortcutHint shortcut={modeCycleShortcut} action="cycle" parens />

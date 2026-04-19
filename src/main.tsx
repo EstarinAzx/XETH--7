@@ -45,6 +45,7 @@ import { loadRemoteManagedSettings, refreshRemoteManagedSettings } from './servi
 import type { ToolInputJSONSchema } from './Tool.js';
 import { createSyntheticOutputTool, isSyntheticOutputToolEnabled } from './tools/SyntheticOutputTool/SyntheticOutputTool.js';
 import { getTools } from './tools.js';
+import { applyAutonomyModeToPermissionContext, getAutonomyModeFromSettings } from './utils/autonomy.js';
 import { canUserConfigureAdvisor, getInitialAdvisorSetting, isAdvisorEnabled, isValidAdvisorModel, modelSupportsAdvisor } from './utils/advisor.js';
 import { isAgentSwarmsEnabled } from './utils/agentSwarmsEnabled.js';
 import { count, uniq } from './utils/array.js';
@@ -1763,6 +1764,7 @@ async function run(): Promise<CommanderCommand> {
     if (feature('TRANSCRIPT_CLASSIFIER') && dangerousPermissions.length > 0) {
       toolPermissionContext = stripDangerousPermissionsForAutoMode(toolPermissionContext);
     }
+    toolPermissionContext = applyAutonomyModeToPermissionContext(toolPermissionContext, getAutonomyModeFromSettings(getInitialSettings()));
 
     // Print any warnings from initialization
     warnings.forEach(warning => {

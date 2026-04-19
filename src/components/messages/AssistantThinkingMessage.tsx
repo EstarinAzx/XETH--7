@@ -41,14 +41,14 @@ export function AssistantThinkingMessage(t0) {
     const t4 = addMargin ? 1 : 0;
     let t5;
     if ($[0] === Symbol.for("react.memo_cache_sentinel")) {
-      t5 = <Text dimColor={true} italic={true}>{"\u2234 Thinking"} <CtrlOToExpand /></Text>;
+      t5 = <Text color="promptBorder" italic={true}>{"TRACE // COGNITION"} <CtrlOToExpand /></Text>;
       $[0] = t5;
     } else {
       t5 = $[0];
     }
     let t6;
     if ($[1] !== t4) {
-      t6 = <Box marginTop={t4}>{t5}</Box>;
+      t6 = <Box marginTop={t4} borderStyle="single" borderColor="promptBorder" borderLeft={true} borderTop={false} borderRight={false} borderBottom={false} paddingLeft={1}>{t5}</Box>;
       $[1] = t4;
       $[2] = t6;
     } else {
@@ -59,7 +59,7 @@ export function AssistantThinkingMessage(t0) {
   const t4 = addMargin ? 1 : 0;
   let t5;
   if ($[3] === Symbol.for("react.memo_cache_sentinel")) {
-    t5 = <Text dimColor={true} italic={true}>{"\u2234 Thinking"}…</Text>;
+    t5 = <Text color="promptBorder" italic={true}>{"TRACE // COGNITION"}…</Text>;
     $[3] = t5;
   } else {
     t5 = $[3];
@@ -74,7 +74,7 @@ export function AssistantThinkingMessage(t0) {
   }
   let t7;
   if ($[6] !== t4 || $[7] !== t6) {
-    t7 = <Box flexDirection="column" gap={1} marginTop={t4} width="100%">{t5}{t6}</Box>;
+    t7 = <Box flexDirection="column" gap={1} marginTop={t4} width="100%" borderStyle="single" borderColor="promptBorder" borderLeft={true} borderTop={false} borderRight={false} borderBottom={false} paddingLeft={1}>{t5}{t6}</Box>;
     $[6] = t4;
     $[7] = t6;
     $[8] = t7;

@@ -310,8 +310,13 @@ function StatusLineInner({
   // flexShrink:0 so a 0→1 row change when the command finishes steals
   // a row from ScrollBox and shifts content. Reserve the row while loading
   // (same trick as PromptInputFooterLeftSide).
-  return <Box paddingX={paddingX} gap={2}>
-      {statusLineText ? <Text dimColor wrap="truncate">
+  return <Box paddingX={paddingX} gap={2} borderStyle="single" borderColor="promptBorder" borderText={{
+    content: ' BUFFER ',
+    position: 'top',
+    align: 'start',
+    offset: 1
+  }} paddingLeft={1}>
+      {statusLineText ? <Text color="claude" wrap="truncate">
           <Ansi>{statusLineText}</Ansi>
         </Text> : isFullscreenEnvEnabled() ? <Text> </Text> : null}
     </Box>;

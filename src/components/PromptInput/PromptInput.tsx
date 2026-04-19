@@ -55,6 +55,7 @@ import type { PermissionMode } from '../../types/permissions.js';
 import type { BaseTextInputProps, PromptInputMode, VimMode } from '../../types/textInputTypes.js';
 import { isAgentSwarmsEnabled } from '../../utils/agentSwarmsEnabled.js';
 import { count } from '../../utils/array.js';
+import { applyAutonomyModeToPermissionContext, getNextAutonomyMode } from '../../utils/autonomy.js';
 import type { AutoUpdaterResult } from '../../utils/autoUpdater.js';
 import { Cursor } from '../../utils/Cursor.js';
 import { getGlobalConfig, type PastedContent, saveGlobalConfig } from '../../utils/config.js';
@@ -80,7 +81,7 @@ import { transitionPermissionMode } from '../../utils/permissions/permissionSetu
 import { getPlatform } from '../../utils/platform.js';
 import type { ProcessUserInputContext } from '../../utils/processUserInput/processUserInput.js';
 import { editPromptInEditor } from '../../utils/promptEditor.js';
-import { hasAutoModeOptIn } from '../../utils/settings/settings.js';
+import { hasAutoModeOptIn, updateSettingsForSource } from '../../utils/settings/settings.js';
 import { findBtwTriggerPositions } from '../../utils/sideQuestion.js';
 import { findSlashCommandPositions } from '../../utils/suggestions/commandSuggestions.js';
 import { findSlackChannelPositions, getKnownChannelsVersion, hasSlackMcpServer, subscribeKnownChannels } from '../../utils/suggestions/slackChannelSuggestions.js';
@@ -1429,6 +1430,8 @@ function PromptInput({
     }
   }, [helpOpen]);
 
+  const autonomyMode = useAppState(s => s.settings.autonomyMode ?? 'off');
+
   // Handler for chat:fastMode - toggle fast mode picker
   const handleFastModePicker = useCallback(() => {
     setShowFastModePicker(prev => !prev);
@@ -1483,6 +1486,31 @@ function PromptInput({
       }
       return;
     }
+
+    const nextAutonomyMode = getNextAutonomyMode(autonomyMode as 'off' | 'smart' | 'aggressive');
+    const persistResult = updateSettingsForSource('userSettings', {
+      autonomyMode: nextAutonomyMode
+    });
+    if (persistResult.error) {
+      logError(persistResult.error);
+    }
+    const preparedContext = applyAutonomyModeToPermissionContext(toolPermissionContext, nextAutonomyMode);
+    logEvent('tengu_autonomy_mode_cycle', {
+      to: nextAutonomyMode as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
+    });
+    setAppState(prev => ({
+      ...prev,
+      settings: {
+        ...prev.settings,
+        autonomyMode: nextAutonomyMode
+      },
+      toolPermissionContext: preparedContext
+    }));
+    setToolPermissionContext(preparedContext);
+    if (helpOpen) {
+      setHelpOpen(false);
+    }
+    return;
 
     // Compute the next mode without triggering side effects first
     logForDebugging(`[auto-mode] handleCycleMode: currentMode=${toolPermissionContext.mode} isAutoModeAvailable=${toolPermissionContext.isAutoModeAvailable} showAutoModeOptIn=${showAutoModeOptIn} timeoutPending=${!!autoModeOptInTimeoutRef.current}`);
@@ -1555,7 +1583,7 @@ function PromptInput({
     // call cyclePermissionMode to apply side effects (e.g. strip
     // dangerous permissions, activate classifier)
     const {
-      context: preparedContext
+      context: cycledContext
     } = cyclePermissionMode(toolPermissionContext, teamContext);
     logEvent('tengu_mode_cycle', {
       to: nextMode as AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS
@@ -1573,15 +1601,15 @@ function PromptInput({
     // intentionally preserves the existing mode (to prevent coordinator mode
     // corruption from workers). Then call setToolPermissionContext to trigger
     // recheck of queued permission prompts.
-    setAppState(prev => ({
+      setAppState(prev => ({
       ...prev,
       toolPermissionContext: {
-        ...preparedContext,
+        ...cycledContext,
         mode: nextMode
       }
     }));
     setToolPermissionContext({
-      ...preparedContext,
+      ...cycledContext,
       mode: nextMode
     });
 
@@ -1592,7 +1620,7 @@ function PromptInput({
     if (helpOpen) {
       setHelpOpen(false);
     }
-  }, [toolPermissionContext, teamContext, viewingAgentTaskId, viewedTeammate, setAppState, setToolPermissionContext, helpOpen, showAutoModeOptIn]);
+  }, [autonomyMode, toolPermissionContext, teamContext, viewingAgentTaskId, viewedTeammate, setAppState, setToolPermissionContext, helpOpen, showAutoModeOptIn]);
 
   // Handler for auto mode opt-in dialog acceptance
   const handleAutoModeOptInAccept = useCallback(() => {
@@ -2303,7 +2331,7 @@ function PromptInput({
             </Box>
           </Box>
           <Text color={swarmBanner.bgColor}>{'─'.repeat(columns)}</Text>
-        </> : <Box flexDirection="row" alignItems="flex-start" justifyContent="flex-start" borderColor={getBorderColor()} borderStyle="round" borderLeft={false} borderRight={false} borderBottom width="100%" borderText={buildBorderText(showFastIcon ?? false, showFastIconHint, fastModeCooldown)}>
+        </> : <Box flexDirection="row" alignItems="flex-start" justifyContent="flex-start" borderColor={getBorderColor()} borderStyle="single" width="100%" paddingX={1} borderText={buildBorderText(showFastIcon ?? false, showFastIconHint, fastModeCooldown)}>
           <PromptInputModeIndicator mode={mode} isLoading={isLoading} viewingAgentName={viewingAgentName} viewingAgentColor={viewingAgentColor} />
           <Box flexGrow={1} flexShrink={1} onClick={handleInputClick}>
             {textInputElement}
@@ -2364,13 +2392,19 @@ function getInitialPasteId(messages: Message[]): number {
   return maxId + 1;
 }
 function buildBorderText(showFastIcon: boolean, showFastIconHint: boolean, fastModeCooldown: boolean): BorderTextOptions | undefined {
-  if (!showFastIcon) return undefined;
+  const baseSeg = ' BREACH // COMMAND MATRIX ';
+  if (!showFastIcon) return {
+    content: baseSeg,
+    position: 'top',
+    align: 'start',
+    offset: 1
+  };
   const fastSeg = showFastIconHint ? `${getFastIconString(true, fastModeCooldown)} ${chalk.dim('/fast')}` : getFastIconString(true, fastModeCooldown);
   return {
-    content: ` ${fastSeg} `,
+    content: `${baseSeg}${chalk.dim('//')} ${fastSeg} `,
     position: 'top',
-    align: 'end',
-    offset: 0
+    align: 'start',
+    offset: 1
   };
 }
 export default React.memo(PromptInput);

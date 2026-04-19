@@ -343,7 +343,7 @@ export function PromptInputHelpMenu(props) {
   }
   let t45;
   if ($[93] !== gap || $[94] !== paddingX || $[95] !== t27 || $[96] !== t35 || $[97] !== t44) {
-    t45 = <Box paddingX={paddingX} flexDirection="row" gap={gap}>{t27}{t35}{t44}</Box>;
+    t45 = <Box borderStyle="single" borderColor="promptBorder" borderText={{ content: ' BREACH // CONTROL SURFACE ', position: 'top', align: 'start', offset: 1 }} paddingX={paddingX ?? 1} paddingY={0} flexDirection="row" gap={gap}>{t27}{t35}{t44}</Box>;
     $[93] = gap;
     $[94] = paddingX;
     $[95] = t27;

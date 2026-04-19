@@ -1,4 +1,5 @@
 import type { AppState } from '../../state/AppState.js'
+import { applyAutonomyModeToPermissionContext } from '../autonomy.js'
 import { logForDebugging } from '../debug.js'
 import { updateHooksConfigSnapshot } from '../hooks/hooksConfigSnapshot.js'
 import {
@@ -66,6 +67,14 @@ export function applySettingsChange(
     }
 
     newContext = transitionPlanAutoMode(newContext)
+    const prevAutonomy = prev.settings.autonomyMode ?? 'off'
+    const nextAutonomy = newSettings.autonomyMode ?? 'off'
+    if (prevAutonomy !== nextAutonomy || nextAutonomy !== 'off') {
+      newContext = applyAutonomyModeToPermissionContext(
+        newContext,
+        nextAutonomy,
+      )
+    }
 
     // Sync effortLevel from settings to top-level AppState when it changes
     // (e.g. via applyFlagSettings from IDE). Only propagate if the setting

@@ -364,7 +364,7 @@ export function LogoV2() {
   const t17 = 1;
   let t18;
   if ($[46] !== welcomeMessage_0) {
-    t18 = <Box marginTop={1} flexDirection="column" alignItems="center"><Text bold={true}>XETH--7</Text><Text dimColor={true}>cyberpunk shell for any LLM</Text><Text color="inactive">•</Text><Text bold={true}>{welcomeMessage_0}</Text></Box>;
+    t18 = <Box marginTop={1} flexDirection="column" alignItems="center"><Text color="promptBorder" bold={true}>XETH--7</Text><Text color="claude">breach shell for any LLM</Text><Text color="promptBorder">◢</Text><Text bold={true}>{welcomeMessage_0}</Text></Box>;
     $[46] = welcomeMessage_0;
     $[47] = t18;
   } else {
@@ -404,7 +404,7 @@ export function LogoV2() {
   }
   let t23;
   if ($[56] !== columns || $[57] !== t18 || $[58] !== t22) {
-    t23 = <Box flexDirection="column" width="100%" justifyContent="center" alignItems="center" minHeight={11}><Box borderStyle="round" borderColor="inactive" paddingX={3} paddingY={1} width="100%" justifyContent="center" alignItems="center" minHeight={11}><Box flexDirection="column" alignItems="center" justifyContent="center">{t18}<Box marginY={1}>{t19}</Box>{t22}</Box></Box></Box>;
+    t23 = <Box flexDirection="column" width="100%" justifyContent="center" alignItems="center" minHeight={11}><Box borderStyle="single" borderColor="promptBorder" borderText={{ content: ' NET//TECH CORE LINK ', position: 'top', align: 'start', offset: 1 }} paddingX={3} paddingY={1} width="100%" justifyContent="center" alignItems="center" minHeight={11}><Box flexDirection="column" alignItems="center" justifyContent="center">{t18}<Box marginY={1}>{t19}</Box>{t22}</Box></Box></Box>;
     $[56] = columns;
     $[57] = t18;
     $[58] = t22;

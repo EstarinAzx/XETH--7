@@ -1,5 +1,5 @@
 /**
- * XETH--7 startup screen â€” neon cyberpunk splash.
+ * XETH--7 startup screen â€” breach HUD splash.
  * Called once at CLI startup before the Ink UI renders.
  *
  * Addresses: https://github.com/Gitlawb/openclaude/issues/55
@@ -18,6 +18,7 @@ const DIM = `${ESC}2m`
 
 type RGB = [number, number, number]
 const rgb = (r: number, g: number, b: number) => `${ESC}38;2;${r};${g};${b}m`
+const bg = (r: number, g: number, b: number) => `${ESC}48;2;${r};${g};${b}m`
 
 function lerp(a: RGB, b: RGB, t: number): RGB {
   return [
@@ -48,17 +49,19 @@ function paintLine(text: string, stops: RGB[], lineT: number): string {
 // â”€â”€â”€ Colors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const SUNSET_GRAD: RGB[] = [
-  [255, 74, 214],
-  [214, 92, 255],
-  [132, 116, 255],
-  [76, 240, 255],
-  [114, 255, 184],
+  [214, 255, 61],
+  [202, 248, 70],
+  [182, 240, 78],
+  [84, 236, 255],
+  [120, 242, 255],
 ]
 
-const ACCENT: RGB = [255, 74, 214]
-const CREAM: RGB = [196, 244, 255]
-const DIMCOL: RGB = [137, 110, 184]
-const BORDER: RGB = [92, 58, 148]
+const ACCENT: RGB = [214, 255, 61]
+const CYAN: RGB = [84, 236, 255]
+const CREAM: RGB = [236, 245, 223]
+const DIMCOL: RGB = [124, 150, 70]
+const BORDER: RGB = [214, 255, 61]
+const PANEL_BG: RGB = [14, 16, 10]
 
 // â”€â”€â”€ Filled Block Text Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -161,7 +164,7 @@ export function printStartupScreen(): void {
   if (process.env.CI || !process.stdout.isTTY) return
 
   const p = detectProvider()
-  const W = 62
+  const W = 84
   const out: string[] = []
 
   out.push('')
@@ -181,36 +184,39 @@ export function printStartupScreen(): void {
   out.push('')
 
   // Tagline
-  out.push(`  ${rgb(...ACCENT)}\u2726${RESET} ${rgb(...CREAM)}XETH--7 // cyberpunk shell // jack in.${RESET} ${rgb(...ACCENT)}\u2726${RESET}`)
+  out.push(`  ${rgb(...ACCENT)}NET//TECH${RESET} ${DIM}${rgb(...DIMCOL)}${'─'.repeat(28)}${RESET}`)
+  out.push(`  ${rgb(...ACCENT)}\u25e2${RESET} ${rgb(...CREAM)}XETH--7 // breach shell // protocol online.${RESET} ${rgb(...CYAN)}\u25e3${RESET}`)
   out.push('')
 
   // Provider info box
-  out.push(`${rgb(...BORDER)}\u2554${'\u2550'.repeat(W - 2)}\u2557${RESET}`)
+  const title = ' BREACH PROTOCOL INTERFACE '
+  out.push(`${bg(...BORDER)}${rgb(...PANEL_BG)}${title}${' '.repeat(Math.max(0, W - title.length))}${RESET}`)
+  out.push(`${rgb(...BORDER)}\u250c${'\u2500'.repeat(W - 2)}\u2510${RESET}`)
 
   const lbl = (k: string, v: string, c: RGB = CREAM): [string, number] => {
     const padK = k.padEnd(9)
     return [` ${DIM}${rgb(...DIMCOL)}${padK}${RESET} ${rgb(...c)}${v}${RESET}`, ` ${padK} ${v}`.length]
   }
 
-  const provC: RGB = p.isLocal ? [130, 175, 130] : ACCENT
+  const provC: RGB = p.isLocal ? [160, 255, 214] : CYAN
   let [r, l] = lbl('Provider', p.name, provC)
   out.push(boxRow(r, W, l))
-  ;[r, l] = lbl('Model', p.model)
+  ;[r, l] = lbl('Cipher', p.model)
   out.push(boxRow(r, W, l))
-  const ep = p.baseUrl.length > 38 ? p.baseUrl.slice(0, 35) + '...' : p.baseUrl
-  ;[r, l] = lbl('Endpoint', ep)
+  const ep = p.baseUrl.length > 46 ? p.baseUrl.slice(0, 43) + '...' : p.baseUrl
+  ;[r, l] = lbl('Uplink', ep)
   out.push(boxRow(r, W, l))
 
-  out.push(`${rgb(...BORDER)}\u2560${'\u2550'.repeat(W - 2)}\u2563${RESET}`)
+  out.push(`${rgb(...BORDER)}\u251c${'\u2500'.repeat(W - 2)}\u2524${RESET}`)
 
-  const sC: RGB = p.isLocal ? [130, 175, 130] : ACCENT
+  const sC: RGB = p.isLocal ? [160, 255, 214] : CYAN
   const sL = p.isLocal ? 'local' : 'cloud'
-  const sRow = ` ${rgb(...sC)}\u25cf${RESET} ${DIM}${rgb(...DIMCOL)}${sL}${RESET}    ${DIM}${rgb(...DIMCOL)}Ready \u2014 type ${RESET}${rgb(...ACCENT)}/help${RESET}${DIM}${rgb(...DIMCOL)} to jack in${RESET}`
-  const sLen = ` \u25cf ${sL}    Ready \u2014 type /help to jack in`.length
+  const sRow = ` ${rgb(...sC)}\u25cf${RESET} ${DIM}${rgb(...DIMCOL)}${sL}${RESET}    ${rgb(...ACCENT)}buffer ready${RESET} ${DIM}${rgb(...DIMCOL)}\u2014 /help for breach controls${RESET}`
+  const sLen = ` \u25cf ${sL}    buffer ready \u2014 /help for breach controls`.length
   out.push(boxRow(sRow, W, sLen))
 
-  out.push(`${rgb(...BORDER)}\u255a${'\u2550'.repeat(W - 2)}\u255d${RESET}`)
-  out.push(`  ${DIM}${rgb(...DIMCOL)}xeth--7 ${RESET}${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET}`)
+  out.push(`${rgb(...BORDER)}\u2514${'\u2500'.repeat(W - 2)}\u2518${RESET}`)
+  out.push(`  ${rgb(...DIMCOL)}xeth--7${RESET} ${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET} ${rgb(...CYAN)}// breach link stable${RESET}`)
   out.push('')
 
   process.stdout.write(out.join('\n') + '\n')

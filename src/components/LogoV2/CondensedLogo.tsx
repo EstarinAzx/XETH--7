@@ -101,7 +101,7 @@ export function CondensedLogo() {
   } else {
     t6 = $[10];
   }
-  const t6a = 'Cyberpunk shell for any LLM';
+  const t6a = 'breach shell for any LLM';
   let t7;
   if ($[11] !== shouldSplit || $[12] !== truncatedBilling || $[13] !== truncatedModel) {
     t7 = shouldSplit ? <><Text><Text color="inactive">Model</Text><Text dimColor={true}>  {truncatedModel}</Text></Text><Text><Text color="inactive">Mode</Text><Text dimColor={true}>   {truncatedBilling}</Text></Text></> : <Text><Text color="inactive">Model</Text><Text dimColor={true}>  {truncatedModel} · {truncatedBilling}</Text></Text>;
@@ -141,7 +141,7 @@ export function CondensedLogo() {
   }
   let t12;
   if ($[23] !== t10 || $[24] !== t11 || $[25] !== t6 || $[26] !== t7 || $[27] !== t9) {
-    t12 = <OffscreenFreeze><Box borderStyle="round" borderColor="inactive" paddingX={2} paddingY={0} flexDirection="row" gap={2} alignItems="center"><Box flexDirection="column" alignItems="center"><Text color="inactive">•</Text>{t4}<Text color="inactive">•</Text></Box><Box flexDirection="column"><Text bold={true}>XETH--7</Text><Text dimColor={true}>{t6a}</Text><Box marginTop={1}>{t6}</Box>{t7}{t9}{t10}{t11}</Box></Box></OffscreenFreeze>;
+    t12 = <OffscreenFreeze><Box borderStyle="single" borderColor="promptBorder" borderText={{ content: ' NET//TECH PROFILE ', position: 'top', align: 'start', offset: 1 }} paddingX={2} paddingY={0} flexDirection="row" gap={2} alignItems="center"><Box flexDirection="column" alignItems="center"><Text color="promptBorder">◢</Text>{t4}<Text color="claude">◣</Text></Box><Box flexDirection="column"><Text color="promptBorder" bold={true}>XETH--7</Text><Text color="claude">{t6a}</Text><Box marginTop={1}>{t6}</Box>{t7}{t9}{t10}{t11}</Box></Box></OffscreenFreeze>;
     $[23] = t10;
     $[24] = t11;
     $[25] = t6;
