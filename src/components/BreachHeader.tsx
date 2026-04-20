@@ -14,11 +14,22 @@ import { getStartupLines } from './StartupScreen.js';
 export function BreachHeader(): React.ReactNode {
   const { columns } = useTerminalSize();
   const lines = React.useMemo(() => getStartupLines(columns), [columns]);
+  const logoLines = lines.slice(2, 8);
+  const taglineLines = lines.slice(9, 11);
+  const protocolLines = lines.slice(13, 23);
 
   return (
-    <Box flexDirection="column">
-      {lines.map((line, i) => (
+    <Box flexDirection="column" paddingTop={3}>
+      {logoLines.map((line, i) => (
         <Text key={i}>{line}</Text>
+      ))}
+      <Box height={1} />
+      {taglineLines.map((line, i) => (
+        <Text key={`tag-${i}`}>{line}</Text>
+      ))}
+      <Box height={1} />
+      {protocolLines.map((line, i) => (
+        <Text key={`proto-${i}`}>{line}</Text>
       ))}
     </Box>
   );
