@@ -100,7 +100,7 @@ export function AgentEditor({
     label: 'Edit tools',
     action: () => setEditMode('edit-tools')
   }, {
-    label: 'Edit model',
+    label: 'Edit cipher',
     action: () => setEditMode('edit-model')
   }, {
     label: 'Edit color',

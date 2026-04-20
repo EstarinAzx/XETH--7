@@ -48,7 +48,7 @@ const DEMO_PATCH: StructuredPatchHunk = {
   lines: [
     ' function greet() {',
     '-  console.log("Hello, World!");',
-    '+  console.log("Hello, Claude!");',
+    '+  console.log("Hello, XETH--7!");',
     ' }',
   ],
 }
@@ -181,7 +181,7 @@ export function ThemePicker({
 
   const introBlock = (
     <Box flexDirection="column">
-      <Text bold>Choose the text style that looks best with your terminal</Text>
+      <Text bold>Select visual protocol for your terminal</Text>
       {helpText && !showHelpTextBelow ? (
         <Text dimColor>{helpText}</Text>
       ) : null}

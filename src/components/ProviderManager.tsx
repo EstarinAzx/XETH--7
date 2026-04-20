@@ -965,7 +965,7 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
       {
         value: 'anthropic',
         label: 'Anthropic',
-        description: 'Native Claude API (x-api-key auth)',
+        description: 'Native Anthropic uplink (x-api-key auth)',
       },
       {
         value: 'ollama',
@@ -1061,10 +1061,10 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
     return (
       <Box flexDirection="column" gap={1}>
         <Text color="remember" bold>
-          {mode === 'first-run' ? 'Set up provider' : 'Choose provider preset'}
+          {mode === 'first-run' ? 'Initialize uplink' : 'Select uplink preset'}
         </Text>
         <Text dimColor>
-          Pick a preset, then confirm base URL, model, and API key.
+          Select preset, then confirm uplink, cipher, and key.
         </Text>
         <Select
           options={options}
@@ -1096,7 +1096,7 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
     return (
       <Box flexDirection="column" gap={1}>
         <Text color="remember" bold>
-          {editingProfileId ? 'Edit provider profile' : 'Create provider profile'}
+          {editingProfileId ? 'Edit uplink profile' : 'Create uplink profile'}
         </Text>
         <Text dimColor>{currentStep.helpText}</Text>
         <Text dimColor>
@@ -1142,25 +1142,25 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
     const options = [
       {
         value: 'add',
-        label: 'Add provider',
-        description: 'Create a new provider profile',
+        label: 'Add uplink',
+        description: 'Create a new uplink profile',
       },
       {
         value: 'activate',
-        label: 'Set active provider',
-        description: 'Switch the active provider profile',
+        label: 'Set active uplink',
+        description: 'Switch the active uplink profile',
         disabled: !hasSelectableProviders,
       },
       {
         value: 'edit',
-        label: 'Edit provider',
-        description: 'Update URL, model, or key',
+        label: 'Edit uplink',
+        description: 'Update URL, cipher, or key',
         disabled: !hasProfiles,
       },
       {
         value: 'delete',
-        label: 'Delete provider',
-        description: 'Remove a provider profile',
+        label: 'Delete uplink',
+        description: 'Remove an uplink profile',
         disabled: !hasSelectableProviders,
       },
       ...(hasStoredCodexOAuthCredentials
@@ -1175,17 +1175,17 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
       {
         value: 'done',
         label: 'Done',
-        description: 'Return to chat',
+        description: 'Return to shell',
       },
     ]
 
     return (
       <Box flexDirection="column" gap={1}>
         <Text color="remember" bold>
-          Provider manager
+          Uplink manager
         </Text>
         <Text dimColor>
-          Active profile controls base URL, model, and API key used by this session.
+          Active profile controls uplink, cipher, and key for this session.
         </Text>
         {statusMessage && <Text>{statusMessage}</Text>}
         <Box flexDirection="column">
@@ -1445,7 +1445,7 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
       break
     case 'select-active':
       content = renderProfileSelection(
-        'Set active provider',
+        'Set active uplink',
         'No providers available. Add one first.',
         profileId => {
           void activateSelectedProvider(profileId)
@@ -1455,7 +1455,7 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
       break
     case 'select-edit':
       content = renderProfileSelection(
-        'Edit provider',
+        'Edit uplink',
         'No providers available. Add one first.',
         profileId => {
           startEditProfile(profileId)
@@ -1464,7 +1464,7 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
       break
     case 'select-delete':
       content = renderProfileSelection(
-        'Delete provider',
+        'Delete uplink',
         'No providers available. Add one first.',
         profileId => {
           if (profileId === GITHUB_PROVIDER_ID) {

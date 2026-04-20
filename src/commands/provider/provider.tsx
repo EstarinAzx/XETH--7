@@ -429,9 +429,9 @@ function buildUsageText(): string {
     '',
     'Guided setup for saved provider profiles.',
     '',
-    `Current provider: ${summary.providerLabel}`,
-    `Current model: ${summary.modelLabel}`,
-    `Current endpoint: ${summary.endpointLabel}`,
+    `Active uplink: ${summary.providerLabel}`,
+    `Active cipher: ${summary.modelLabel}`,
+    `Active endpoint: ${summary.endpointLabel}`,
     `Saved profile: ${summary.savedProfileLabel}`,
     '',
     availableProviders,
@@ -618,21 +618,21 @@ function ProviderChooser({
     options.push({
       label: 'Clear saved profile',
       value: 'clear',
-      description: 'Remove .openclaude-profile.json and return to normal startup',
+      description: 'Remove saved profile and return to default uplink',
     })
   }
 
   return (
     <Dialog
-      title="Set up a provider profile"
-      subtitle={`Current provider: ${summary.providerLabel}`}
+      title="Initialize uplink profile"
+      subtitle={`Active uplink: ${summary.providerLabel}`}
       onCancel={onCancel}
     >
       <Box flexDirection="column" gap={1}>
         <Text>{helperText}</Text>
         <Box flexDirection="column">
-          <Text dimColor>Current model: {summary.modelLabel}</Text>
-          <Text dimColor>Current endpoint: {summary.endpointLabel}</Text>
+          <Text dimColor>Active cipher: {summary.modelLabel}</Text>
+          <Text dimColor>Active endpoint: {summary.endpointLabel}</Text>
           <Text dimColor>Saved profile: {summary.savedProfileLabel}</Text>
         </Box>
         <Select
