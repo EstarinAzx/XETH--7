@@ -720,7 +720,7 @@ export function Config({
     }
   }, {
     id: 'agentPushNotifEnabled',
-    label: 'Push when Claude decides',
+    label: 'Push when XETH--7 decides',
     value: globalConfig.agentPushNotifEnabled ?? false,
     type: 'boolean' as const,
     onChange(agentPushNotifEnabled: boolean) {
@@ -892,7 +892,7 @@ export function Config({
     }
   }] : []), {
     id: 'claudeInChromeDefaultEnabled',
-    label: 'Claude in Chrome enabled by default',
+    label: 'XETH--7 in Chrome enabled by default',
     value: globalConfig.claudeInChromeDefaultEnabled ?? true,
     type: 'boolean' as const,
     onChange(enabled_5: boolean) {

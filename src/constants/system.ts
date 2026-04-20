@@ -10,9 +10,9 @@ import { getWorkload } from '../utils/workloadContext.js'
 const DEFAULT_PREFIX =
   `You are XETH--7, an open-source coding agent and CLI.`
 const AGENT_SDK_CLAUDE_CODE_PRESET_PREFIX =
-  `You are XETH--7, an open-source coding agent and CLI running within the Claude Agent SDK.`
+  `You are XETH--7, an open-source coding agent and CLI running within the XETH--7 Agent SDK.`
 const AGENT_SDK_PREFIX =
-  `You are XETH--7, built on the Claude Agent SDK.`
+  `You are XETH--7, built on the XETH--7 Agent SDK.`
 
 const CLI_SYSPROMPT_PREFIX_VALUES = [
   DEFAULT_PREFIX,
