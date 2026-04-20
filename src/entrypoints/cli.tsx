@@ -134,9 +134,7 @@ async function main(): Promise<void> {
 
   await validateProviderEnvOrExit()
 
-  // Print the gradient startup screen before the Ink UI loads
-  const { printStartupScreen } = await import('../components/StartupScreen.js')
-  printStartupScreen()
+  // Breach header now renders inside Ink (BreachHeader) — survives resize.
 
   // For all other paths, load the startup profiler
   const {

@@ -19,6 +19,16 @@ const DIM = `${ESC}2m`
 type RGB = [number, number, number]
 const rgb = (r: number, g: number, b: number) => `${ESC}38;2;${r};${g};${b}m`
 const bg = (r: number, g: number, b: number) => `${ESC}48;2;${r};${g};${b}m`
+const ANSI_PATTERN = /\x1b\[[0-9;]*m/g
+
+function visibleWidth(text: string): number {
+  return text.replace(ANSI_PATTERN, '').length
+}
+
+function centerAnsiLine(text: string, width: number): string {
+  const pad = Math.max(0, Math.floor((width - visibleWidth(text)) / 2))
+  return `${' '.repeat(pad)}${text}`
+}
 
 function lerp(a: RGB, b: RGB, t: number): RGB {
   return [
@@ -159,12 +169,10 @@ function boxRow(content: string, width: number, rawLen: number): string {
 
 // â”€â”€â”€ Main â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-export function printStartupScreen(): void {
-  // Skip in non-interactive / CI / print mode
-  if (process.env.CI || !process.stdout.isTTY) return
-
+export function getStartupLines(termWidth?: number): string[] {
   const p = detectProvider()
   const W = 84
+  const tw = termWidth ?? process.stdout.columns ?? W
   const out: string[] = []
 
   out.push('')
@@ -177,21 +185,21 @@ export function printStartupScreen(): void {
     if (allLogo[i] === '') {
       out.push('')
     } else {
-      out.push(paintLine(allLogo[i], SUNSET_GRAD, t))
+      out.push(centerAnsiLine(paintLine(allLogo[i], SUNSET_GRAD, t), tw))
     }
   }
 
   out.push('')
 
   // Tagline
-  out.push(`  ${rgb(...ACCENT)}NET//TECH${RESET} ${DIM}${rgb(...DIMCOL)}${'─'.repeat(28)}${RESET}`)
-  out.push(`  ${rgb(...ACCENT)}\u25e2${RESET} ${rgb(...CREAM)}XETH--7 // breach shell // protocol online.${RESET} ${rgb(...CYAN)}\u25e3${RESET}`)
+  out.push(centerAnsiLine(`${rgb(...ACCENT)}NET//TECH${RESET} ${DIM}${rgb(...DIMCOL)}${'─'.repeat(28)}${RESET}`, tw))
+  out.push(centerAnsiLine(`${rgb(...ACCENT)}◢${RESET} ${rgb(...CREAM)}XETH--7 // breach shell // protocol online.${RESET} ${rgb(...CYAN)}◣${RESET}`, tw))
   out.push('')
 
   // Provider info box
   const title = ' BREACH PROTOCOL INTERFACE '
-  out.push(`${bg(...BORDER)}${rgb(...PANEL_BG)}${title}${' '.repeat(Math.max(0, W - title.length))}${RESET}`)
-  out.push(`${rgb(...BORDER)}\u250c${'\u2500'.repeat(W - 2)}\u2510${RESET}`)
+  out.push(centerAnsiLine(`${bg(...BORDER)}${rgb(...PANEL_BG)}${title}${' '.repeat(Math.max(0, W - title.length))}${RESET}`, tw))
+  out.push(centerAnsiLine(`${rgb(...BORDER)}┌${'─'.repeat(W - 2)}┐${RESET}`, tw))
 
   const lbl = (k: string, v: string, c: RGB = CREAM): [string, number] => {
     const padK = k.padEnd(9)
@@ -200,24 +208,29 @@ export function printStartupScreen(): void {
 
   const provC: RGB = p.isLocal ? [160, 255, 214] : CYAN
   let [r, l] = lbl('Provider', p.name, provC)
-  out.push(boxRow(r, W, l))
+  out.push(centerAnsiLine(boxRow(r, W, l), tw))
   ;[r, l] = lbl('Cipher', p.model)
-  out.push(boxRow(r, W, l))
+  out.push(centerAnsiLine(boxRow(r, W, l), tw))
   const ep = p.baseUrl.length > 46 ? p.baseUrl.slice(0, 43) + '...' : p.baseUrl
   ;[r, l] = lbl('Uplink', ep)
-  out.push(boxRow(r, W, l))
+  out.push(centerAnsiLine(boxRow(r, W, l), tw))
 
-  out.push(`${rgb(...BORDER)}\u251c${'\u2500'.repeat(W - 2)}\u2524${RESET}`)
+  out.push(centerAnsiLine(`${rgb(...BORDER)}├${'─'.repeat(W - 2)}┤${RESET}`, tw))
 
   const sC: RGB = p.isLocal ? [160, 255, 214] : CYAN
   const sL = p.isLocal ? 'local' : 'cloud'
-  const sRow = ` ${rgb(...sC)}\u25cf${RESET} ${DIM}${rgb(...DIMCOL)}${sL}${RESET}    ${rgb(...ACCENT)}buffer ready${RESET} ${DIM}${rgb(...DIMCOL)}\u2014 /help for breach controls${RESET}`
-  const sLen = ` \u25cf ${sL}    buffer ready \u2014 /help for breach controls`.length
-  out.push(boxRow(sRow, W, sLen))
+  const sRow = ` ${rgb(...sC)}●${RESET} ${DIM}${rgb(...DIMCOL)}${sL}${RESET}    ${rgb(...ACCENT)}buffer ready${RESET} ${DIM}${rgb(...DIMCOL)}— /help for breach controls${RESET}`
+  const sLen = ` ● ${sL}    buffer ready — /help for breach controls`.length
+  out.push(centerAnsiLine(boxRow(sRow, W, sLen), tw))
 
-  out.push(`${rgb(...BORDER)}\u2514${'\u2500'.repeat(W - 2)}\u2518${RESET}`)
-  out.push(`  ${rgb(...DIMCOL)}xeth--7${RESET} ${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET} ${rgb(...CYAN)}// breach link stable${RESET}`)
+  out.push(centerAnsiLine(`${rgb(...BORDER)}└${'─'.repeat(W - 2)}┘${RESET}`, tw))
+  out.push(centerAnsiLine(`${rgb(...DIMCOL)}xeth--7${RESET} ${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET} ${rgb(...CYAN)}// breach link stable${RESET}`, tw))
   out.push('')
 
-  process.stdout.write(out.join('\n') + '\n')
+  return out
+}
+
+export function printStartupScreen(): void {
+  if (process.env.CI || !process.stdout.isTTY) return
+  process.stdout.write(getStartupLines().join('\n') + '\n')
 }
