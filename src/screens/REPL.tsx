@@ -4148,11 +4148,13 @@ export function REPL({
   useEffect(() => {
     const handleSuspend = () => {
       // Print suspension instructions
-      process.stdout.write(`\nClaude Code has been suspended. Run \`fg\` to bring Claude Code back.\nNote: ctrl + z now suspends Claude Code, ctrl + _ undoes input.\n`);
+      process.stdout.write(`\nXETH--7 has been suspended. Run \`fg\` to bring XETH--7 back.\nNote: ctrl + z now suspends XETH--7, ctrl + _ undoes input.\n`);
     };
     const handleResume = () => {
-      // Force complete component tree replacement instead of terminal clear
-      // Ink now handles line count reset internally on SIGCONT
+      // Force complete component tree replacement and hard-clear the terminal.
+      // On Windows terminal maximize/minimize, stale alternate-screen contents
+      // can remain visible unless we explicitly clear before remounting.
+      process.stdout.write('\x1b[2J\x1b[3J\x1b[H');
       setRemountKey(prev => prev + 1);
     };
     internal_eventEmitter?.on('suspend', handleSuspend);
