@@ -74,7 +74,7 @@ export function LogoV2() {
   const agent = useAppState(_temp);
   const effortValue = useAppState(_temp2);
   const config = getGlobalConfig();
-  let changelog;
+  let changelog: string[];
   try {
     changelog = getRecentReleaseNotesSync(3);
   } catch {
@@ -527,7 +527,7 @@ export function LogoV2() {
   }
   return t41;
 }
-function _temp3(current) {
+function _temp3(current: any) {
   if (current.lastReleaseNotesSeen === MACRO.VERSION) {
     return current;
   }
@@ -536,9 +536,9 @@ function _temp3(current) {
     lastReleaseNotesSeen: MACRO.VERSION
   };
 }
-function _temp2(s_0) {
+function _temp2(s_0: any) {
   return s_0.effortValue;
 }
-function _temp(s) {
+function _temp(s: any) {
   return s.agent;
 }

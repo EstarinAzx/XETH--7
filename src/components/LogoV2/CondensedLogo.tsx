@@ -153,9 +153,9 @@ export function CondensedLogo() {
   }
   return t12;
 }
-function _temp2(s_0) {
+function _temp2(s_0: any) {
   return s_0.effortValue;
 }
-function _temp(s) {
+function _temp(s: any) {
   return s.agent;
 }
