@@ -194,7 +194,7 @@ export function getStartupLines(termWidth?: number): string[] {
   out.push('')
 
   // Tagline
-  out.push(centerAnsiLine(`${rgb(...ACCENT)}NET//TECH${RESET} ${DIM}${rgb(...DIMCOL)}${'─'.repeat(28)}${RESET}`, tw))
+  out.push(centerAnsiLine(`${DIM}${rgb(...DIMCOL)}${'─'.repeat(14)}${RESET} ${rgb(...ACCENT)}NET//TECH${RESET} ${DIM}${rgb(...DIMCOL)}${'─'.repeat(14)}${RESET}`, tw))
   out.push(centerAnsiLine(`${rgb(...ACCENT)}◢${RESET} ${rgb(...CREAM)}STRATAGEM X7 // breach shell // protocol online.${RESET} ${rgb(...CYAN)}◣${RESET}`, tw))
   out.push('')
   out.push('')
