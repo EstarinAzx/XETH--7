@@ -6,6 +6,7 @@ import { join } from 'path'
 export function resolveClaudeConfigHomeDir(options?: {
   configDirEnv?: string
   homeDir?: string
+  stratagemExists?: boolean
   openClaudeExists?: boolean
   legacyClaudeExists?: boolean
 }): string {
@@ -14,20 +15,29 @@ export function resolveClaudeConfigHomeDir(options?: {
   }
 
   const homeDir = options?.homeDir ?? homedir()
+  const stratagemDir = join(homeDir, '.stratagem')
   const openClaudeDir = join(homeDir, '.openclaude')
   const legacyClaudeDir = join(homeDir, '.claude')
+  const stratagemExists =
+    options?.stratagemExists ?? existsSync(stratagemDir)
   const openClaudeExists =
     options?.openClaudeExists ?? existsSync(openClaudeDir)
   const legacyClaudeExists =
     options?.legacyClaudeExists ?? existsSync(legacyClaudeDir)
 
-  // Preserve existing user config/install state until we ship an explicit
-  // migration. New installs (neither path exists) use ~/.openclaude.
-  if (!openClaudeExists && legacyClaudeExists) {
+  // Priority: .stratagem > .openclaude > .claude
+  // New installs (no existing dirs) use ~/.stratagem.
+  if (stratagemExists) {
+    return stratagemDir.normalize('NFC')
+  }
+  if (openClaudeExists) {
+    return openClaudeDir.normalize('NFC')
+  }
+  if (legacyClaudeExists) {
     return legacyClaudeDir.normalize('NFC')
   }
 
-  return openClaudeDir.normalize('NFC')
+  return stratagemDir.normalize('NFC')
 }
 
 // Memoized: 150+ callers, many on hot paths. Keyed off CLAUDE_CONFIG_DIR so

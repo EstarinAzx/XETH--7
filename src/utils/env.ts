@@ -21,8 +21,20 @@ export const getGlobalClaudeFile = memoize((): string => {
     return join(getClaudeConfigHomeDir(), '.config.json')
   }
 
-  const filename = `.claude${fileSuffixForOauthConfig()}.json`
-  return join(process.env.CLAUDE_CONFIG_DIR || homedir(), filename)
+  // Prefer .stratagem.json, fall back to .claude.json for migration
+  const suffix = fileSuffixForOauthConfig()
+  const stratagemFile = join(process.env.CLAUDE_CONFIG_DIR || homedir(), `.stratagem${suffix}.json`)
+  const legacyFile = join(process.env.CLAUDE_CONFIG_DIR || homedir(), `.claude${suffix}.json`)
+
+  if (getFsImplementation().existsSync(stratagemFile)) {
+    return stratagemFile
+  }
+  if (getFsImplementation().existsSync(legacyFile)) {
+    return legacyFile
+  }
+
+  // New install — use .stratagem.json
+  return stratagemFile
 })
 
 const hasInternetAccess = memoize(async (): Promise<boolean> => {
