@@ -18,6 +18,7 @@ import type { AutoUpdaterResult } from '../../utils/autoUpdater.js';
 import { isFullscreenEnvEnabled } from '../../utils/fullscreen.js';
 import { isUndercover } from '../../utils/undercover.js';
 import { CoordinatorTaskPanel, useCoordinatorTaskCount } from '../CoordinatorAgentStatus.js';
+import { getPoolStatus } from '../../cockpit/pool.js';
 import { getLastAssistantMessageId, StatusLine, statusLineShouldDisplay } from '../StatusLine.js';
 import { Notifications } from './Notifications.js';
 import { PromptInputFooterLeftSide } from './PromptInputFooterLeftSide.js';
@@ -150,6 +151,7 @@ function PromptInputFooter({
           <Box flexShrink={1} gap={1}>
             {isFullscreen ? null : <Notifications apiKeyStatus={apiKeyStatus} autoUpdaterResult={autoUpdaterResult} debug={debug} isAutoUpdating={isAutoUpdating} verbose={verbose} messages={messages} onAutoUpdaterResult={onAutoUpdaterResult} onChangeIsUpdating={onChangeIsUpdating} ideSelection={ideSelection} mcpClients={mcpClients} isInputWrapped={isInputWrapped} isNarrow={isNarrow} />}
             {"external" === 'ant' && isUndercover() && <Text dimColor>undercover</Text>}
+            <CockpitStatusIndicator />
             <BridgeStatusIndicator bridgeSelected={bridgeSelected} />
           </Box>
         </Box>
@@ -193,5 +195,17 @@ function BridgeStatusIndicator({
   return <Text color={bridgeSelected ? 'background' : status.color} inverse={bridgeSelected} wrap="truncate">
       {status.label}
       {bridgeSelected && <Text dimColor> · Enter to view</Text>}
+    </Text>;
+}
+function CockpitStatusIndicator(): React.ReactNode {
+  const status = getPoolStatus('ollama-cloud');
+  if (!status) return null;
+  const keyLabel = `K${status.activeIndex + 1}/${status.totalKeys}`;
+  const reqCount = status.activeKey?.totalRequests ?? 0;
+  const color = status.allExhausted ? 'red' : 'cyan';
+  const exhaustedCount = status.keys.filter(k => k.status !== 'active').length;
+  const exhaustedLabel = exhaustedCount > 0 ? ` ${exhaustedCount}\u2620` : '';
+  return <Text color={color} wrap="truncate">
+      {`\u27d0 COCKPIT ${keyLabel} [${reqCount}req]${exhaustedLabel}`}
     </Text>;
 }

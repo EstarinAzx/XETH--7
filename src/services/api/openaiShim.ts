@@ -48,6 +48,7 @@ import {
   type ShimCreateParams,
 } from './codexShim.js'
 import { fetchWithProxyRetry } from './fetchWithProxyRetry.js'
+import { cockpitFetch, hasCockpitPool } from '../../cockpit/index.js'
 import {
   isLocalProviderUrl,
   resolveRuntimeCodexCredentials,
@@ -1429,10 +1430,18 @@ class OpenAIShimMessages {
       signal: options?.signal,
     }
 
+    // ─── Cockpit key rotation ─────────────────────────────────
+    // Detect provider from base URL for cockpit pool lookup
+    const cockpitProvider = request.baseUrl.includes('ollama.com') ? 'ollama-cloud' : ''
+    const useCockpit = cockpitProvider && hasCockpitPool(cockpitProvider)
+    const activeFetch = useCockpit
+      ? cockpitFetch(cockpitProvider, fetchWithProxyRetry)
+      : fetchWithProxyRetry
+
     const maxAttempts = isGithub ? GITHUB_429_MAX_RETRIES : 1
     let response: Response | undefined
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      response = await fetchWithProxyRetry(chatCompletionsUrl, fetchInit)
+      response = await activeFetch(chatCompletionsUrl, fetchInit)
       if (response.ok) {
         return response
       }
