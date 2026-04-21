@@ -1,4 +1,4 @@
-﻿import figures from 'figures'
+import figures from 'figures'
 import * as React from 'react'
 import { DEFAULT_CODEX_BASE_URL } from '../services/api/providerConfig.js'
 import { Box, Text } from '../ink.js'
@@ -783,16 +783,27 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
   }
 
   function persistDraft(nextDraft: ProviderDraft = draft): void {
+    // If no API key in draft but an existing profile with the same provider
+    // has one, preserve it (prevents accidental key wipe on model change)
+    const existingByName = !editingProfileId
+      ? profiles.find(
+          p => p.name === nextDraft.name && p.baseUrl === nextDraft.baseUrl,
+        )
+      : undefined
+
     const payload: ProviderProfileInput = {
       provider: draftProvider,
       name: nextDraft.name,
       baseUrl: nextDraft.baseUrl,
       model: nextDraft.model,
-      apiKey: nextDraft.apiKey,
+      apiKey: nextDraft.apiKey || existingByName?.apiKey || '',
     }
 
-    const saved = editingProfileId
-      ? updateProviderProfile(editingProfileId, payload)
+    // Update existing profile if editing OR if a profile with same
+    // name+baseUrl already exists (prevents duplicates)
+    const resolvedEditId = editingProfileId ?? existingByName?.id
+    const saved = resolvedEditId
+      ? updateProviderProfile(resolvedEditId, payload)
       : addProviderProfile(payload, { makeActive: true })
 
     if (!saved) {
