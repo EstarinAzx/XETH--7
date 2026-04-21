@@ -10,6 +10,7 @@ import { getPrimaryModel, parseModelList } from './providerModels.js'
 export type ProviderPreset =
   | 'anthropic'
   | 'ollama'
+  | 'ollama-cloud'
   | 'openai'
   | 'moonshotai'
   | 'deepseek'
@@ -248,6 +249,15 @@ export function getProviderPresetDefaults(
         baseUrl: 'https://api.minimax.io/v1',
         model: 'MiniMax-M2.5',
         apiKey: process.env.MINIMAX_API_KEY ?? '',
+        requiresApiKey: true,
+      }
+    case 'ollama-cloud':
+      return {
+        provider: 'openai',
+        name: 'Ollama Cloud',
+        baseUrl: 'https://ollama.com/v1',
+        model: process.env.OPENAI_MODEL ?? 'deepseek-v3.2',
+        apiKey: process.env.OLLAMA_API_KEY ?? '',
         requiresApiKey: true,
       }
     case 'ollama':

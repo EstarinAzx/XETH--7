@@ -1047,6 +1047,11 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
         label: 'MiniMax',
         description: 'MiniMax API endpoint',
       },
+      {
+        value: 'ollama-cloud',
+        label: 'Ollama Cloud',
+        description: 'Ollama Cloud API — just needs API key',
+      },
       ...(mode === 'first-run'
         ? [
             {
