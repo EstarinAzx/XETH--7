@@ -1,4 +1,4 @@
-import { POWERSHELL_TOOL_NAME } from '../../../tools/PowerShellTool/toolName.js';
+﻿import { POWERSHELL_TOOL_NAME } from '../../../tools/PowerShellTool/toolName.js';
 import type { PermissionUpdate } from '../../../utils/permissions/PermissionUpdateSchema.js';
 import { shouldShowAlwaysAllowOptions } from '../../../utils/permissions/permissionsLoader.js';
 import type { OptionWithDescription } from '../../CustomSelect/select.js';
@@ -27,7 +27,7 @@ export function powershellToolUseOptions({
       type: 'input',
       label: 'Yes',
       value: 'yes',
-      placeholder: 'and tell XETH--7 what to do next',
+      placeholder: 'and tell STRATAGEM X7 what to do next',
       onChange: onAcceptFeedbackChange,
       allowEmptySubmitToCancel: true
     });
@@ -76,7 +76,7 @@ export function powershellToolUseOptions({
       type: 'input',
       label: 'No',
       value: 'no',
-      placeholder: 'and tell XETH--7 what to do differently',
+      placeholder: 'and tell STRATAGEM X7 what to do differently',
       onChange: onRejectFeedbackChange,
       allowEmptySubmitToCancel: true
     });

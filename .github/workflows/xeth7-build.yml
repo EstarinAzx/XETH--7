@@ -1,4 +1,4 @@
-name: XETH--7 Build & Release
+﻿name: STRATAGEM X7 Build & Release
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: xeth7-build-${{ github.ref }}
+  group: stx7-build-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -21,10 +21,10 @@ jobs:
         include:
           - os: ubuntu-latest
             platform: linux-x64
-            artifact: xeth7-linux-x64
+            artifact: stx7-linux-x64
           - os: windows-latest
             platform: win-x64
-            artifact: xeth7-win-x64
+            artifact: stx7-win-x64
 
     steps:
       - name: Checkout
@@ -50,20 +50,20 @@ jobs:
         shell: bash
         run: |
           mkdir -p release
-          cp dist/cli.mjs release/xeth7.mjs
+          cp dist/cli.mjs release/stx7.mjs
           cp package.json release/
-          echo '#!/usr/bin/env node' > release/xeth7
-          echo 'import "./cli.mjs"' >> release/xeth7
+          echo '#!/usr/bin/env node' > release/stx7
+          echo 'import "./cli.mjs"' >> release/stx7
           # Create a simple install script
           cat > release/install.sh << 'EOF'
           #!/bin/bash
           set -e
           INSTALL_DIR="${HOME}/.local/bin"
           mkdir -p "$INSTALL_DIR"
-          cp xeth7.mjs "$INSTALL_DIR/"
-          cp xeth7 "$INSTALL_DIR/"
-          chmod +x "$INSTALL_DIR/xeth7"
-          echo "XETH--7 installed to $INSTALL_DIR/xeth7"
+          cp stx7.mjs "$INSTALL_DIR/"
+          cp stx7 "$INSTALL_DIR/"
+          chmod +x "$INSTALL_DIR/stx7"
+          echo "STRATAGEM X7 installed to $INSTALL_DIR/stx7"
           echo "Make sure $INSTALL_DIR is in your PATH"
           EOF
           chmod +x release/install.sh
@@ -111,9 +111,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: dev-${{ steps.version.outputs.version }}
-          name: "XETH--7 dev build v${{ steps.version.outputs.version }} (${{ steps.sha.outputs.short }})"
+          name: "STRATAGEM X7 dev build v${{ steps.version.outputs.version }} (${{ steps.sha.outputs.short }})"
           body: |
-            ## XETH--7 Development Build
+            ## STRATAGEM X7 Development Build
 
             **Branch:** `xeth-7-dev`
             **Commit:** `${{ github.sha }}`
@@ -124,20 +124,20 @@ jobs:
             **Linux/macOS:**
             ```bash
             # Download and extract
-            curl -L https://github.com/${{ github.repository }}/releases/download/dev-${{ steps.version.outputs.version }}/xeth7-linux-x64.tar.gz | tar xz
+            curl -L https://github.com/${{ github.repository }}/releases/download/dev-${{ steps.version.outputs.version }}/stx7-linux-x64.tar.gz | tar xz
             # Install
             bash install.sh
             ```
 
             **Windows:**
-            Download `xeth7-win-x64.tar.gz`, extract, and run with `node xeth7.mjs`
+            Download `stx7-win-x64.tar.gz`, extract, and run with `node stx7.mjs`
 
             **Direct run (any platform with Node.js + Bun):**
             ```bash
-            node xeth7.mjs
+            node stx7.mjs
             ```
           files: |
-            xeth7-linux-x64.tar.gz
-            xeth7-win-x64.tar.gz
+            stx7-linux-x64.tar.gz
+            stx7-win-x64.tar.gz
           prerelease: true
           make_latest: false

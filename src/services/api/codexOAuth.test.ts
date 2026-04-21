@@ -1,4 +1,4 @@
-import { createServer } from 'node:http'
+﻿import { createServer } from 'node:http'
 
 import { afterEach, expect, mock, test } from 'bun:test'
 
@@ -100,9 +100,9 @@ test('serves updated success copy after a successful Codex OAuth flow', async ()
 
   expect(tokens.accessToken).toBe('access-token')
   expect(tokens.refreshToken).toBe('refresh-token')
-  expect(html).toContain('You can return to XETH--7 now.')
+  expect(html).toContain('You can return to STRATAGEM X7 now.')
   expect(html).toContain(
-    'XETH--7 will finish activating your new Codex OAuth login.',
+    'STRATAGEM X7 will finish activating your new Codex OAuth login.',
   )
   expect(html).not.toContain('continue automatically')
 })
@@ -162,5 +162,5 @@ test('cancellation during token exchange returns a cancelled page and rejects th
   const html = await callbackResponse.text()
 
   expect(html).toContain('Codex login cancelled')
-  expect(html).toContain('retry in XETH--7')
+  expect(html).toContain('retry in STRATAGEM X7')
 })

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Memory type taxonomy.
  *
  * Memories are constrained to four types capturing context NOT derivable
@@ -244,15 +244,15 @@ export const KNOWLEDGE_ARTICLE_FORMAT_SECTION: readonly string[] = [
   'Durable knowledge notes should use YAML frontmatter plus wikilinks:',
   '```markdown',
   '---',
-  'title: XETH--7 Branch Workflow',
-  'description: Ongoing XETH--7 work should continue on xeth-7-dev instead of main.',
+  'title: STRATAGEM X7 Branch Workflow',
+  'description: Ongoing STRATAGEM X7 work should continue on xeth-7-dev instead of main.',
   'type: feedback',
   'created: 2026-04-17',
   'updated: 2026-04-17',
   'tags: [xeth-7, workflow, git]',
   '---',
   '',
-  '# XETH--7 Branch Workflow',
+  '# STRATAGEM X7 Branch Workflow',
   '',
   'Development should continue on `xeth-7-dev`, not `main`.',
   '',

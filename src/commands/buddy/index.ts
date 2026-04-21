@@ -1,9 +1,9 @@
-import type { Command } from '../../commands.js'
+﻿import type { Command } from '../../commands.js'
 
 const buddy = {
   type: 'local-jsx',
   name: 'buddy',
-  description: 'Hatch, pet, and manage your XETH--7 companion',
+  description: 'Hatch, pet, and manage your STRATAGEM X7 companion',
   immediate: true,
   argumentHint: '[status|mute|unmute|help]',
   load: () => import('./buddy.js'),

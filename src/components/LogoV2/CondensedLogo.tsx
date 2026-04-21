@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import * as React from 'react';
 import { type ReactNode, useEffect } from 'react';
 import { useMainLoopModel } from '../../hooks/useMainLoopModel.js';
@@ -88,7 +88,7 @@ export function CondensedLogo() {
   }
   let t5;
   if ($[8] === Symbol.for("react.memo_cache_sentinel")) {
-    t5 = <Text bold={true}>XETH--7</Text>;
+    t5 = <Text bold={true}>STRATAGEM X7</Text>;
     $[8] = t5;
   } else {
     t5 = $[8];
@@ -141,7 +141,7 @@ export function CondensedLogo() {
   }
   let t12;
   if ($[23] !== t10 || $[24] !== t11 || $[25] !== t6 || $[26] !== t7 || $[27] !== t9) {
-    t12 = <OffscreenFreeze><Box borderStyle="single" borderColor="promptBorder" borderText={{ content: ' NET//TECH PROFILE ', position: 'top', align: 'start', offset: 1 }} paddingX={2} paddingY={0} flexDirection="row" gap={2} alignItems="center"><Box flexDirection="column" alignItems="center"><Text color="promptBorder">◢</Text>{t4}<Text color="claude">◣</Text></Box><Box flexDirection="column"><Text color="promptBorder" bold={true}>XETH--7</Text><Text color="claude">{t6a}</Text><Box marginTop={1}>{t6}</Box>{t7}{t9}{t10}{t11}</Box></Box></OffscreenFreeze>;
+    t12 = <OffscreenFreeze><Box borderStyle="single" borderColor="promptBorder" borderText={{ content: ' NET//TECH PROFILE ', position: 'top', align: 'start', offset: 1 }} paddingX={2} paddingY={0} flexDirection="row" gap={2} alignItems="center"><Box flexDirection="column" alignItems="center"><Text color="promptBorder">◢</Text>{t4}<Text color="claude">◣</Text></Box><Box flexDirection="column"><Text color="promptBorder" bold={true}>STRATAGEM X7</Text><Text color="claude">{t6a}</Text><Box marginTop={1}>{t6}</Box>{t7}{t9}{t10}{t11}</Box></Box></OffscreenFreeze>;
     $[23] = t10;
     $[24] = t11;
     $[25] = t6;

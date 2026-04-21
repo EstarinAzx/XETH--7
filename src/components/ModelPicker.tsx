@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import capitalize from 'lodash-es/capitalize.js';
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
@@ -265,7 +265,7 @@ export function ModelPicker(t0) {
   } else {
     t15 = $[41];
   }
-  const t16 = headerText ?? "Switch cipher for this session. Applies globally to future XETH--7 sessions. For unlisted ciphers, specify with --model.";
+  const t16 = headerText ?? "Switch cipher for this session. Applies globally to future STRATAGEM X7 sessions. For unlisted ciphers, specify with --model.";
   let t17;
   if ($[42] !== t16) {
     t17 = <Text dimColor={true}>{t16}</Text>;

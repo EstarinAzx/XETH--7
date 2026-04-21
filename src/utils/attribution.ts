@@ -1,4 +1,4 @@
-import { feature } from 'bun:bundle'
+﻿import { feature } from 'bun:bundle'
 import { stat } from 'fs/promises'
 import { getClientType } from '../bootstrap/state.js'
 import { getRemoteSessionUrl, isRemoteSessionLocal } from '../constants/product.js'
@@ -75,9 +75,9 @@ export function getAttributionTexts(): AttributionTexts {
       ? getPublicModelName(model)
       : 'Claude Opus 4.6'
   const defaultAttribution =
-    '🤖 Generated with [XETH--7](https://github.com/EstarinAzx/XETH--7)'
+    '🤖 Generated with [STRATAGEM X7](https://github.com/EstarinAzx/STRATAGEM X7)'
   const coAuthorDomain =
-    getAPIProvider() === 'firstParty' ? 'anthropic.com' : 'xeth7.dev'
+    getAPIProvider() === 'firstParty' ? 'anthropic.com' : 'stx7.dev'
   const defaultCommit = isEnvTruthy(
     process.env.OPENCLAUDE_DISABLE_CO_AUTHORED_BY,
   )
@@ -331,7 +331,7 @@ export async function getEnhancedPRAttribution(
   }
 
   const defaultAttribution =
-    '🤖 Generated with [XETH--7](https://github.com/EstarinAzx/XETH--7)'
+    '🤖 Generated with [STRATAGEM X7](https://github.com/EstarinAzx/STRATAGEM X7)'
 
   // Get AppState first
   const appState = getAppState()
@@ -377,7 +377,7 @@ export async function getEnhancedPRAttribution(
     memoryAccessCount > 0
       ? `, ${memoryAccessCount} ${memoryAccessCount === 1 ? 'memory' : 'memories'} recalled`
       : ''
-  const summary = `🤖 Generated with [XETH--7](https://github.com/EstarinAzx/XETH--7) (${claudePercent}% ${promptCount}-shotted by ${shortModelName}${memSuffix})`
+  const summary = `🤖 Generated with [STRATAGEM X7](https://github.com/EstarinAzx/STRATAGEM X7) (${claudePercent}% ${promptCount}-shotted by ${shortModelName}${memSuffix})`
 
   // Append trailer lines for squash-merge survival. Only for allowlisted repos
   // (INTERNAL_MODEL_REPOS) and only in builds with COMMIT_ATTRIBUTION enabled —

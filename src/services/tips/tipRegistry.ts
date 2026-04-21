@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+﻿import chalk from 'chalk'
 import { logForDebugging } from 'src/utils/debug.js'
 import { fileHistoryEnabled } from 'src/utils/fileHistory.js'
 import {
@@ -375,7 +375,7 @@ const externalTips: Tip[] = [
   {
     id: 'continue',
     content: async () =>
-      'Run xeth7 --continue or xeth7 --resume to resume a conversation',
+      'Run stx7 --continue or stx7 --resume to resume a conversation',
     cooldownSessions: 10,
     isRelevant: async () => true,
   },

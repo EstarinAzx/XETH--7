@@ -1,4 +1,4 @@
-import { PassThrough } from 'node:stream'
+﻿import { PassThrough } from 'node:stream'
 
 import { afterEach, expect, mock, test } from 'bun:test'
 import React from 'react'
@@ -607,7 +607,7 @@ test('ProviderManager first-run Codex OAuth switches the current session after l
     expect.objectContaining({
       action: 'saved',
       message:
-        'Codex OAuth configured. XETH--7 switched to it for this session.',
+        'Codex OAuth configured. STRATAGEM X7 switched to it for this session.',
     }),
   )
 

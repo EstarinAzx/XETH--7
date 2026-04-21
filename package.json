@@ -1,11 +1,11 @@
 {
   "name": "@gitlawb/openclaude",
   "version": "0.3.0",
-  "description": "XETH--7 is a cyberpunk coding-agent CLI for cloud and local model providers",
+  "description": "STRATAGEM X7 is a cyberpunk coding-agent CLI for cloud and local model providers",
   "type": "module",
   "bin": {
     "openclaude": "./bin/openclaude",
-    "xeth7": "./bin/xeth7"
+    "stx7": "./bin/stx7"
   },
   "files": [
     "bin/",
@@ -144,7 +144,7 @@
     "url": "https://github.com/EstarinAzx/XETH--7.git"
   },
   "keywords": [
-    "claude-code",
+    "stratagem-x7",
     "openai",
     "llm",
     "cli",

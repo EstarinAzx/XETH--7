@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import figures from 'figures';
 import React, { useCallback, useState } from 'react';
 import type { CommandResultDisplay } from '../../commands.js';
@@ -423,7 +423,7 @@ export function MCPListPanel(t0) {
   }
   let t26;
   if ($[60] !== hasFailedClients) {
-    t26 = hasFailedClients && <Text dimColor={true}>{debugMode ? "\u203B Error logs shown inline with --debug" : "\u203B Run xeth7 --debug to see error logs"}</Text>;
+    t26 = hasFailedClients && <Text dimColor={true}>{debugMode ? "\u203B Error logs shown inline with --debug" : "\u203B Run stx7 --debug to see error logs"}</Text>;
     $[60] = hasFailedClients;
     $[61] = t26;
   } else {

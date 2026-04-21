@@ -1,4 +1,4 @@
-import figures from 'figures';
+﻿import figures from 'figures';
 import { homedir } from 'os';
 import * as React from 'react';
 import { Box, Text } from '../../ink.js';
@@ -41,7 +41,7 @@ export function createWhatsNewFeed(releaseNotes: string[]): FeedConfig {
   });
   const emptyMessage = "external" === 'ant' ? 'Unable to fetch latest claude-cli-internal commits' : 'Check /release-notes for recent updates';
   return {
-    title: "external" === 'ant' ? "XETH--7 Updates [internal-only: Latest CC commits]" : "XETH--7 Updates",
+    title: "external" === 'ant' ? "STRATAGEM X7 Updates [internal-only: Latest CC commits]" : "STRATAGEM X7 Updates",
     lines,
     footer: lines.length > 0 ? '/release-notes for more' : undefined,
     emptyMessage
@@ -73,7 +73,7 @@ export function createProjectOnboardingFeed(steps: Step[]): FeedConfig {
 }
 export function createGuestPassesFeed(): FeedConfig {
   const reward = getCachedReferrerReward();
-  const subtitle = reward ? `Share XETH--7 and earn ${formatCreditAmount(reward)} of extra usage` : 'Share XETH--7 with friends';
+  const subtitle = reward ? `Share STRATAGEM X7 and earn ${formatCreditAmount(reward)} of extra usage` : 'Share STRATAGEM X7 with friends';
   return {
     title: '3 guest passes',
     lines: [],

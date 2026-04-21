@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import * as React from 'react';
 import { useState } from 'react';
 import { useExitOnCtrlCDWithKeybindings } from 'src/hooks/useExitOnCtrlCDWithKeybindings.js';
@@ -30,11 +30,11 @@ export function ThinkingToggle(t0) {
     t1 = [{
       value: "true",
       label: "Enabled",
-      description: "XETH--7 will think before responding"
+      description: "STRATAGEM X7 will think before responding"
     }, {
       value: "false",
       label: "Disabled",
-      description: "XETH--7 will respond without extended thinking"
+      description: "STRATAGEM X7 will respond without extended thinking"
     }];
     $[0] = t1;
   } else {

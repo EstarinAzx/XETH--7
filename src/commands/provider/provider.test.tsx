@@ -1,4 +1,4 @@
-import { PassThrough } from 'node:stream'
+﻿import { PassThrough } from 'node:stream'
 
 import { afterEach, expect, mock, test } from 'bun:test'
 import React from 'react'
@@ -329,8 +329,8 @@ test('buildProfileSaveMessage reflects immediate Codex activation for existing c
   )
 
   expect(message).toContain('Saved Codex profile.')
-  expect(message).toContain('XETH--7 switched to it for this session.')
-  expect(message).not.toContain('Restart XETH--7 to use it.')
+  expect(message).toContain('STRATAGEM X7 switched to it for this session.')
+  expect(message).not.toContain('Restart STRATAGEM X7 to use it.')
 })
 
 test('buildProfileSaveMessage reflects immediate Codex OAuth activation when the session switched successfully', () => {
@@ -349,8 +349,8 @@ test('buildProfileSaveMessage reflects immediate Codex OAuth activation when the
   )
 
   expect(message).toContain('Saved Codex profile.')
-  expect(message).toContain('XETH--7 switched to it for this session.')
-  expect(message).not.toContain('Restart XETH--7 to use it.')
+  expect(message).toContain('STRATAGEM X7 switched to it for this session.')
+  expect(message).not.toContain('Restart STRATAGEM X7 to use it.')
 })
 
 test('buildCodexOAuthProfileEnv uses the fresh OAuth account id without persisting an API key', () => {

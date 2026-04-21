@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 // biome-ignore-all assist/source/organizeImports: internal-only import markers must not be reordered
 import { feature } from 'bun:bundle';
 import { spawnSync } from 'child_process';
@@ -1134,7 +1134,7 @@ export function REPL({
   // session from mid-conversation context.
   const haikuTitleAttemptedRef = useRef((initialMessages?.length ?? 0) > 0);
   const agentTitle = mainThreadAgentDefinition?.agentType;
-  const terminalTitle = sessionTitle ?? agentTitle ?? haikuTitle ?? 'XETH--7';
+  const terminalTitle = sessionTitle ?? agentTitle ?? haikuTitle ?? 'STRATAGEM X7';
   const isWaitingForApproval = toolUseConfirmQueue.length > 0 || promptQueue.length > 0 || pendingWorkerRequest || pendingSandboxRequest;
   // Local-jsx commands (like /plugin, /config) show user-facing dialogs that
   // wait for input. Require jsx != null — if the flag is stuck true but jsx
@@ -4148,7 +4148,7 @@ export function REPL({
   useEffect(() => {
     const handleSuspend = () => {
       // Print suspension instructions
-      process.stdout.write(`\nXETH--7 has been suspended. Run \`fg\` to bring XETH--7 back.\nNote: ctrl + z now suspends XETH--7, ctrl + _ undoes input.\n`);
+      process.stdout.write(`\nSTRATAGEM X7 has been suspended. Run \`fg\` to bring STRATAGEM X7 back.\nNote: ctrl + z now suspends STRATAGEM X7, ctrl + _ undoes input.\n`);
     };
     const handleResume = () => {
       // Force complete component tree replacement and hard-clear the terminal.

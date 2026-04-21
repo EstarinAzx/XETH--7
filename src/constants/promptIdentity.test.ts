@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from 'bun:test'
+﻿import { afterEach, expect, test } from 'bun:test'
 
 // MACRO is replaced at build time by Bun.define but not in test mode.
 // Define it globally so tests that import modules using MACRO don't crash.
@@ -25,57 +25,57 @@ afterEach(() => {
   process.env.CLAUDE_CODE_SIMPLE = originalSimpleEnv
 })
 
-test('CLI identity prefixes describe XETH--7 instead of Claude Code', () => {
-  expect(getCLISyspromptPrefix()).toContain('XETH--7')
+test('CLI identity prefixes describe STRATAGEM X7 instead of Claude Code', () => {
+  expect(getCLISyspromptPrefix()).toContain('STRATAGEM X7')
   expect(getCLISyspromptPrefix()).not.toContain('Claude Code')
   expect(getCLISyspromptPrefix()).not.toContain("Anthropic's official CLI for Claude")
 
   for (const prefix of CLI_SYSPROMPT_PREFIXES) {
-    expect(prefix).toContain('XETH--7')
+    expect(prefix).toContain('STRATAGEM X7')
     expect(prefix).not.toContain('Claude Code')
     expect(prefix).not.toContain("Anthropic's official CLI for Claude")
   }
 })
 
-test('simple mode identity describes XETH--7 instead of Claude Code', async () => {
+test('simple mode identity describes STRATAGEM X7 instead of Claude Code', async () => {
   process.env.CLAUDE_CODE_SIMPLE = '1'
 
   const prompt = await getSystemPrompt([], 'gpt-4o')
 
-  expect(prompt[0]).toContain('XETH--7')
+  expect(prompt[0]).toContain('STRATAGEM X7')
   expect(prompt[0]).not.toContain('Claude Code')
   expect(prompt[0]).not.toContain("Anthropic's official CLI for Claude")
 })
 
-test('built-in agent prompts describe XETH--7 instead of Claude Code', () => {
-  expect(DEFAULT_AGENT_PROMPT).toContain('XETH--7')
+test('built-in agent prompts describe STRATAGEM X7 instead of Claude Code', () => {
+  expect(DEFAULT_AGENT_PROMPT).toContain('STRATAGEM X7')
   expect(DEFAULT_AGENT_PROMPT).not.toContain('Claude Code')
   expect(DEFAULT_AGENT_PROMPT).not.toContain("Anthropic's official CLI for Claude")
 
   const generalPrompt = GENERAL_PURPOSE_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(generalPrompt).toContain('XETH--7')
+  expect(generalPrompt).toContain('STRATAGEM X7')
   expect(generalPrompt).not.toContain('Claude Code')
   expect(generalPrompt).not.toContain("Anthropic's official CLI for Claude")
 
   const explorePrompt = EXPLORE_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(explorePrompt).toContain('XETH--7')
+  expect(explorePrompt).toContain('STRATAGEM X7')
   expect(explorePrompt).not.toContain('Claude Code')
   expect(explorePrompt).not.toContain("Anthropic's official CLI for Claude")
 
   const planPrompt = PLAN_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(planPrompt).toContain('XETH--7')
+  expect(planPrompt).toContain('STRATAGEM X7')
   expect(planPrompt).not.toContain('Claude Code')
 
   const statuslinePrompt = STATUSLINE_SETUP_AGENT.getSystemPrompt({
     toolUseContext: { options: {} as never },
   })
-  expect(statuslinePrompt).toContain('XETH--7')
+  expect(statuslinePrompt).toContain('STRATAGEM X7')
   expect(statuslinePrompt).not.toContain('Claude Code')
 
   const guidePrompt = CLAUDE_CODE_GUIDE_AGENT.getSystemPrompt({
@@ -87,9 +87,9 @@ test('built-in agent prompts describe XETH--7 instead of Claude Code', () => {
       } as never,
     },
   })
-  expect(guidePrompt).toContain('XETH--7')
-  expect(guidePrompt).toContain('You are the XETH--7 guide agent.')
-  expect(guidePrompt).toContain('**XETH--7** (the CLI tool)')
+  expect(guidePrompt).toContain('STRATAGEM X7')
+  expect(guidePrompt).toContain('You are the STRATAGEM X7 guide agent.')
+  expect(guidePrompt).toContain('**STRATAGEM X7** (the CLI tool)')
   expect(guidePrompt).not.toContain('You are the Claude guide agent.')
   expect(guidePrompt).not.toContain('**Claude Code** (the CLI tool)')
 })

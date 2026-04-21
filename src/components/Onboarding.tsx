@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { type AnalyticsMetadata_I_VERIFIED_THIS_IS_NOT_CODE_OR_FILEPATHS, logEvent } from 'src/services/analytics/index.js';
 import { setupTerminal, shouldOfferTerminalSetup } from '../commands/terminalSetup/terminalSetup.js';
@@ -71,9 +71,9 @@ export function Onboarding({
          */}
         <OrderedList>
           <OrderedList.Item>
-            <Text>XETH--7 can make mistakes</Text>
+            <Text>STRATAGEM X7 can make mistakes</Text>
             <Text dimColor wrap="wrap">
-              You should always review XETH--7's responses, especially when
+              You should always review STRATAGEM X7's responses, especially when
               <Newline />
               running code.
               <Newline />
@@ -98,7 +98,7 @@ export function Onboarding({
   const apiKeyNeedingApproval = useMemo(() => {
     // Add API key step if needed
     // On homespace, ANTHROPIC_API_KEY is preserved in process.env for child
-    // processes but ignored by XETH--7 itself (see auth.ts).
+    // processes but ignored by STRATAGEM X7 itself (see auth.ts).
     if (!process.env.ANTHROPIC_API_KEY || isRunningOnHomespace() || !isAnthropicAuthEnabled()) {
       return '';
     }
@@ -146,7 +146,7 @@ export function Onboarding({
     steps.push({
       id: 'terminal-setup',
       component: <Box flexDirection="column" gap={1} paddingLeft={1}>
-          <Text bold>Use XETH--7's terminal setup?</Text>
+          <Text bold>Use STRATAGEM X7's terminal setup?</Text>
           <Box flexDirection="column" width={70} gap={1}>
             <Text>
               For the optimal coding experience, enable the recommended settings

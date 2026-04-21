@@ -1,4 +1,4 @@
-import { feature } from 'bun:bundle';
+﻿import { feature } from 'bun:bundle';
 import type { UUID } from 'crypto';
 import figures from 'figures';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -738,7 +738,7 @@ export function buildPlanApprovalOptions({
     type: 'input',
     label: 'No, keep planning',
     value: 'no',
-    placeholder: 'Tell XETH--7 what to change',
+    placeholder: 'Tell STRATAGEM X7 what to change',
     description: 'shift+tab to approve with this feedback',
     onChange: onFeedbackChange
   });

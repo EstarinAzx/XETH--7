@@ -1,4 +1,4 @@
-import { homedir } from 'os';
+﻿import { homedir } from 'os';
 import { basename, join, sep } from 'path';
 import React, { type ReactNode } from 'react';
 import { getOriginalCwd } from '../../../bootstrap/state.js';
@@ -76,7 +76,7 @@ export function getFilePermissionOptions({
       type: 'input',
       label: 'Yes',
       value: 'yes',
-      placeholder: 'and tell XETH--7 what to do next',
+      placeholder: 'and tell STRATAGEM X7 what to do next',
       onChange: onAcceptFeedbackChange,
       allowEmptySubmitToCancel: true,
       option: {
@@ -104,7 +104,7 @@ export function getFilePermissionOptions({
   // persisted permission rules.
   if ((inClaudeFolder || inGlobalClaudeFolder) && operationType !== 'read') {
     options.push({
-      label: 'Yes, and allow XETH--7 to edit its own settings for this session',
+      label: 'Yes, and allow STRATAGEM X7 to edit its own settings for this session',
       value: 'yes-claude-folder',
       option: {
         type: 'accept-session',
@@ -155,7 +155,7 @@ export function getFilePermissionOptions({
       type: 'input',
       label: 'No',
       value: 'no',
-      placeholder: 'and tell XETH--7 what to do differently',
+      placeholder: 'and tell STRATAGEM X7 what to do differently',
       onChange: onRejectFeedbackChange,
       allowEmptySubmitToCancel: true,
       option: {

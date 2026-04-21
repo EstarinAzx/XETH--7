@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import chalk from 'chalk';
 import figures from 'figures';
 import * as React from 'react';
@@ -388,9 +388,9 @@ function PermissionRulesTab(t0) {
     let t8;
     if ($[10] === Symbol.for("react.memo_cache_sentinel")) {
       t8 = {
-        allow: "XETH--7 won't ask before using allowed tools.",
-        ask: "XETH--7 will always ask for confirmation before using these tools.",
-        deny: "XETH--7 will always reject requests to use denied tools."
+        allow: "STRATAGEM X7 won't ask before using allowed tools.",
+        ask: "STRATAGEM X7 will always ask for confirmation before using these tools.",
+        deny: "STRATAGEM X7 will always reject requests to use denied tools."
       };
       $[10] = t8;
     } else {

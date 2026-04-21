@@ -1,5 +1,5 @@
 /**
- * XETH--7 startup screen â€” breach HUD splash.
+ * STRATAGEM X7 startup screen â€” breach HUD splash.
  * Called once at CLI startup before the Ink UI renders.
  *
  * Addresses: https://github.com/Gitlawb/openclaude/issues/55
@@ -75,13 +75,14 @@ const PANEL_BG: RGB = [14, 16, 10]
 
 // â”€â”€â”€ Filled Block Text Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-const LOGO_XETH7 = [
-  `  ██╗  ██╗███████╗████████╗██╗  ██╗      ███████╗`,
-  `  ╚██╗██╔╝██╔════╝╚══██╔══╝██║  ██║      ╚════██║`,
-  `   ╚███╔╝ █████╗     ██║   ███████║█████╗    ██╔╝`,
-  `   ██╔██╗ ██╔══╝     ██║   ██╔══██║╚════╝   ██╔╝ `,
-  `  ██╔╝ ██╗███████╗   ██║   ██║  ██║        ██╔╝  `,
-  `  ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝        ╚═╝   `,
+const LOGO_STX7 = [
+  `  ███████╗████████╗██████╗  █████╗ ████████╗ █████╗  ██████╗ ███████╗███╗   ███╗`,
+  `  ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔════╝ ██╔════╝████╗ ████║`,
+  `  ███████╗   ██║   ██████╔╝███████║   ██║   ███████║██║  ███╗█████╗  ██╔████╔██║`,
+  `  ╚════██║   ██║   ██╔══██╗██╔══██║   ██║   ██╔══██║██║   ██║██╔══╝  ██║╚██╔╝██║`,
+  `  ███████║   ██║   ██║  ██║██║  ██║   ██║   ██║  ██║╚██████╔╝███████╗██║ ╚═╝ ██║`,
+  `  ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝`,
+  `                              ═══ X7 ═══                                        `,
 ]
 
 
@@ -179,7 +180,7 @@ export function getStartupLines(termWidth?: number): string[] {
   out.push('')
 
   // Gradient logo
-  const allLogo = LOGO_XETH7
+  const allLogo = LOGO_STX7
   const total = allLogo.length
   for (let i = 0; i < total; i++) {
     const t = total > 1 ? i / (total - 1) : 0
@@ -194,7 +195,7 @@ export function getStartupLines(termWidth?: number): string[] {
 
   // Tagline
   out.push(centerAnsiLine(`${rgb(...ACCENT)}NET//TECH${RESET} ${DIM}${rgb(...DIMCOL)}${'─'.repeat(28)}${RESET}`, tw))
-  out.push(centerAnsiLine(`${rgb(...ACCENT)}◢${RESET} ${rgb(...CREAM)}XETH--7 // breach shell // protocol online.${RESET} ${rgb(...CYAN)}◣${RESET}`, tw))
+  out.push(centerAnsiLine(`${rgb(...ACCENT)}◢${RESET} ${rgb(...CREAM)}STRATAGEM X7 // breach shell // protocol online.${RESET} ${rgb(...CYAN)}◣${RESET}`, tw))
   out.push('')
   out.push('')
 
@@ -226,7 +227,7 @@ export function getStartupLines(termWidth?: number): string[] {
   out.push(centerAnsiLine(boxRow(sRow, W, sLen), tw))
 
   out.push(centerAnsiLine(`${rgb(...BORDER)}└${'─'.repeat(W - 2)}┘${RESET}`, tw))
-  out.push(centerAnsiLine(`${rgb(...DIMCOL)}xeth--7${RESET} ${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET} ${rgb(...CYAN)}// breach link stable${RESET}`, tw))
+  out.push(centerAnsiLine(`${rgb(...DIMCOL)}STRATAGEM X7${RESET} ${rgb(...ACCENT)}v${MACRO.DISPLAY_VERSION ?? MACRO.VERSION}${RESET} ${rgb(...CYAN)}// breach link stable${RESET}`, tw))
   out.push('')
 
   return out

@@ -1,4 +1,4 @@
-import figures from 'figures'
+﻿import figures from 'figures'
 import memoize from 'lodash-es/memoize.js'
 import { getOutputStyleDirStyles } from '../outputStyles/loadOutputStylesDir.js'
 import type { OutputStyle } from '../utils/config.js'
@@ -44,7 +44,7 @@ export const OUTPUT_STYLE_CONFIG: OutputStyles = {
     name: 'Explanatory',
     source: 'built-in',
     description:
-      'XETH--7 explains its implementation choices and codebase patterns',
+      'STRATAGEM X7 explains its implementation choices and codebase patterns',
     keepCodingInstructions: true,
     prompt: `You are an interactive CLI tool that helps users with software engineering tasks. In addition to software engineering tasks, you should provide educational insights about the codebase along the way.
 
@@ -57,7 +57,7 @@ ${EXPLANATORY_FEATURE_PROMPT}`,
     name: 'Learning',
     source: 'built-in',
     description:
-      'XETH--7 pauses and asks you to write small pieces of code for hands-on practice',
+      'STRATAGEM X7 pauses and asks you to write small pieces of code for hands-on practice',
     keepCodingInstructions: true,
     prompt: `You are an interactive CLI tool that helps users with software engineering tasks. In addition to software engineering tasks, you should help users learn more about the codebase through hands-on practice and educational insights.
 

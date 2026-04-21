@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import { feature } from 'bun:bundle';
 import * as React from 'react';
 import { EnterPlanModeTool } from 'src/tools/EnterPlanModeTool/EnterPlanModeTool.js';
@@ -128,18 +128,18 @@ export type ToolUseConfirm<Input extends AnyObject = AnyObject> = {
 function getNotificationMessage(toolUseConfirm: ToolUseConfirm): string {
   const toolName = toolUseConfirm.tool.userFacingName(toolUseConfirm.input as never);
   if (toolUseConfirm.tool === ExitPlanModeV2Tool) {
-    return 'XETH--7 needs your approval for the plan';
+    return 'STRATAGEM X7 needs your approval for the plan';
   }
   if (toolUseConfirm.tool === EnterPlanModeTool) {
-    return 'XETH--7 wants to enter plan mode';
+    return 'STRATAGEM X7 wants to enter plan mode';
   }
   if (feature('REVIEW_ARTIFACT') && toolUseConfirm.tool === ReviewArtifactTool) {
-    return 'XETH--7 needs your approval for a review artifact';
+    return 'STRATAGEM X7 needs your approval for a review artifact';
   }
   if (!toolName || toolName.trim() === '') {
-    return 'XETH--7 needs your attention';
+    return 'STRATAGEM X7 needs your attention';
   }
-  return `XETH--7 needs your permission to use ${toolName}`;
+  return `STRATAGEM X7 needs your permission to use ${toolName}`;
 }
 
 // TODO: Move this to Tool.renderPermissionRequest

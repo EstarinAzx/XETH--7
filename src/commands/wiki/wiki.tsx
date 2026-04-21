@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { COMMON_HELP_ARGS, COMMON_INFO_ARGS } from '../../constants/xml.js'
 import { ingestLocalWikiSource } from '../../services/wiki/ingest.js'
 import { initializeWiki } from '../../services/wiki/init.js'
@@ -12,7 +12,7 @@ import { getCwd } from '../../utils/cwd.js'
 function renderHelp(): string {
   return `Usage: /wiki [init|status|ingest <path>]
 
-Manage the XETH--7 project wiki stored in .openclaude/wiki.
+Manage the STRATAGEM X7 project wiki stored in .openclaude/wiki.
 
 Commands:
   /wiki init    Initialize the wiki structure in the current project
@@ -26,7 +26,7 @@ Examples:
 }
 
 function formatInitResult(result: Awaited<ReturnType<typeof initializeWiki>>): string {
-  const lines = [`Initialized XETH--7 wiki at ${result.root}`]
+  const lines = [`Initialized STRATAGEM X7 wiki at ${result.root}`]
 
   if (result.alreadyExisted) {
     lines.push('', 'Wiki already existed. No new files were created.')
@@ -45,11 +45,11 @@ function formatInitResult(result: Awaited<ReturnType<typeof initializeWiki>>): s
 
 function formatStatus(status: Awaited<ReturnType<typeof getWikiStatus>>): string {
   if (!status.initialized) {
-    return `XETH--7 wiki is not initialized in this project.\n\nRun /wiki init to create ${status.root}.`
+    return `STRATAGEM X7 wiki is not initialized in this project.\n\nRun /wiki init to create ${status.root}.`
   }
 
   return [
-    'XETH--7 wiki status',
+    'STRATAGEM X7 wiki status',
     '',
     `Root: ${status.root}`,
     `Pages: ${status.pageCount}`,
@@ -65,7 +65,7 @@ function formatIngestResult(
   result: Awaited<ReturnType<typeof ingestLocalWikiSource>>,
 ): string {
   return [
-    `Ingested ${result.sourceFile} into the XETH--7 wiki.`,
+    `Ingested ${result.sourceFile} into the STRATAGEM X7 wiki.`,
     '',
     `Title: ${result.title}`,
     `Source note: ${result.sourceNote}`,

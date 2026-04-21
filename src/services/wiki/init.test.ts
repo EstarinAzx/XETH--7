@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from 'bun:test'
+﻿import { afterEach, expect, test } from 'bun:test'
 import { mkdtemp, readFile, rm } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join } from 'path'
@@ -32,11 +32,11 @@ test('initializeWiki creates the expected wiki scaffold', async () => {
     '.openclaude/wiki/pages/architecture.md',
   ])
   expect(await readFile(paths.schemaFile, 'utf8')).toContain(
-    '# XETH--7 Wiki Schema',
+    '# STRATAGEM X7 Wiki Schema',
   )
   expect(await readFile(paths.indexFile, 'utf8')).toContain('Wiki')
   expect(await readFile(paths.logFile, 'utf8')).toContain(
-    'Wiki initialized by XETH--7',
+    'Wiki initialized by STRATAGEM X7',
   )
   expect(await readFile(join(paths.pagesDir, 'architecture.md'), 'utf8')).toContain(
     '# Architecture',

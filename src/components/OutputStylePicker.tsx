@@ -1,4 +1,4 @@
-import { c as _c } from "react-compiler-runtime";
+﻿import { c as _c } from "react-compiler-runtime";
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { getAllOutputStyles, OUTPUT_STYLE_CONFIG, type OutputStyleConfig } from '../constants/outputStyles.js';
@@ -9,7 +9,7 @@ import type { OptionWithDescription } from './CustomSelect/select.js';
 import { Select } from './CustomSelect/select.js';
 import { Dialog } from './design-system/Dialog.js';
 const DEFAULT_OUTPUT_STYLE_LABEL = 'Default';
-const DEFAULT_OUTPUT_STYLE_DESCRIPTION = 'XETH--7 completes coding tasks efficiently and provides concise responses';
+const DEFAULT_OUTPUT_STYLE_DESCRIPTION = 'STRATAGEM X7 completes coding tasks efficiently and provides concise responses';
 function mapConfigsToOptions(styles: {
   [styleName: string]: OutputStyleConfig | null;
 }): OptionWithDescription[] {

@@ -1,4 +1,4 @@
-import { getDirectConnectServerUrl, getSessionId } from '../bootstrap/state.js'
+﻿import { getDirectConnectServerUrl, getSessionId } from '../bootstrap/state.js'
 import { stringWidth } from '../ink/stringWidth.js'
 import type { LogOption } from '../types/logs.js'
 import { getSubscriptionName, isClaudeAISubscriber } from './auth.js'
@@ -96,7 +96,7 @@ export function calculateOptimalLeftWidth(
  */
 export function formatWelcomeMessage(username: string | null): string {
   if (!username || username.length > MAX_USERNAME_LENGTH) {
-    return 'Welcome to XETH--7'
+    return 'Welcome to STRATAGEM X7'
   }
   return `Welcome back, ${username}`
 }

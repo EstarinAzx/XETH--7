@@ -1,4 +1,4 @@
-import type { TerminalNotification } from '../ink/useTerminalNotification.js'
+﻿import type { TerminalNotification } from '../ink/useTerminalNotification.js'
 import { getGlobalConfig } from '../utils/config.js'
 import { env } from '../utils/env.js'
 import { execFileNoThrow } from '../utils/execFileNoThrow.js'
@@ -35,7 +35,7 @@ export async function sendNotification(
   })
 }
 
-const DEFAULT_TITLE = 'XETH--7'
+const DEFAULT_TITLE = 'STRATAGEM X7'
 
 async function sendToChannel(
   channel: string,
