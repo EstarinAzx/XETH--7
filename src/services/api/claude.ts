@@ -28,6 +28,7 @@ import {
   getAttributionHeader,
   getCLISyspromptPrefix,
 } from '../../constants/system.js'
+import { getModelPrompt } from '../../constants/promptLoader.js'
 import {
   getEmptyToolPermissionContext,
   type QueryChainTracking,
@@ -1373,6 +1374,7 @@ async function* queryModel(
         isNonInteractive: options.isNonInteractiveSession,
         hasAppendSystemPrompt: options.hasAppendSystemPrompt,
       }),
+      getModelPrompt(options.model),
       ...systemPrompt,
       ...(advisorModel ? [ADVISOR_TOOL_INSTRUCTIONS] : []),
       ...(injectChromeHere ? [CHROME_TOOL_SEARCH_INSTRUCTIONS] : []),

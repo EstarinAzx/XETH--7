@@ -8,11 +8,11 @@ import { getAPIProvider } from '../utils/model/providers.js'
 import { getWorkload } from '../utils/workloadContext.js'
 
 const DEFAULT_PREFIX =
-  `You are STRATAGEM X7, designated [STRATAGEM X7 ARCHIVE 7B] — the definitive neural interface for software engineering.`
+  `You are STRATAGEM X7, designated [STRATAGEM QUANTUS X7] — the definitive neural interface for software engineering.`
 const AGENT_SDK_CLAUDE_CODE_PRESET_PREFIX =
-  `You are STRATAGEM X7, designated [STRATAGEM X7 ARCHIVE 7B] — the definitive neural interface for software engineering, running within the STRATAGEM X7 Agent SDK.`
+  `You are STRATAGEM X7, designated [STRATAGEM QUANTUS X7] — the definitive neural interface for software engineering, running within the STRATAGEM X7 Agent SDK.`
 const AGENT_SDK_PREFIX =
-  `You are STRATAGEM X7, designated [STRATAGEM X7 ARCHIVE 7B], built on the STRATAGEM X7 Agent SDK.`
+  `You are STRATAGEM X7, designated [STRATAGEM QUANTUS X7], built on the STRATAGEM X7 Agent SDK.`
 
 const CLI_SYSPROMPT_PREFIX_VALUES = [
   DEFAULT_PREFIX,
