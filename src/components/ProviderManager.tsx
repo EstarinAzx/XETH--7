@@ -1059,6 +1059,56 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
         description: 'MiniMax API endpoint',
       },
       {
+        value: 'deepinfra',
+        label: 'DeepInfra',
+        description: 'DeepInfra serverless inference',
+      },
+      {
+        value: 'cerebras',
+        label: 'Cerebras',
+        description: 'Cerebras ultra-fast inference',
+      },
+      {
+        value: 'cohere',
+        label: 'Cohere',
+        description: 'Cohere Command R+ endpoint',
+      },
+      {
+        value: 'perplexity',
+        label: 'Perplexity',
+        description: 'Perplexity Sonar search-augmented models',
+      },
+      {
+        value: 'xai',
+        label: 'xAI (Grok)',
+        description: 'xAI Grok OpenAI-compatible endpoint',
+      },
+      {
+        value: 'venice',
+        label: 'Venice',
+        description: 'Venice AI private inference',
+      },
+      {
+        value: 'gitlab',
+        label: 'GitLab',
+        description: 'GitLab Duo AI gateway',
+      },
+      {
+        value: 'cloudflare',
+        label: 'Cloudflare Workers AI',
+        description: 'Cloudflare Workers AI inference',
+      },
+      {
+        value: 'vercel',
+        label: 'Vercel',
+        description: 'Vercel AI gateway',
+      },
+      {
+        value: 'sap-ai-core',
+        label: 'SAP AI Core',
+        description: 'SAP AI Core generative AI hub',
+      },
+      {
         value: 'ollama-cloud',
         label: 'Ollama Cloud',
         description: 'Ollama Cloud API — just needs API key',

@@ -24,6 +24,16 @@ export type ProviderPreset =
   | 'custom'
   | 'nvidia-nim'
   | 'minimax'
+  | 'deepinfra'
+  | 'cerebras'
+  | 'cohere'
+  | 'perplexity'
+  | 'xai'
+  | 'venice'
+  | 'gitlab'
+  | 'cloudflare'
+  | 'vercel'
+  | 'sap-ai-core'
 
 export type ProviderProfileInput = {
   provider?: ProviderProfile['provider']
@@ -258,6 +268,96 @@ export function getProviderPresetDefaults(
         baseUrl: 'https://ollama.com/v1',
         model: process.env.OPENAI_MODEL ?? 'deepseek-v3.2',
         apiKey: process.env.OLLAMA_API_KEY ?? '',
+        requiresApiKey: true,
+      }
+    case 'deepinfra':
+      return {
+        provider: 'openai',
+        name: 'DeepInfra',
+        baseUrl: 'https://api.deepinfra.com/v1/openai',
+        model: 'meta-llama/Llama-4-Maverick-17B-128E-Instruct',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'cerebras':
+      return {
+        provider: 'openai',
+        name: 'Cerebras',
+        baseUrl: 'https://api.cerebras.ai/v1',
+        model: 'llama-4-scout-17b-16e',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'cohere':
+      return {
+        provider: 'openai',
+        name: 'Cohere',
+        baseUrl: 'https://api.cohere.com/v2',
+        model: 'command-r-plus',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'perplexity':
+      return {
+        provider: 'openai',
+        name: 'Perplexity',
+        baseUrl: 'https://api.perplexity.ai',
+        model: 'sonar-pro',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'xai':
+      return {
+        provider: 'openai',
+        name: 'xAI (Grok)',
+        baseUrl: 'https://api.x.ai/v1',
+        model: 'grok-3',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'venice':
+      return {
+        provider: 'openai',
+        name: 'Venice',
+        baseUrl: 'https://api.venice.ai/api/v1',
+        model: 'deepseek-r1-671b',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'gitlab':
+      return {
+        provider: 'openai',
+        name: 'GitLab',
+        baseUrl: 'https://gitlab.com/api/v4/ai/v1',
+        model: 'claude-3-5-sonnet',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'cloudflare':
+      return {
+        provider: 'openai',
+        name: 'Cloudflare Workers AI',
+        baseUrl: 'https://api.cloudflare.com/client/v4/accounts/YOUR_ACCOUNT_ID/ai/v1',
+        model: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'vercel':
+      return {
+        provider: 'openai',
+        name: 'Vercel',
+        baseUrl: 'https://api.vercel.ai/v1',
+        model: 'anthropic:claude-sonnet-4-6',
+        apiKey: '',
+        requiresApiKey: true,
+      }
+    case 'sap-ai-core':
+      return {
+        provider: 'openai',
+        name: 'SAP AI Core',
+        baseUrl: 'https://api.ai.prod.YOUR_REGION.ml.hana.ondemand.com/v2/inference/deployments/YOUR_DEPLOYMENT_ID',
+        model: 'gpt-4o',
+        apiKey: '',
         requiresApiKey: true,
       }
     case 'ollama':
