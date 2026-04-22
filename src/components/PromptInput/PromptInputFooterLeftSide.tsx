@@ -347,19 +347,19 @@ function ModeIndicator({
   // the local permission mode shown here doesn't reflect the agent's state.
   // Rendered before the tasks pill so a long pill label (e.g. ultraplan URL)
   // doesn't push the mode indicator off-screen.
-  const modePart = currentMode && hasActiveMode && !getIsRemoteMode() ? currentMode !== 'plan' ? <Text color={autonomyModeColor(autonomyMode)} key="mode">
-        [{`BUFFER:${autonomyModeTitle(autonomyMode)}`}]
-        {shouldShowModeHint && <Text dimColor>
-            {' '}
-            <KeyboardShortcutHint shortcut={modeCycleShortcut} action="cycle" parens />
-          </Text>}
-      </Text> : <Text color={getModeColor(currentMode)} key="mode">
+  const modePart = currentMode && !getIsRemoteMode() ? (hasActiveMode && currentMode === 'plan' ? <Text color={getModeColor(currentMode)} key="mode">
         [{permissionModeSymbol(currentMode)} {permissionModeTitle(currentMode).toUpperCase()}]
         {shouldShowModeHint && <Text dimColor>
             {' '}
             <KeyboardShortcutHint shortcut={modeCycleShortcut} action="cycle" parens />
           </Text>}
-      </Text> : null;
+      </Text> : <Text color={autonomyModeColor(autonomyMode)} key="mode">
+        [{`BUFFER:${autonomyModeTitle(autonomyMode)}`}]
+        {shouldShowModeHint && <Text dimColor>
+            {' '}
+            <KeyboardShortcutHint shortcut={modeCycleShortcut} action="cycle" parens />
+          </Text>}
+      </Text>) : null;
 
   // Build parts array - exclude BackgroundTaskStatus when we have teammate pills
   // (teammate pills get their own row)

@@ -73,6 +73,13 @@ export const UserInputTool = buildTool({
   async description() {
     return DESCRIPTION
   },
+  mapToolResultToToolResultBlockParam(output, toolUseID) {
+    return {
+      tool_use_id: toolUseID,
+      type: 'tool_result',
+      content: `${output.status}: ${output.message}`,
+    }
+  },
   async prompt() {
     return `Use this tool to inject user-level input into the REPL. This allows you to autonomously execute slash commands or send text as if the user typed it.
 
