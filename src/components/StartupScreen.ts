@@ -212,7 +212,7 @@ export function getStartupLines(termWidth?: number): string[] {
   const provC: RGB = p.isLocal ? [160, 255, 214] : CYAN
   let [r, l] = lbl('Provider', p.name, provC)
   out.push(centerAnsiLine(boxRow(r, W, l), tw))
-  ;[r, l] = lbl('Cipher', p.model)
+  ;[r, l] = lbl('Model', p.model)
   out.push(centerAnsiLine(boxRow(r, W, l), tw))
   const ep = p.baseUrl.length > 46 ? p.baseUrl.slice(0, 43) + '...' : p.baseUrl
   ;[r, l] = lbl('Uplink', ep)

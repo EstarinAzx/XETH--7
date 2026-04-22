@@ -198,6 +198,11 @@ function BridgeStatusIndicator({
     </Text>;
 }
 function CockpitStatusIndicator(): React.ReactNode {
+  // Only show cockpit status when the active provider is routed through the cockpit system
+  const baseUrl = process.env.OPENAI_BASE_URL ?? '';
+  const isCockpitProvider = baseUrl.includes('ollama.com');
+  if (!isCockpitProvider) return null;
+
   const status = getPoolStatus('ollama-cloud');
   if (!status) return null;
   const keyLabel = `K${status.activeIndex + 1}/${status.totalKeys}`;
