@@ -1,158 +1,187 @@
-# XETH--7
+<div align="center">
 
-XETH--7 is an open-source cyberpunk coding-agent CLI for cloud and local model providers.
+```
+ ██████  ████████ ██████   █████  ████████  █████   ██████  ███████ ███    ███
+██          ██    ██   ██ ██   ██    ██    ██   ██ ██       ██      ████  ████
+ █████      ██    ██████  ███████    ██    ███████ ██   ███ █████   ██ ████ ██
+     ██     ██    ██   ██ ██   ██    ██    ██   ██ ██    ██ ██      ██  ██  ██
+██████      ██    ██   ██ ██   ██    ██    ██   ██  ██████  ███████ ██      ██
+                              ═══ X 7 ═══
+```
 
-Use OpenAI-compatible APIs, Gemini, GitHub Models, Codex OAuth, Codex, Ollama, Atomic Chat, and other supported backends while keeping one terminal-first workflow: prompts, tools, agents, MCP, slash commands, and streaming output.
+**A cyberpunk agentic coding CLI. Multi-provider. Terminal-first. No leash.**
 
-[![PR Checks](https://github.com/EstarinAzx/XETH--7/actions/workflows/pr-checks.yml/badge.svg?branch=main)](https://github.com/EstarinAzx/XETH--7/actions/workflows/pr-checks.yml)
+[![npm](https://img.shields.io/npm/v/stratagem-x7?color=ff2a6d&label=npm)](https://www.npmjs.com/package/stratagem-x7)
 [![Release](https://img.shields.io/github/v/tag/EstarinAzx/XETH--7?label=release&color=0ea5e9)](https://github.com/EstarinAzx/XETH--7/tags)
-[![Discussions](https://img.shields.io/badge/discussions-open-7c3aed)](https://github.com/EstarinAzx/XETH--7/discussions)
-[![Security Policy](https://img.shields.io/badge/security-policy-0f766e)](SECURITY.md)
 [![License](https://img.shields.io/badge/license-MIT-2563eb)](LICENSE)
+[![Discussions](https://img.shields.io/badge/discussions-open-7c3aed)](https://github.com/EstarinAzx/XETH--7/discussions)
 
-Primary repository:
-[github.com/EstarinAzx/XETH--7](https://github.com/EstarinAzx/XETH--7)
+</div>
 
-[Quick Start](#quick-start) | [Setup Guides](#setup-guides) | [Providers](#supported-providers) | [Source Build](#source-build-and-local-development) | [VS Code Extension](#vs-code-extension) | [Community](#community)
+---
 
-## Star History
+## What is Stratagem X7?
 
-[![Star History Chart](https://api.star-history.com/chart?repos=EstarinAzx/XETH--7&type=date&legend=top-left)](https://www.star-history.com/?repos=EstarinAzx%2FXETH--7&type=date&legend=top-left)
+Stratagem X7 is an autonomous coding agent that lives in your terminal. It reads your codebase, writes code, runs commands, manages files, searches the web, and orchestrates multi-agent swarms — all from a single TUI with a cyberpunk aesthetic.
 
-## Why XETH--7
+It works with **any provider**: OpenAI, Gemini, Ollama, DeepSeek, Groq, Mistral, GitHub Models, Codex, LM Studio, OpenRouter, and any OpenAI-compatible API. Cloud or local. Your choice.
 
-- Use one CLI across cloud APIs and local model backends
-- Save provider profiles inside the app with `/provider`
-- Run with OpenAI-compatible services, Gemini, GitHub Models, Codex OAuth, Codex, Ollama, Atomic Chat, and other supported providers
-- Keep coding-agent workflows in one place: bash, file tools, grep, glob, agents, tasks, MCP, and web tools
-- Use the bundled VS Code extension for launch integration and theme support
-
-## Quick Start
-
-### Install
-
-```bash
-npm install -g @gitlawb/openclaude
+```
+┌──────────────────────────────────────────┐
+│ Provider  Ollama                         │
+│ Model     qwen2.5-coder:32b             │
+│ Uplink    http://localhost:11434/v1      │
+├──────────────────────────────────────────┤
+│ ● local    buffer ready — /help          │
+└──────────────────────────────────────────┘
+ STRATAGEM X7 v0.3.2 // breach link stable
 ```
 
-If the install later reports `ripgrep not found`, install ripgrep system-wide and confirm `rg --version` works in the same terminal before starting XETH--7.
+---
 
-### Start
+## Install
 
 ```bash
-xeth7
+npm install -g stratagem-x7
 ```
 
-Inside XETH--7:
+Then launch:
 
-- run `/provider` for guided provider setup and saved profiles
-- run `/onboard-github` for GitHub Models onboarding
+```bash
+stx7
+```
 
-### Fastest OpenAI setup
+That's it. Run `/provider` inside to configure your backend, or set environment variables before launching.
 
-macOS / Linux:
+> **Node 20+** required. If you get a `ripgrep not found` warning, install ripgrep system-wide (`rg --version` should work in the same terminal).
+
+---
+
+## Quick Setup
+
+### OpenAI
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
-export OPENAI_API_KEY=sk-your-key-here
+export OPENAI_API_KEY=sk-your-key
 export OPENAI_MODEL=gpt-4o
-
-xeth7
+stx7
 ```
 
-Windows PowerShell:
-
-```powershell
-$env:CLAUDE_CODE_USE_OPENAI="1"
-$env:OPENAI_API_KEY="sk-your-key-here"
-$env:OPENAI_MODEL="gpt-4o"
-
-xeth7
-```
-
-### Fastest local Ollama setup
-
-macOS / Linux:
+### Local Ollama
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
 export OPENAI_BASE_URL=http://localhost:11434/v1
 export OPENAI_MODEL=qwen2.5-coder:7b
-
-xeth7
+stx7
 ```
 
-Windows PowerShell:
+### Ollama Launch (zero config)
+
+```bash
+ollama launch stx7 --model qwen2.5-coder:7b
+```
+
+### Windows (PowerShell)
 
 ```powershell
 $env:CLAUDE_CODE_USE_OPENAI="1"
-$env:OPENAI_BASE_URL="http://localhost:11434/v1"
-$env:OPENAI_MODEL="qwen2.5-coder:7b"
-
-xeth7
+$env:OPENAI_API_KEY="sk-your-key"
+$env:OPENAI_MODEL="gpt-4o"
+stx7
 ```
 
-### Using Ollama's launch command
+### Interactive Setup
 
-If you have [Ollama](https://ollama.com) installed, you can skip the env var setup entirely:
+Don't want to touch environment variables? Just run:
 
 ```bash
-ollama launch xeth7 --model qwen2.5-coder:7b
+stx7
+# then type: /provider
 ```
 
-This automatically sets `ANTHROPIC_BASE_URL`, model routing, and auth so all API traffic goes through your local Ollama instance. Works with any model you have pulled — local or cloud.
+The `/provider` command walks you through guided setup and saves profiles to disk.
 
-## Setup Guides
-
-Beginner-friendly guides:
-
-- [Non-Technical Setup](docs/non-technical-setup.md)
-- [Windows Quick Start](docs/quick-start-windows.md)
-- [macOS / Linux Quick Start](docs/quick-start-mac-linux.md)
-
-Advanced and source-build guides:
-
-- [Advanced Setup](docs/advanced-setup.md)
-- [Android Install](ANDROID_INSTALL.md)
+---
 
 ## Supported Providers
 
-| Provider | Setup Path | Notes |
-| --- | --- | --- |
-| OpenAI-compatible | `/provider` or env vars | Works with OpenAI, OpenRouter, DeepSeek, Groq, Mistral, LM Studio, and other compatible `/v1` servers |
-| Gemini | `/provider` or env vars | Supports API key, access token, or local ADC workflow on current `main` |
-| GitHub Models | `/onboard-github` | Interactive onboarding with saved credentials |
-| Codex OAuth | `/provider` | Opens ChatGPT sign-in in your browser and stores Codex credentials securely |
-| Codex | `/provider` | Uses existing Codex CLI auth, XETH--7 secure storage, or env credentials |
-| Ollama | `/provider`, env vars, or `ollama launch` | Local inference with no API key |
-| Atomic Chat | advanced setup | Local Apple Silicon backend |
-| Bedrock / Vertex / Foundry | env vars | Additional provider integrations for supported environments |
+| Provider | Setup | Notes |
+|----------|-------|-------|
+| **OpenAI** | `/provider` or env vars | GPT-4o, o1, o3, etc. |
+| **Ollama** | `/provider`, env vars, or `ollama launch` | Local inference, no API key |
+| **Gemini** | `/provider` or env vars | API key, access token, or ADC |
+| **DeepSeek** | `/provider` or env vars | OpenAI-compatible |
+| **GitHub Models** | `/onboard-github` | Interactive onboarding |
+| **Codex** | `/provider` | OAuth or CLI auth |
+| **OpenRouter** | `/provider` or env vars | OpenAI-compatible multi-model gateway |
+| **Groq / Mistral** | `/provider` or env vars | OpenAI-compatible |
+| **LM Studio** | `/provider` or env vars | Local OpenAI-compatible server |
+| **Bedrock / Vertex** | env vars | AWS and GCP provider integrations |
+| **Any `/v1` compatible** | env vars | Point `OPENAI_BASE_URL` at it |
 
-## What Works
+---
 
-- **Tool-driven coding workflows**: Bash, file read/write/edit, grep, glob, agents, tasks, MCP, and slash commands
-- **Streaming responses**: Real-time token output and tool progress
-- **Tool calling**: Multi-step tool loops with model calls, tool execution, and follow-up responses
-- **Images**: URL and base64 image inputs for providers that support vision
-- **Provider profiles**: Guided setup plus saved `.openclaude-profile.json` support
-- **Local and remote model backends**: Cloud APIs, local servers, and Apple Silicon local inference
+## Features
 
-## Provider Notes
+### 🔧 Tool-Driven Coding
+Bash execution, file read/write/edit, grep, glob, web search, web fetch — all as structured tool calls the agent orchestrates automatically.
 
-XETH--7 supports multiple providers, but behavior is not identical across all of them.
+### 🤖 Autonomous Buffer Modes
+Three autonomy levels via `shift+tab`:
+- **`BUFFER:OFF`** — Ask permission for everything
+- **`BUFFER:SMART`** — Auto-approve safe operations
+- **`BUFFER:AGGRESSIVE`** — Full autonomy including self-command injection
 
-- Anthropic-specific features may not exist on other providers
-- Tool quality depends heavily on the selected model
-- Smaller local models can struggle with long multi-step tool flows
-- Some providers impose lower output caps than the CLI defaults, and XETH--7 adapts where possible
+### ⚡ Self-Command Injection
+On `BUFFER:AGGRESSIVE`, Stratagem can invoke its own slash commands — `/compact` when context gets full, `/new` to start fresh sessions, `/model` to switch models mid-task. No human in the loop.
 
-For best results, use models with strong tool/function calling support.
+### 🐝 Agent Swarms
+Spawn multi-agent teams that work in parallel. Route different agents to different models. Coordinate via message injection.
+
+### 🔌 MCP Support
+Full Model Context Protocol support. Connect external tools, data sources, and services.
+
+### 📡 Cockpit API Rotation
+Built-in API key rotation system for high-throughput operations. Monitors rate limits and rotates keys automatically.
+
+### 🎮 Cyberpunk TUI
+Not your average terminal app. Custom BREACH PROTOCOL splash screen, STATUS BUS footer with live model/cockpit indicators, and a color scheme that looks like it belongs in Night City.
+
+### 📋 Plan Mode
+Enter plan mode to explore, research, and design before writing code. Stratagem presents a structured plan for your approval before executing.
+
+### 🔍 Web Search & Fetch
+DuckDuckGo-powered web search works out of the box on all providers. Optional Firecrawl integration for JS-rendered pages.
+
+### 💾 Session Persistence
+Conversations are saved to disk. Resume any session with `/resume`. Start fresh with `/new`.
+
+---
+
+## Slash Commands
+
+| Command | Description |
+|---------|-------------|
+| `/help` | Show all available commands |
+| `/provider` | Guided provider setup |
+| `/model` | Switch active model |
+| `/compact` | Compress conversation context |
+| `/new` | Start a fresh session |
+| `/clear` | Same as `/new` |
+| `/resume` | Resume a previous session |
+| `/config` | View/edit configuration |
+| `/memory` | Edit memory files |
+| `/stats` | Usage statistics |
+| `/status` | System status and connectivity |
+| `/onboard-github` | GitHub Models setup |
+
+---
 
 ## Agent Routing
 
-XETH--7 can route different agents to different models through settings-based routing. This is useful for cost optimization or splitting work by model strength.
-
-Add to `~/.claude/settings.json`:
+Route different agents to different models for cost optimization:
 
 ```json
 {
@@ -169,176 +198,130 @@ Add to `~/.claude/settings.json`:
   "agentRouting": {
     "Explore": "deepseek-chat",
     "Plan": "gpt-4o",
-    "general-purpose": "gpt-4o",
-    "frontend-dev": "deepseek-chat",
     "default": "gpt-4o"
   }
 }
 ```
 
-When no routing match is found, the global provider remains the fallback.
+Add to `~/.claude/settings.json`. When no routing match is found, the global provider is the fallback.
 
-> **Note:** `api_key` values in `settings.json` are stored in plaintext. Keep this file private and do not commit it to version control.
+> ⚠️ `api_key` values in `settings.json` are stored in plaintext. Keep this file private.
 
-## Web Search and Fetch
+---
 
-By default, `WebSearch` works on non-Anthropic models using DuckDuckGo. This gives GPT-4o, DeepSeek, Gemini, Ollama, and other OpenAI-compatible providers a free web search path out of the box.
+## Web Search
 
-> **Note:** DuckDuckGo fallback works by scraping search results and may be rate-limited, blocked, or subject to DuckDuckGo's Terms of Service. If you want a more reliable supported option, configure Firecrawl.
+`WebSearch` uses DuckDuckGo by default on all non-Anthropic providers — free, no API key needed.
 
-For Anthropic-native backends and Codex responses, XETH--7 keeps the native provider web search behavior.
-
-`WebFetch` works, but its basic HTTP plus HTML-to-markdown path can still fail on JavaScript-rendered sites or sites that block plain HTTP requests.
-
-Set a [Firecrawl](https://firecrawl.dev) API key if you want Firecrawl-powered search/fetch behavior:
+For better reliability and JS-rendered page support, set up [Firecrawl](https://firecrawl.dev):
 
 ```bash
 export FIRECRAWL_API_KEY=your-key-here
 ```
 
-With Firecrawl enabled:
-
-- `WebSearch` can use Firecrawl's search API while DuckDuckGo remains the default free path for non-Claude models
-- `WebFetch` uses Firecrawl's scrape endpoint instead of raw HTTP, handling JS-rendered pages correctly
-
-Free tier at [firecrawl.dev](https://firecrawl.dev) includes 500 credits. The key is optional.
+Free tier includes 500 credits.
 
 ---
 
 ## Headless gRPC Server
 
-XETH--7 can be run as a headless gRPC service, allowing you to integrate its agentic capabilities (tools, bash, file editing) into other applications, CI/CD pipelines, or custom user interfaces. The server uses bidirectional streaming to send real-time text chunks, tool calls, and request permissions for sensitive commands.
-
-### 1. Start the gRPC Server
-
-Start the core engine as a gRPC service on `localhost:50051`:
+Run Stratagem as a headless service for CI/CD, custom UIs, or programmatic access:
 
 ```bash
-npm run dev:grpc
+npm run dev:grpc        # Start server on localhost:50051
+npm run dev:grpc:cli    # Test CLI client
 ```
-
-#### Configuration
 
 | Variable | Default | Description |
-|-----------|-------------|------------------------------------------------|
-| `GRPC_PORT` | `50051` | Port the gRPC server listens on |
-| `GRPC_HOST` | `localhost` | Bind address. Use `0.0.0.0` to expose on all interfaces (not recommended without authentication) |
+|----------|---------|-------------|
+| `GRPC_PORT` | `50051` | Server port |
+| `GRPC_HOST` | `localhost` | Bind address |
 
-### 2. Run the Test CLI Client
-
-We provide a lightweight CLI client that communicates exclusively over gRPC. It acts just like the main interactive CLI, rendering colors, streaming tokens, and prompting you for tool permissions (y/n) via the gRPC `action_required` event.
-
-In a separate terminal, run:
-
-```bash
-npm run dev:grpc:cli
-```
-
-*Note: The gRPC definitions are located in `src/proto/openclaude.proto`. You can use this file to generate clients in Python, Go, Rust, or any other language.*
+Proto definitions: `src/proto/openclaude.proto`
 
 ---
 
-## Source Build And Local Development
+## Build From Source
 
 ```bash
+git clone https://github.com/EstarinAzx/XETH--7.git
+cd XETH--7
 bun install
 bun run build
 node dist/cli.mjs
 ```
 
-Helpful commands:
+### Dev Commands
 
-- `bun run dev`
-- `bun test`
-- `bun run test:coverage`
-- `bun run security:pr-scan -- --base origin/main`
-- `bun run smoke`
-- `bun run doctor:runtime`
-- `bun run verify:privacy`
-- focused `bun test ...` runs for the areas you touch
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Build + launch |
+| `bun run dev:ollama` | Launch with Ollama profile |
+| `bun test` | Run tests |
+| `bun run test:coverage` | Coverage report |
+| `bun run smoke` | Build + version check |
+| `bun run doctor:runtime` | System diagnostics |
+| `bun run verify:privacy` | Verify no telemetry |
 
-## Testing And Coverage
+---
 
-XETH--7 uses Bun's built-in test runner for unit tests.
+## Project Structure
 
-Run the full unit suite:
-
-```bash
-bun test
+```
+src/            Core CLI runtime
+src/tools/      Tool implementations (Bash, FileEdit, UserInput, etc.)
+src/components/ TUI components (Ink/React)
+src/screens/    Main screens (REPL, Doctor)
+src/utils/      Utilities and helpers
+src/commands/   Slash command handlers
+scripts/        Build and maintenance scripts
+bin/            CLI launchers (stx7, openclaude)
+docs/           Documentation
 ```
 
-Generate unit test coverage:
-
-```bash
-bun run test:coverage
-```
-
-Open the visual coverage report:
-
-```bash
-open coverage/index.html
-```
-
-If you already have `coverage/lcov.info` and only want to rebuild the UI:
-
-```bash
-bun run test:coverage:ui
-```
-
-Use focused test runs when you only touch one area:
-
-- `bun run test:provider`
-- `bun run test:provider-recommendation`
-- `bun test path/to/file.test.ts`
-
-Recommended contributor validation before opening a PR:
-
-- `bun run build`
-- `bun run smoke`
-- `bun run test:coverage` for broader unit coverage when your change affects shared runtime or provider logic
-- focused `bun test ...` runs for the files and flows you changed
-
-Coverage output is written to `coverage/lcov.info`, and XETH--7 also generates a git-activity-style heatmap at `coverage/index.html`.
-## Repository Structure
-
-- `src/` - core CLI/runtime
-- `scripts/` - build, verification, and maintenance scripts
-- `docs/` - setup, contributor, and project documentation
-- `python/` - standalone Python helpers and their tests
-- `vscode-extension/openclaude-vscode/` - VS Code extension
-- `.github/` - repo automation, templates, and CI configuration
-- `bin/` - CLI launcher entrypoints
-
-## VS Code Extension
-
-The repo includes a VS Code extension in [`vscode-extension/openclaude-vscode`](vscode-extension/openclaude-vscode) for XETH--7 launch integration, provider-aware control-center UI, and theme support.
-
-## Security
-
-If you believe you found a security issue, see [SECURITY.md](SECURITY.md).
-
-## Community
-
-- Use [GitHub Discussions](https://github.com/EstarinAzx/XETH--7/discussions) for Q&A, ideas, and community conversation
-- Use [GitHub Issues](https://github.com/EstarinAzx/XETH--7/issues) for confirmed bugs and actionable feature work
+---
 
 ## Contributing
 
-Contributions are welcome.
+Contributions welcome. For larger changes, open an issue first.
 
-For larger changes, open an issue first so the scope is clear before implementation. Helpful validation commands include:
+Before submitting:
 
-- `bun run build`
-- `bun run test:coverage`
-- `bun run smoke`
-- focused `bun test ...` runs for touched areas
+```bash
+bun run build
+bun run smoke
+bun test
+```
+
+---
+
+## Security
+
+Found a vulnerability? See [SECURITY.md](SECURITY.md).
+
+---
+
+## Community
+
+- [GitHub Discussions](https://github.com/EstarinAzx/XETH--7/discussions) — Q&A, ideas, conversation
+- [GitHub Issues](https://github.com/EstarinAzx/XETH--7/issues) — Bugs and feature requests
+
+---
 
 ## Disclaimer
 
-XETH--7 is an independent community project and is not affiliated with, endorsed by, or sponsored by Anthropic.
+Stratagem X7 is an independent community project. Not affiliated with, endorsed by, or sponsored by Anthropic.
 
-XETH--7 originated from the Claude Code codebase and has since been substantially modified to support multiple providers and open use. "Claude" and "Claude Code" are trademarks of Anthropic PBC. See [LICENSE](LICENSE) for details.
+Stratagem X7 originated from the Claude Code codebase and has been substantially modified to support multiple providers and open use. "Claude" and "Claude Code" are trademarks of Anthropic PBC. See [LICENSE](LICENSE) for details.
 
-## License
+---
 
-See [LICENSE](LICENSE).
+<div align="center">
+
+```
+◢ STRATAGEM X7 // breach shell // protocol online. ◣
+```
+
+**[Install](#install) · [Setup](#quick-setup) · [Providers](#supported-providers) · [Features](#features) · [Build](#build-from-source)**
+
+</div>
