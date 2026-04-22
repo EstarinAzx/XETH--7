@@ -218,6 +218,9 @@ export function LogSelector(t0) {
   const [focusedIndex, setFocusedIndex] = React.useState(1);
   const [viewMode, setViewMode] = React.useState("list");
   const [previewLog, setPreviewLog] = React.useState(null);
+  // Ref to bypass memoization cache for onDelete callback
+  const onDeleteRef = React.useRef(onDelete);
+  onDeleteRef.current = onDelete;
   const prevFocusedIdRef = React.useRef(null);
   const [selectedTagIndex, setSelectedTagIndex] = React.useState(0);
   let t8;
@@ -1132,8 +1135,8 @@ export function LogSelector(t0) {
                       logEvent("tengu_session_preview_opened", {
                         messageCount: focusedLog.messageCount
                       });
-                    } else if (lowerInput === "x" && key.ctrl && focusedLog && onDelete) {
-                      onDelete(focusedLog);
+                    } else if (lowerInput === "x" && key.ctrl && focusedLog && onDeleteRef.current) {
+                      onDeleteRef.current(focusedLog);
                     } else {
                       if (focusedLog && keyIsNotCtrlOrMeta && input.length > 0 && !/^\s+$/.test(input)) {
                         setViewMode("search");
