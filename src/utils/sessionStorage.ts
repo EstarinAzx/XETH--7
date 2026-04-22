@@ -367,6 +367,24 @@ export async function deleteRemoteAgentMetadata(taskId: string): Promise<void> {
 }
 
 /**
+ * Delete a session transcript file. Used by /resume's delete feature.
+ * Accepts the full path from LogOption.fullPath, or falls back to the
+ * computed path for the given sessionId.
+ */
+export async function deleteSessionFile(
+  sessionId: string,
+  fullPath?: string,
+): Promise<void> {
+  const resolvedPath = fullPath ?? getTranscriptPathForSession(sessionId)
+  try {
+    await unlink(resolvedPath)
+  } catch (e) {
+    if (isFsInaccessible(e)) return
+    throw e
+  }
+}
+
+/**
  * Scan the remote-agents/ directory for all persisted metadata files.
  * Used by restoreRemoteAgentTasks to reconnect to still-running CCR sessions.
  */

@@ -11,7 +11,7 @@ import { Spinner } from '../../components/Spinner.js';
 import { useIsInsideModal } from '../../context/modalContext.js';
 import { useTerminalSize } from '../../hooks/useTerminalSize.js';
 import { setClipboard } from '../../ink/termio/osc.js';
-import { Box, Text } from '../../ink.js';
+import { Box, Text, useInput } from '../../ink.js';
 import type { LocalJSXCommandCall } from '../../types/command.js';
 import type { LogOption } from '../../types/logs.js';
 import { agenticSessionSearch } from '../../utils/agenticSessionSearch.js';
@@ -100,6 +100,8 @@ function ResumeCommand({
   const [loading, setLoading] = React.useState(true);
   const [resuming, setResuming] = React.useState(false);
   const [showAllProjects, setShowAllProjects] = React.useState(false);
+  const [deleteTarget, setDeleteTarget] = React.useState<LogOption | null>(null);
+  const [deleting, setDeleting] = React.useState(false);
   const {
     rows
   } = useTerminalSize();
@@ -186,8 +188,55 @@ function ResumeCommand({
         <Text> Resuming conversation…</Text>
       </Box>;
   }
-  return <LogSelector logs={logs} maxHeight={insideModal ? Math.floor(rows / 2) : rows - 2} onCancel={handleCancel} onSelect={handleSelect} onLogsChanged={() => loadLogs(showAllProjects, worktreePaths)} showAllProjects={showAllProjects} onToggleAllProjects={handleToggleAllProjects} onAgenticSearch={agenticSessionSearch} />;
+  if (deleting) {
+    return <Box>
+        <Spinner />
+        <Text> Purging session…</Text>
+      </Box>;
+  }
+  if (deleteTarget) {
+    return <DeleteConfirmation
+      log={deleteTarget}
+      onConfirm={async () => {
+        setDeleting(true);
+        setDeleteTarget(null);
+        const sid = getSessionIdFromLog(deleteTarget);
+        if (sid) {
+          const { deleteSessionFile } = await import('../../utils/sessionStorage.js');
+          await deleteSessionFile(sid, deleteTarget.fullPath);
+        }
+        setDeleting(false);
+        void loadLogs(showAllProjects, worktreePaths);
+      }}
+      onCancel={() => setDeleteTarget(null)}
+    />;
+  }
+  return <LogSelector logs={logs} maxHeight={insideModal ? Math.floor(rows / 2) : rows - 2} onCancel={handleCancel} onSelect={handleSelect} onDelete={(log) => setDeleteTarget(log)} onLogsChanged={() => loadLogs(showAllProjects, worktreePaths)} showAllProjects={showAllProjects} onToggleAllProjects={handleToggleAllProjects} onAgenticSearch={agenticSessionSearch} />;
 }
+
+function DeleteConfirmation({ log, onConfirm, onCancel }: {
+  log: LogOption;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const title = log.customTitle || log.firstPrompt || 'Untitled session';
+  const truncated = title.length > 60 ? title.slice(0, 57) + '...' : title;
+  useInput((input, key) => {
+    if (input.toLowerCase() === 'y') {
+      onConfirm();
+    } else if (input.toLowerCase() === 'n' || key.escape) {
+      onCancel();
+    }
+  });
+  return <Box flexDirection="column" paddingLeft={2}>
+    <Text color="red" bold>⚠ Delete session?</Text>
+    <Text> </Text>
+    <Text>  {truncated}</Text>
+    <Text> </Text>
+    <Text dimColor>Press <Text bold color="red">y</Text> to confirm, <Text bold>n</Text> or Esc to cancel</Text>
+  </Box>;
+}
+
 export function filterResumableSessions(logs: LogOption[], currentSessionId: string): LogOption[] {
   return logs.filter(l => !l.isSidechain && getSessionIdFromLog(l) !== currentSessionId);
 }
