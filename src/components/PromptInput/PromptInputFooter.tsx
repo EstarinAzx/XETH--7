@@ -151,6 +151,7 @@ function PromptInputFooter({
           <Box flexShrink={1} gap={1}>
             {isFullscreen ? null : <Notifications apiKeyStatus={apiKeyStatus} autoUpdaterResult={autoUpdaterResult} debug={debug} isAutoUpdating={isAutoUpdating} verbose={verbose} messages={messages} onAutoUpdaterResult={onAutoUpdaterResult} onChangeIsUpdating={onChangeIsUpdating} ideSelection={ideSelection} mcpClients={mcpClients} isInputWrapped={isInputWrapped} isNarrow={isNarrow} />}
             {"external" === 'ant' && isUndercover() && <Text dimColor>undercover</Text>}
+            <ModelIndicator />
             <CockpitStatusIndicator />
             <BridgeStatusIndicator bridgeSelected={bridgeSelected} />
           </Box>
@@ -196,6 +197,13 @@ function BridgeStatusIndicator({
       {status.label}
       {bridgeSelected && <Text dimColor> · Enter to view</Text>}
     </Text>;
+}
+function ModelIndicator(): React.ReactNode {
+  const model = process.env.OPENAI_MODEL ?? process.env.ANTHROPIC_MODEL ?? process.env.CLAUDE_MODEL ?? '';
+  if (!model) return null;
+  // Truncate long model names (e.g. moonshotai/kimi-k2.6 -> kimi-k2.6)
+  const short = model.includes('/') ? model.split('/').pop()! : model;
+  return <Text dimColor wrap="truncate">{`\u25c6 ${short}`}</Text>;
 }
 function CockpitStatusIndicator(): React.ReactNode {
   // Only show cockpit status when the active provider is routed through the cockpit system
