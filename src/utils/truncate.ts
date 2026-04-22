@@ -136,6 +136,7 @@ export function truncate(
   maxWidth: number,
   singleLine: boolean = false,
 ): string {
+  if (!str) return str ?? ''
   let result = str
 
   // If singleLine is true, truncate at first newline
