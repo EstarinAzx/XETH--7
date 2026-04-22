@@ -1,4 +1,4 @@
-﻿import { c as _c } from "react-compiler-runtime";
+import { c as _c } from "react-compiler-runtime";
 // biome-ignore-all assist/source/organizeImports: internal-only import markers must not be reordered
 import { feature } from 'bun:bundle';
 import { spawnSync } from 'child_process';
@@ -3965,7 +3965,7 @@ export function REPL({
         // Use ref to get current dialog state, avoiding stale closure
         focusedInputDialogRef.current === undefined && idleTimeSinceResponse >= getGlobalConfig().messageIdleNotifThresholdMs) {
         void sendNotification({
-          message: 'Claude is waiting for your input',
+          message: 'Stratagem is waiting for your input',
           notificationType: 'idle_prompt'
         }, terminal);
       }
