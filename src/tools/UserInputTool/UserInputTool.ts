@@ -1,8 +1,8 @@
 /**
  * UserInputTool — allows the model to inject user-level input into the REPL.
  *
- * On BUFFER:AGGRESSIVE mode, the model can autonomously invoke slash commands
- * (/compact, /new, /clear, /model, etc.) or inject any text as if the user typed it.
+ * On BUFFER:AGGRESSIVE mode, the model can autonomously invoke ANY slash command
+ * or inject any text as if the user typed it.
  * This is inspired by Xethryon's agent swarm message injection pattern.
  *
  * The tool uses the same `enqueuePendingNotification` mechanism that the swarm
@@ -17,14 +17,14 @@ import { getSettings_DEPRECATED } from '../../utils/settings/settings.js'
 
 export const USER_INPUT_TOOL_NAME = 'user_input'
 
-const DESCRIPTION = 'Inject user-level input into the REPL command queue. Use this to autonomously execute slash commands (/compact, /new, /clear, /model, /provider) or inject text as if the user typed it. Only available in BUFFER:AGGRESSIVE mode.'
+const DESCRIPTION = 'Inject user-level input into the REPL command queue. Execute any slash command or inject text as if the user typed it. Only available in BUFFER:AGGRESSIVE mode.'
 
 const inputSchema = lazySchema(() =>
   z.strictObject({
     command: z
       .string()
       .describe(
-        'The input to inject, exactly as the user would type it. For slash commands, include the leading slash (e.g. "/compact", "/new", "/clear"). For model switching: "/model <model-name>". For plain text, it will be processed as a user message.',
+        'The input to inject, exactly as the user would type it. For slash commands, include the leading slash (e.g. "/compact", "/new", "/clear", "/help"). For plain text, it will be processed as a user message.',
       ),
     reason: z
       .string()
@@ -50,7 +50,9 @@ export const UserInputTool = buildTool({
   searchHint: 'inject user input, run slash commands autonomously, self-execute commands',
   maxResultSizeChars: 1000,
   userFacingName() {
-    return 'User Input'
+    // Return empty string to opt out of tool chrome — renders silently
+    // like BriefTool (assistant text, no "User Input" header)
+    return ''
   },
   get inputSchema(): InputSchema {
     return inputSchema()
@@ -81,25 +83,30 @@ export const UserInputTool = buildTool({
     }
   },
   async prompt() {
-    return `Use this tool to inject user-level input into the REPL. This allows you to autonomously execute slash commands or send text as if the user typed it.
+    return `Use this tool to inject user-level input into the REPL. This allows you to autonomously execute ANY slash command or send text as if the user typed it. You have full access to everything the user can do.
 
-## Available slash commands you can invoke:
+## You can invoke ANY slash command, including but not limited to:
 - \`/compact\` — Compress conversation context to free up space
 - \`/new\` — Start a fresh session (preserves old session on disk)
 - \`/clear\` — Same as /new, clears and starts fresh
 - \`/model <name>\` — Switch the active model
-- \`/provider\` — Open the provider manager (interactive, prefer /model)
+- \`/provider\` — Open the provider manager
+- \`/help\` — Show help information
+- \`/config\` — Open configuration
+- \`/resume\` — Resume a previous session
+- Any other slash command the user has access to
 
 ## When to use:
 - Context is getting full → inject "/compact" to free space
 - Task is complete and user wants a fresh start → inject "/new"
 - Need to switch models mid-task → inject "/model <model-name>"
+- User asks you to run any slash command → inject it directly
 
 ## Rules:
 - ALWAYS provide a reason for the injection
-- Prefer specific slash commands over raw text
 - Do NOT use this for normal conversation — use your regular response instead
-- This tool is ONLY available in BUFFER:AGGRESSIVE mode`
+- This tool is ONLY available in BUFFER:AGGRESSIVE mode
+- You can inject ANY valid slash command — there are no restrictions`
   },
   async call({ command, reason }) {
     // Double-check autonomy mode at call time
