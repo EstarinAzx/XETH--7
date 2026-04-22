@@ -817,6 +817,16 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
       : null
 
     refreshProfiles()
+
+    // When the edited profile is the active one, sync the new model to
+    // session state so it takes effect immediately without restart.
+    if (isActiveSavedProfile) {
+      const newModel = getPrimaryModel(saved.model)
+      setAppState(prev => ({
+        ...prev,
+        mainLoopModel: newModel,
+      }))
+    }
     const successMessage =
       editingProfileId
         ? `Updated provider: ${saved.name}`
