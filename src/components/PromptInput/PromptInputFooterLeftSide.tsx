@@ -347,7 +347,7 @@ function ModeIndicator({
   // the local permission mode shown here doesn't reflect the agent's state.
   // Rendered before the tasks pill so a long pill label (e.g. ultraplan URL)
   // doesn't push the mode indicator off-screen.
-  const modePart = currentMode && hasActiveMode && !getIsRemoteMode() ? autonomyMode !== 'off' && currentMode !== 'plan' ? <Text color={autonomyModeColor(autonomyMode)} key="mode">
+  const modePart = currentMode && hasActiveMode && !getIsRemoteMode() ? currentMode !== 'plan' ? <Text color={autonomyModeColor(autonomyMode)} key="mode">
         [{`BUFFER:${autonomyModeTitle(autonomyMode)}`}]
         {shouldShowModeHint && <Text dimColor>
             {' '}
