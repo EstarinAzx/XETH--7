@@ -353,7 +353,9 @@ async function getOrCreateWorktree(
       )
       if (shaCode !== 0) {
         throw new Error(
-          `Failed to resolve base branch "${baseBranch}": git rev-parse failed`,
+          `Failed to resolve base branch "${baseBranch}": git rev-parse failed. ` +
+            `This usually means the repository has no commits or is in an invalid state. ` +
+            `Do NOT retry — worktree isolation is unavailable for this directory.`,
         )
       }
       baseSha = stdout.trim()

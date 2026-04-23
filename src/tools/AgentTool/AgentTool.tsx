@@ -592,15 +592,17 @@ export const AgentTool = buildTool({
       try {
         worktreeInfo = await createAgentWorktree(slug);
       } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        if (message.includes('Cannot create agent worktree: not in a git repository')) {
-          if (isolation === 'worktree') {
-            throw error;
-          }
-          logForDebugging('Agent worktree isolation unavailable outside a git repository; falling back to the current working directory.');
-        } else {
+        // If the user explicitly requested worktree isolation (via the
+        // `isolation` param on the tool call), propagate the error so
+        // the model knows the request failed. Otherwise, the isolation
+        // was inferred from the agent definition — gracefully fall back
+        // to the current working directory instead of looping on a
+        // terminal git error (e.g. non-git directory, no HEAD ref).
+        if (isolation === 'worktree') {
           throw error;
         }
+        const message = error instanceof Error ? error.message : String(error);
+        logForDebugging(`Agent worktree isolation unavailable (${message}); falling back to the current working directory.`);
       }
     }
 
