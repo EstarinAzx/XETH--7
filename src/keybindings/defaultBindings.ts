@@ -58,6 +58,7 @@ export const DEFAULT_BINDINGS: KeybindingBlock[] = [
           }
         : {}),
       ...(feature('TERMINAL_PANEL') ? { 'meta+j': 'app:toggleTerminal' } : {}),
+      'meta+r': 'app:toggleVerbose',
     },
   },
   {

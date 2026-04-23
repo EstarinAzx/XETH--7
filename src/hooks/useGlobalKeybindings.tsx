@@ -229,6 +229,23 @@ export function GlobalKeybindingHandlers({
     context: 'Global'
   });
 
+  // Toggle verbose mode (meta+r). Shows or hides model reasoning/thinking
+  // traces inline so the user can inspect the chain-of-thought output.
+  const verbose = useAppState(s_2 => s_2.verbose);
+  const handleToggleVerbose = useCallback(() => {
+    const next = !verbose;
+    setAppState(prev_v => ({
+      ...prev_v,
+      verbose: next
+    }));
+    logEvent('tengu_verbose_toggled', {
+      enabled: next
+    });
+  }, [verbose, setAppState]);
+  useKeybinding('app:toggleVerbose', handleToggleVerbose, {
+    context: 'Global'
+  });
+
   // Transcript-specific bindings (only active when in transcript mode)
   const isInTranscript = screen === 'transcript';
   useKeybinding('transcript:toggleShowAll', handleToggleShowAll, {
