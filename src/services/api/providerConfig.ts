@@ -80,6 +80,7 @@ export type ResolvedProviderRequest = {
   baseUrl: string
   reasoning?: {
     effort: ReasoningEffort
+    summary?: 'auto' | 'concise' | 'detailed'
   }
 }
 
@@ -95,6 +96,7 @@ type ModelDescriptor = {
   baseModel: string
   reasoning?: {
     effort: ReasoningEffort
+    summary?: 'auto' | 'concise' | 'detailed'
   }
 }
 
@@ -424,8 +426,10 @@ export function resolveProviderRequest(options?: {
       : descriptor.baseModel)
 
   const reasoning = options?.reasoningEffortOverride
-    ? { effort: options.reasoningEffortOverride }
+    ? { effort: options.reasoningEffortOverride, summary: 'auto' as const }
     : descriptor.reasoning
+      ? { ...descriptor.reasoning, summary: descriptor.reasoning.summary ?? 'auto' as const }
+      : undefined
 
   return {
     transport,
