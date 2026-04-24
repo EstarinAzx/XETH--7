@@ -919,13 +919,23 @@ export function collapseReadSearchGroups(
       currentGroup.relevantMemories ??= []
       currentGroup.relevantMemories.push(...msg.attachment.memories)
     } else if (shouldSkipMessage(msg)) {
-      // Don't flush the group for skippable messages (thinking, attachments, system)
-      // If a group is in progress, defer these messages to output after the collapsed group
-      // This preserves the visual ordering where the collapsed badge appears at the position
-      // of the first tool use, not displaced by intervening skippable messages.
+      // Skippable messages (thinking, attachments, system) during group building.
+      // Thinking blocks BREAK the group: flush what we have, emit the thinking
+      // block, then continue building a new group. This preserves the interleaved
+      // think→act→think→act visual flow even after tool operations get collapsed.
+      // Non-thinking skippable messages (attachments, system) are still deferred
+      // so they don't displace the collapsed badge.
       // Exception: nested_memory attachments are pushed through even during a group so
       // ⎿ Loaded lines cluster tightly instead of being split by the badge's marginTop.
-      if (
+      const isThinking = msg.type === 'assistant' && (
+        msg.message.content[0]?.type === 'thinking' ||
+        msg.message.content[0]?.type === 'redacted_thinking'
+      )
+      if (isThinking && currentGroup.messages.length > 0) {
+        // Flush the current group, then emit thinking inline
+        flushGroup()
+        result.push(msg)
+      } else if (
         currentGroup.messages.length > 0 &&
         !(msg.type === 'attachment' && msg.attachment.type === 'nested_memory')
       ) {
