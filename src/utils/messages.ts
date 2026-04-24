@@ -3079,6 +3079,11 @@ export function handleMessageFromStream(
         }
         case 'thinking_delta':
           onUpdateLength(message.event.delta.thinking)
+          // Stream thinking text in real-time so it renders live
+          onStreamingThinking?.(current => ({
+            thinking: (current?.thinking ?? '') + message.event.delta.thinking,
+            isStreaming: true,
+          }))
           return
         case 'signature_delta':
           // Signatures are cryptographic authentication strings, not model
