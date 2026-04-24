@@ -58,7 +58,6 @@ export const DEFAULT_BINDINGS: KeybindingBlock[] = [
           }
         : {}),
       ...(feature('TERMINAL_PANEL') ? { 'meta+j': 'app:toggleTerminal' } : {}),
-      'meta+r': 'app:toggleVerbose',
     },
   },
   {
@@ -71,6 +70,7 @@ export const DEFAULT_BINDINGS: KeybindingBlock[] = [
       'meta+p': 'chat:modelPicker',
       'meta+o': 'chat:fastMode',
       'meta+t': 'chat:thinkingToggle',
+      'meta+r': 'chat:toggleVerbose',
       enter: 'chat:submit',
       up: 'history:previous',
       down: 'history:next',

@@ -1448,6 +1448,26 @@ function PromptInput({
     }
   }, [helpOpen]);
 
+  // Handler for chat:toggleVerbose - toggle reasoning trace visibility (meta+r)
+  const handleVerboseToggle = useCallback(() => {
+    const next = !verbose;
+    setAppState(prev_v => ({
+      ...prev_v,
+      verbose: next
+    }));
+    addNotification({
+      key: 'verbose-toggled-hotkey',
+      jsx: <Text color={next ? 'suggestion' : undefined} dimColor={!next}>
+            Reasoning trace {next ? 'visible' : 'hidden'}
+          </Text>,
+      priority: 'immediate',
+      timeoutMs: 3000
+    });
+    logEvent('tengu_verbose_toggled', {
+      enabled: next
+    });
+  }, [verbose, setAppState, addNotification]);
+
   // Handler for chat:cycleMode - cycle through permission modes
   const handleCycleMode = useCallback(() => {
     // When viewing a teammate, cycle their mode instead of the leader's
@@ -1731,9 +1751,10 @@ function PromptInput({
     'chat:stash': handleStash,
     'chat:modelPicker': handleModelPicker,
     'chat:thinkingToggle': handleThinkingToggle,
+    'chat:toggleVerbose': handleVerboseToggle,
     'chat:cycleMode': handleCycleMode,
     'chat:imagePaste': handleImagePaste
-  }), [handleUndo, handleNewline, handleExternalEditor, handleStash, handleModelPicker, handleThinkingToggle, handleCycleMode, handleImagePaste]);
+  }), [handleUndo, handleNewline, handleExternalEditor, handleStash, handleModelPicker, handleThinkingToggle, handleVerboseToggle, handleCycleMode, handleImagePaste]);
   useKeybindings(chatHandlers, {
     context: 'Chat',
     isActive: !isModalOverlayActive
