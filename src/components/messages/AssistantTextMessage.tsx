@@ -246,7 +246,7 @@ export function AssistantTextMessage(t0) {
         }
         let t6;
         if ($[27] !== t4 || $[28] !== t5) {
-          t6 = <Box flexDirection="row" borderStyle="single" borderColor="claude" borderLeft={true} borderTop={false} borderRight={false} borderBottom={false} paddingLeft={1}>{t4}{t5}</Box>;
+          t6 = <Box flexDirection="column" borderStyle="single" borderColor="claude" borderLeft={true} borderTop={false} borderRight={false} borderBottom={false} paddingLeft={1}><Text color="claude" italic={true}>{'STRATAGEM'}</Text><Box flexDirection="row">{t4}{t5}</Box></Box>;
           $[27] = t4;
           $[28] = t5;
           $[29] = t6;
