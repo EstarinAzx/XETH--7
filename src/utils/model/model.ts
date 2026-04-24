@@ -48,8 +48,8 @@ export function getSmallFastModel(): ModelName {
   if (getAPIProvider() === 'mistral') {
     return process.env.MISTRAL_MODEL || 'ministral-3b-latest'
   }
-  // For OpenAI provider, use OPENAI_MODEL or a sensible default
-  if (getAPIProvider() === 'openai') {
+  // For OpenAI/OpenCode provider, use OPENAI_MODEL or a sensible default
+  if (getAPIProvider() === 'openai' || getAPIProvider() === 'opencode') {
     return process.env.OPENAI_MODEL || 'gpt-4o-mini'
   }
   // For GitHub Copilot provider
@@ -95,7 +95,7 @@ export function getUserSpecifiedModelSetting(): ModelSetting | undefined {
     specifiedModel =
       (provider === 'gemini' ? process.env.GEMINI_MODEL : undefined) ||
       (provider === 'mistral' ? process.env.MISTRAL_MODEL : undefined) ||
-      (provider === 'openai' || provider === 'gemini' || provider === 'mistral' || provider === 'github' ? process.env.OPENAI_MODEL : undefined) ||
+      (provider === 'openai' || provider === 'gemini' || provider === 'mistral' || provider === 'github' || provider === 'opencode' ? process.env.OPENAI_MODEL : undefined) ||
       (provider === 'firstParty' ? process.env.ANTHROPIC_MODEL : undefined) ||
       setting ||
       undefined
@@ -147,7 +147,7 @@ export function getDefaultOpusModel(): ModelName {
     return process.env.MISTRAL_MODEL || 'devstral-latest'
   }
   // OpenAI provider: use user-specified model or default
-  if (getAPIProvider() === 'openai') {
+  if (getAPIProvider() === 'openai' || getAPIProvider() === 'opencode') {
     return process.env.OPENAI_MODEL || 'gpt-4o'
   }
   // Codex provider: use user-specified model or default to gpt-5.4
@@ -181,7 +181,7 @@ export function getDefaultSonnetModel(): ModelName {
     return process.env.MISTRAL_MODEL || 'mistral-medium-latest'
   }
   // OpenAI provider
-  if (getAPIProvider() === 'openai') {
+  if (getAPIProvider() === 'openai' || getAPIProvider() === 'opencode') {
     return process.env.OPENAI_MODEL || 'gpt-4o'
   }
   // Codex provider
@@ -209,7 +209,7 @@ export function getDefaultHaikuModel(): ModelName {
     return process.env.MISTRAL_MODEL || 'ministral-3b-latest'
   }
   // OpenAI provider
-  if (getAPIProvider() === 'openai') {
+  if (getAPIProvider() === 'openai' || getAPIProvider() === 'opencode') {
     return process.env.OPENAI_MODEL || 'gpt-4o-mini'
   }
   // Codex provider
@@ -284,8 +284,8 @@ export function getDefaultMainLoopModelSetting(): ModelName | ModelAlias {
   if (getAPIProvider() === 'mistral') {
     return process.env.MISTRAL_MODEL || 'devstral-latest'
   }
-  // OpenAI provider: always use the configured OpenAI model
-  if (getAPIProvider() === 'openai') {
+  // OpenAI/OpenCode provider: always use the configured OpenAI model
+  if (getAPIProvider() === 'openai' || getAPIProvider() === 'opencode') {
     return process.env.OPENAI_MODEL || 'gpt-4o'
   }
   // Codex provider: always use the configured Codex model (default gpt-5.4)
@@ -471,8 +471,8 @@ export function renderModelSetting(setting: ModelName | ModelAlias): string {
  * if the model is not recognized as a public model.
  */
 export function getPublicModelDisplayName(model: ModelName): string | null {
-  // For OpenAI/Gemini/Codex/GitHub providers, show the actual model name not a Claude alias
-  if (getAPIProvider() === 'openai' || getAPIProvider() === 'gemini' || getAPIProvider() === 'codex' || getAPIProvider() === 'github') {
+  // For OpenAI/Gemini/Codex/GitHub/OpenCode providers, show the actual model name not a Claude alias
+  if (getAPIProvider() === 'openai' || getAPIProvider() === 'gemini' || getAPIProvider() === 'codex' || getAPIProvider() === 'github' || getAPIProvider() === 'opencode') {
     // Return display names for known GitHub Copilot models
     const copilotModelNames: Record<string, string> = {
       'gpt-5.4': 'GPT-5.4',

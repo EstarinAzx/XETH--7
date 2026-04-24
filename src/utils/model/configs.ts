@@ -39,6 +39,8 @@ export const CLAUDE_3_7_SONNET_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_3_5_V2_SONNET_CONFIG = {
@@ -52,6 +54,8 @@ export const CLAUDE_3_5_V2_SONNET_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_3_5_HAIKU_CONFIG = {
@@ -65,6 +69,8 @@ export const CLAUDE_3_5_HAIKU_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_HAIKU_4_5_CONFIG = {
@@ -78,6 +84,8 @@ export const CLAUDE_HAIKU_4_5_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_SONNET_4_CONFIG = {
@@ -91,6 +99,8 @@ export const CLAUDE_SONNET_4_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_SONNET_4_5_CONFIG = {
@@ -104,6 +114,8 @@ export const CLAUDE_SONNET_4_5_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_OPUS_4_CONFIG = {
@@ -117,6 +129,8 @@ export const CLAUDE_OPUS_4_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_OPUS_4_1_CONFIG = {
@@ -130,6 +144,8 @@ export const CLAUDE_OPUS_4_1_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_OPUS_4_5_CONFIG = {
@@ -143,6 +159,8 @@ export const CLAUDE_OPUS_4_5_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_OPUS_4_6_CONFIG = {
@@ -156,6 +174,8 @@ export const CLAUDE_OPUS_4_6_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 export const CLAUDE_SONNET_4_6_CONFIG = {
@@ -169,6 +189,8 @@ export const CLAUDE_SONNET_4_6_CONFIG = {
   codex: 'gpt-5.4',
   'nvidia-nim': 'nvidia/llama-3.1-nemotron-70b-instruct',
   minimax: 'MiniMax-M2.5',
+  mistral: 'devstral-latest',
+  opencode: 'gpt-5.4',
 } as const satisfies ModelConfig
 
 // @[MODEL LAUNCH]: Register the new config here.
