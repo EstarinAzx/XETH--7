@@ -14,6 +14,7 @@ export type APIProvider =
   | 'nvidia-nim'
   | 'minimax'
   | 'mistral'
+  | 'opencode'
 
 export function getAPIProvider(): APIProvider {
   if (isEnvTruthy(process.env.NVIDIA_NIM)) {
@@ -21,6 +22,10 @@ export function getAPIProvider(): APIProvider {
   }
   if (isEnvTruthy(process.env.MINIMAX_API_KEY)) {
     return 'minimax'
+  }
+  // Detect OpenCode Zen / Go — both route through OPENAI shim with opencode.ai base URL
+  if (process.env.OPENAI_BASE_URL?.includes('opencode.ai')) {
+    return 'opencode'
   }
   return isEnvTruthy(process.env.CLAUDE_CODE_USE_GEMINI)
     ? 'gemini'

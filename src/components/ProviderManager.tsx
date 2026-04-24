@@ -1123,6 +1123,16 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
         label: 'Ollama Cloud',
         description: 'Ollama Cloud API — just needs API key',
       },
+      {
+        value: 'opencode',
+        label: 'OpenCode Zen',
+        description: 'OpenCode Zen proxy — premium multi-provider API',
+      },
+      {
+        value: 'opencode-go',
+        label: 'OpenCode Go',
+        description: 'OpenCode Go proxy — lightweight multi-provider API',
+      },
       ...(mode === 'first-run'
         ? [
             {

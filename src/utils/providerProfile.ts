@@ -36,6 +36,10 @@ export const DEFAULT_GEMINI_BASE_URL =
 export const DEFAULT_GEMINI_MODEL = 'gemini-2.0-flash'
 export const DEFAULT_MISTRAL_BASE_URL = 'https://api.mistral.ai/v1'
 export const DEFAULT_MISTRAL_MODEL = 'devstral-latest'
+export const DEFAULT_OPENCODE_BASE_URL = 'https://opencode.ai/zen/v1'
+export const DEFAULT_OPENCODE_GO_BASE_URL = 'https://opencode.ai/zen/go/v1'
+export const DEFAULT_OPENCODE_MODEL = 'gpt-5.4'
+export const DEFAULT_OPENCODE_GO_MODEL = 'glm-5'
 
 const PROFILE_ENV_KEYS = [
   'CLAUDE_CODE_USE_OPENAI',
@@ -66,6 +70,7 @@ const PROFILE_ENV_KEYS = [
   'MISTRAL_BASE_URL',
   'MISTRAL_API_KEY',
   'MISTRAL_MODEL',
+  'OPENCODE_API_KEY',
 ] as const
 
 const SECRET_ENV_KEYS = [
@@ -76,9 +81,10 @@ const SECRET_ENV_KEYS = [
   'NVIDIA_API_KEY',
   'MINIMAX_API_KEY',
   'MISTRAL_API_KEY',
+  'OPENCODE_API_KEY',
 ] as const
 
-export type ProviderProfile = 'openai' | 'ollama' | 'codex' | 'gemini' | 'atomic-chat' | 'nvidia-nim' | 'minimax' | 'mistral'
+export type ProviderProfile = 'openai' | 'ollama' | 'codex' | 'gemini' | 'atomic-chat' | 'nvidia-nim' | 'minimax' | 'mistral' | 'opencode' | 'opencode-go'
 
 export type ProfileEnv = {
   OPENAI_BASE_URL?: string
@@ -101,6 +107,7 @@ export type ProfileEnv = {
   MISTRAL_BASE_URL?: string
   MISTRAL_API_KEY?: string
   MISTRAL_MODEL?: string
+  OPENCODE_API_KEY?: string
 }
 
 export type ProfileFile = {
@@ -117,7 +124,8 @@ type SecretValueSource = Partial<
     | 'GOOGLE_API_KEY'
     | 'NVIDIA_API_KEY'
     | 'MINIMAX_API_KEY'
-    | 'MISTRAL_API_KEY',
+    | 'MISTRAL_API_KEY'
+    | 'OPENCODE_API_KEY',
     string | undefined
   >
 >
@@ -144,7 +152,9 @@ export function isProviderProfile(value: unknown): value is ProviderProfile {
     value === 'atomic-chat' ||
     value === 'nvidia-nim' ||
     value === 'minimax' ||
-    value === 'mistral'
+    value === 'mistral' ||
+    value === 'opencode' ||
+    value === 'opencode-go'
   )
 }
 
@@ -389,6 +399,54 @@ export function buildMistralProfileEnv(options: {
   }
 
   return env
+}
+
+export function buildOpenCodeProfileEnv(options: {
+  model?: string | null
+  apiKey?: string | null
+  processEnv?: NodeJS.ProcessEnv
+}): ProfileEnv | null {
+  const processEnv = options.processEnv ?? process.env
+  const key = sanitizeApiKey(options.apiKey ?? processEnv.OPENCODE_API_KEY)
+  if (!key) {
+    return null
+  }
+
+  const secretSource: SecretValueSource = { OPENAI_API_KEY: key }
+
+  return {
+    OPENAI_BASE_URL: DEFAULT_OPENCODE_BASE_URL,
+    OPENAI_MODEL:
+      sanitizeProviderConfigValue(options.model, secretSource) ||
+      sanitizeProviderConfigValue(processEnv.OPENAI_MODEL, secretSource) ||
+      DEFAULT_OPENCODE_MODEL,
+    OPENAI_API_KEY: key,
+    OPENCODE_API_KEY: key,
+  }
+}
+
+export function buildOpenCodeGoProfileEnv(options: {
+  model?: string | null
+  apiKey?: string | null
+  processEnv?: NodeJS.ProcessEnv
+}): ProfileEnv | null {
+  const processEnv = options.processEnv ?? process.env
+  const key = sanitizeApiKey(options.apiKey ?? processEnv.OPENCODE_API_KEY)
+  if (!key) {
+    return null
+  }
+
+  const secretSource: SecretValueSource = { OPENAI_API_KEY: key }
+
+  return {
+    OPENAI_BASE_URL: DEFAULT_OPENCODE_GO_BASE_URL,
+    OPENAI_MODEL:
+      sanitizeProviderConfigValue(options.model, secretSource) ||
+      sanitizeProviderConfigValue(processEnv.OPENAI_MODEL, secretSource) ||
+      DEFAULT_OPENCODE_GO_MODEL,
+    OPENAI_API_KEY: key,
+    OPENCODE_API_KEY: key,
+  }
 }
 
 export function buildCodexOAuthProfileEnv(
@@ -741,6 +799,30 @@ export async function buildLaunchEnv(options: {
       ''
 
     delete env.OPENAI_API_KEY
+    delete env.CODEX_API_KEY
+    delete env.CHATGPT_ACCOUNT_ID
+    delete env.CODEX_ACCOUNT_ID
+
+    return env
+  }
+
+  if (options.profile === 'opencode' || options.profile === 'opencode-go') {
+    const isGo = options.profile === 'opencode-go'
+    const defaultBaseUrl = isGo ? DEFAULT_OPENCODE_GO_BASE_URL : DEFAULT_OPENCODE_BASE_URL
+    const defaultModel = isGo ? DEFAULT_OPENCODE_GO_MODEL : DEFAULT_OPENCODE_MODEL
+
+    env.OPENAI_BASE_URL = persistedOpenAIBaseUrl || defaultBaseUrl
+    env.OPENAI_MODEL = persistedOpenAIModel || defaultModel
+
+    const shellKey = sanitizeApiKey(processEnv.OPENCODE_API_KEY)
+    const persistedKey = sanitizeApiKey(persistedEnv.OPENCODE_API_KEY)
+    const key = shellKey || persistedKey || sanitizeApiKey(processEnv.OPENAI_API_KEY) || sanitizeApiKey(persistedEnv.OPENAI_API_KEY)
+
+    if (key) {
+      env.OPENAI_API_KEY = key
+    } else {
+      delete env.OPENAI_API_KEY
+    }
     delete env.CODEX_API_KEY
     delete env.CHATGPT_ACCOUNT_ID
     delete env.CODEX_ACCOUNT_ID

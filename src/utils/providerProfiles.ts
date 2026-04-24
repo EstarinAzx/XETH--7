@@ -34,6 +34,8 @@ export type ProviderPreset =
   | 'cloudflare'
   | 'vercel'
   | 'sap-ai-core'
+  | 'opencode'
+  | 'opencode-go'
 
 export type ProviderProfileInput = {
   provider?: ProviderProfile['provider']
@@ -360,6 +362,24 @@ export function getProviderPresetDefaults(
         apiKey: '',
         requiresApiKey: true,
       }
+    case 'opencode':
+      return {
+        provider: 'openai',
+        name: 'OpenCode Zen',
+        baseUrl: 'https://opencode.ai/zen/v1',
+        model: 'gpt-5.4',
+        apiKey: process.env.OPENCODE_API_KEY ?? '',
+        requiresApiKey: true,
+      }
+    case 'opencode-go':
+      return {
+        provider: 'openai',
+        name: 'OpenCode Go',
+        baseUrl: 'https://opencode.ai/zen/go/v1',
+        model: 'glm-5',
+        apiKey: process.env.OPENCODE_API_KEY ?? '',
+        requiresApiKey: true,
+      }
     case 'ollama':
     default:
       return {
@@ -501,6 +521,7 @@ export function clearProviderProfileEnvFromProcessEnv(
   delete processEnv.MINIMAX_API_KEY
   delete processEnv.NVIDIA_API_KEY
   delete processEnv.NVIDIA_NIM
+  delete processEnv.OPENCODE_API_KEY
 }
 
 export function applyProviderProfileToProcessEnv(profile: ProviderProfile): void {
