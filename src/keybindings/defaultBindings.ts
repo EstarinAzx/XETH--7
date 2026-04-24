@@ -71,6 +71,7 @@ export const DEFAULT_BINDINGS: KeybindingBlock[] = [
       'meta+o': 'chat:fastMode',
       'meta+t': 'chat:thinkingToggle',
       'meta+r': 'chat:toggleVerbose',
+      f4: 'chat:toggleVerbose',
       enter: 'chat:submit',
       up: 'history:previous',
       down: 'history:next',
