@@ -771,11 +771,14 @@ export function collapseReadSearchGroups(
     if (currentGroup.messages.length === 0) {
       return
     }
-    result.push(createCollapsedGroup(currentGroup))
+    // Emit deferred skippable messages (thinking blocks, etc.) BEFORE
+    // the collapsed group so that TRACE // COGNITION blocks appear
+    // before the tool operations they describe, not after.
     for (const deferred of deferredSkippable) {
       result.push(deferred)
     }
     deferredSkippable = []
+    result.push(createCollapsedGroup(currentGroup))
     currentGroup = createEmptyGroup()
   }
 
