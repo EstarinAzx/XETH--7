@@ -572,6 +572,7 @@ interface OpenAIStreamChunk {
       role?: string
       content?: string | null
       reasoning_content?: string | null
+      reasoning?: string | null  // Ollama uses 'reasoning' instead of 'reasoning_content'
       tool_calls?: Array<{
         index: number
         id?: string
@@ -793,9 +794,11 @@ async function* openaiStreamToAnthropic(
         const delta = choice.delta
 
         // Reasoning models (e.g. GLM-5, DeepSeek) may stream chain-of-thought
-        // in `reasoning_content` before the actual reply appears in `content`.
+        // in `reasoning_content` (OpenAI standard) or `reasoning` (Ollama)
+        // before the actual reply appears in `content`.
         // Emit reasoning as a thinking block and content as a text block.
-        if (delta.reasoning_content != null && delta.reasoning_content !== '') {
+        const reasoningText = delta.reasoning_content ?? delta.reasoning
+        if (reasoningText != null && reasoningText !== '') {
           if (!hasEmittedThinkingStart) {
             yield {
               type: 'content_block_start',
@@ -807,7 +810,7 @@ async function* openaiStreamToAnthropic(
           yield {
             type: 'content_block_delta',
             index: contentBlockIndex,
-            delta: { type: 'thinking_delta', thinking: delta.reasoning_content },
+            delta: { type: 'thinking_delta', thinking: reasoningText },
           }
         }
 
@@ -1693,6 +1696,7 @@ class OpenAIShimMessages {
             | null
             | Array<{ type?: string; text?: string }>
           reasoning_content?: string | null
+          reasoning?: string | null  // Ollama variant
           tool_calls?: Array<{
             id: string
             function: { name: string; arguments: string }
@@ -1717,7 +1721,7 @@ class OpenAIShimMessages {
     // Some reasoning models (e.g. GLM-5) put their chain-of-thought in
     // reasoning_content while content stays null. Preserve it as a thinking
     // block, but do not surface it as visible assistant text.
-    const reasoningText = choice?.message?.reasoning_content
+    const reasoningText = choice?.message?.reasoning_content ?? (choice?.message as any)?.reasoning
     if (typeof reasoningText === 'string' && reasoningText) {
       content.push({ type: 'thinking', thinking: reasoningText })
     }
