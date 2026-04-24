@@ -1446,6 +1446,16 @@ class OpenAIShimMessages {
     }
 
     if (params.temperature !== undefined) body.temperature = params.temperature
+
+    // Ollama endpoints (both local and cloud) require `think: true` in the
+    // request body for reasoning models to produce thinking output via the
+    // OpenAI-compatible /v1 API. Without this, models like DeepSeek-R1,
+    // QwQ, and MiniMax-M2.7 skip their chain-of-thought entirely.
+    const isOllamaEndpoint = request.baseUrl.includes('ollama.com') ||
+      (isLocal && /(:11434|ollama)/i.test(request.baseUrl))
+    if (isOllamaEndpoint) {
+      body.think = true
+    }
     if (params.top_p !== undefined) body.top_p = params.top_p
 
     if (params.tools && params.tools.length > 0) {
