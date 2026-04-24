@@ -739,6 +739,12 @@ export async function* codexStreamToAnthropic(
   let nextContentBlockIndex = 0
   let sawToolUse = false
   let finalResponse: Record<string, any> | undefined
+  // Reasoning/thinking trace support for GPT-5+ models.
+  // The Codex Responses API streams reasoning via separate events
+  // (response.reasoning_summary_text.delta). We convert these to
+  // Anthropic-format thinking blocks so the TUI can display them.
+  let hasEmittedThinkingStart = false
+  let hasClosedThinking = false
 
   const closeActiveTextBlock = async function* () {
     if (activeTextBlockIndex === null) return
@@ -794,6 +800,11 @@ export async function* codexStreamToAnthropic(
     if (event.event === 'response.output_item.added') {
       const item = payload.item
       if (item?.type === 'function_call') {
+        // Close thinking block before tool calls
+        if (hasEmittedThinkingStart && !hasClosedThinking) {
+          yield { type: 'content_block_stop', index: nextContentBlockIndex - 1 }
+          hasClosedThinking = true
+        }
         yield* closeActiveTextBlock()
         const blockIndex = nextContentBlockIndex++
         const toolUseId = item.call_id ?? item.id ?? `call_${blockIndex}`
@@ -830,7 +841,50 @@ export async function* codexStreamToAnthropic(
 
     if (event.event === 'response.content_part.added') {
       if (payload.part?.type === 'output_text') {
+        // Close thinking block before starting text content
+        if (hasEmittedThinkingStart && !hasClosedThinking) {
+          yield { type: 'content_block_stop', index: nextContentBlockIndex - 1 }
+          hasClosedThinking = true
+        }
         yield* startTextBlockIfNeeded()
+      }
+      continue
+    }
+
+    // Reasoning/thinking trace events from GPT-5+ models via Codex Responses API.
+    // These arrive as response.reasoning_summary_text.delta before the text content.
+    if (
+      event.event === 'response.reasoning_summary_text.delta' ||
+      event.event === 'response.reasoning.delta'
+    ) {
+      const reasoningText = payload.delta ?? ''
+      if (reasoningText) {
+        if (!hasEmittedThinkingStart) {
+          const thinkingIndex = nextContentBlockIndex++
+          yield {
+            type: 'content_block_start',
+            index: thinkingIndex,
+            content_block: { type: 'thinking', thinking: '' },
+          }
+          hasEmittedThinkingStart = true
+        }
+        yield {
+          type: 'content_block_delta',
+          index: nextContentBlockIndex - 1,
+          delta: { type: 'thinking_delta', thinking: reasoningText },
+        }
+      }
+      continue
+    }
+
+    // Close thinking block when reasoning is done
+    if (
+      event.event === 'response.reasoning_summary_text.done' ||
+      event.event === 'response.reasoning.done'
+    ) {
+      if (hasEmittedThinkingStart && !hasClosedThinking) {
+        yield { type: 'content_block_stop', index: nextContentBlockIndex - 1 }
+        hasClosedThinking = true
       }
       continue
     }
@@ -926,6 +980,11 @@ export async function* codexStreamToAnthropic(
     }
   }
 
+  // Close any remaining thinking block
+  if (hasEmittedThinkingStart && !hasClosedThinking) {
+    yield { type: 'content_block_stop', index: nextContentBlockIndex - 1 }
+    hasClosedThinking = true
+  }
   yield* closeActiveTextBlock()
   for (const toolBlock of toolBlocksByItemId.values()) {
     yield {
@@ -964,6 +1023,21 @@ export function convertCodexResponseToAnthropicMessage(
   const output = Array.isArray(data.output) ? data.output : []
 
   for (const item of output) {
+    // Extract reasoning/thinking summary from Codex Responses API
+    if (item?.type === 'reasoning' && Array.isArray(item.summary)) {
+      const summaryText = item.summary
+        .filter((s: { type?: string }) => s?.type === 'summary_text')
+        .map((s: { text?: string }) => s.text ?? '')
+        .join('')
+      if (summaryText) {
+        content.push({
+          type: 'thinking',
+          thinking: summaryText,
+        })
+      }
+      continue
+    }
+
     if (item?.type === 'message' && Array.isArray(item.content)) {
       for (const part of item.content) {
         if (part?.type === 'output_text') {
