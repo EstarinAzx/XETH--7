@@ -148,6 +148,7 @@ function sleepMs(ms: number): Promise<void> {
 interface OpenAIMessage {
   role: 'system' | 'user' | 'assistant' | 'tool'
   content?: string | Array<{ type: string; text?: string; image_url?: { url: string } }>
+  reasoning_content?: string | null
   tool_calls?: Array<{
     id: string
     type: 'function'
@@ -360,6 +361,15 @@ function convertMessages(
             const c = convertContentBlocks(textContent)
             return typeof c === 'string' ? c : Array.isArray(c) ? c.map((p: { text?: string }) => p.text ?? '').join('') : ''
           })(),
+        }
+
+        // Preserve reasoning/thinking content on assistant messages so that
+        // reasoning-model providers (Moonshot/Kimi, DeepSeek, etc.) see their
+        // own chain-of-thought when we replay the conversation. Without this,
+        // these providers reject tool-call messages with "reasoning content is
+        // missing" errors.
+        if (thinkingBlock && (thinkingBlock as any).thinking) {
+          assistantMsg.reasoning_content = (thinkingBlock as any).thinking
         }
 
         if (toolUses.length > 0) {
