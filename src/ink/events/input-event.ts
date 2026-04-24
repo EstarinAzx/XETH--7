@@ -167,18 +167,12 @@ function parseKey(keypress: ParsedKey): [Key, string] {
   // Clear input for non-alphanumeric keys (arrows, function keys, etc.)
   // Skip this for CSI u and application keypad mode sequences since
   // those were already converted to their proper input characters.
-  // Exception: F-keys (f1-f12) — preserve their name so the keybinding
-  // resolver can match them (they have no boolean flags on the Key object).
   if (
     !processedAsSpecialSequence &&
     keypress.name &&
     nonAlphanumericKeys.includes(keypress.name)
   ) {
-    if (/^f(?:[1-9]|1[0-2])$/.test(keypress.name)) {
-      input = keypress.name
-    } else {
-      input = ''
-    }
+    input = ''
   }
 
   // Set shift=true for uppercase letters (A-Z)

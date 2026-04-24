@@ -43,12 +43,6 @@ export function getKeyName(input: string, key: Key): string | null {
   if (key.home) return 'home'
   if (key.end) return 'end'
   if (input.length === 1) return input.toLowerCase()
-  // Multi-character key names: F-keys (f1-f12), insert, etc.
-  // These arrive as input = keypress.name via CSI u / application keypad
-  // processing in input-event.ts (e.g., 'f4', 'insert').
-  if (input.length > 1 && /^(?:f[1-9]|f1[0-2]|insert)$/.test(input)) {
-    return input.toLowerCase()
-  }
   return null
 }
 
