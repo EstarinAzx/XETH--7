@@ -662,6 +662,11 @@ async function* openaiStreamToAnthropic(
   let hasClosedThinking = false
   let activeTextBuffer = ''
   let textBufferMode: 'none' | 'pending' | 'strip' = 'none'
+  // State machine for <think>...</think> tag parsing in content deltas.
+  // Ollama models (DeepSeek-R1, QwQ, etc.) stream chain-of-thought inside
+  // these tags in the regular content field.
+  let insideThinkTag = false
+  let thinkTagBuffer = ''
   let lastStopReason: 'tool_use' | 'max_tokens' | 'end_turn' | null = null
   let hasEmittedFinalUsage = false
   let hasProcessedFinishReason = false
@@ -809,54 +814,169 @@ async function* openaiStreamToAnthropic(
         // Text content — use != null to distinguish absent field from empty string,
         // some providers send "" as first delta to signal streaming start
         if (delta.content != null && delta.content !== '') {
-          // Close thinking block if transitioning from reasoning to content
-          if (hasEmittedThinkingStart && !hasClosedThinking) {
-            yield { type: 'content_block_stop', index: contentBlockIndex }
-            contentBlockIndex++
-            hasClosedThinking = true
-          }
-          activeTextBuffer += delta.content
-          if (!hasEmittedContentStart) {
-            yield {
-              type: 'content_block_start',
-              index: contentBlockIndex,
-              content_block: { type: 'text', text: '' },
-            }
-            hasEmittedContentStart = true
-          }
+          // --- <think> tag interception for Ollama models ---
+          // Models like DeepSeek-R1, QwQ stream chain-of-thought inside
+          // <think>...</think> tags in the content field. Detect and route
+          // these as thinking_delta events for real-time trace display.
+          let remaining = delta.content
+          while (remaining.length > 0) {
+            if (insideThinkTag) {
+              // Look for closing </think> tag
+              const closeIdx = remaining.indexOf('</think>')
+              if (closeIdx !== -1) {
+                // Emit everything before </think> as thinking
+                const thinkChunk = remaining.slice(0, closeIdx)
+                if (thinkChunk) {
+                  yield {
+                    type: 'content_block_delta',
+                    index: contentBlockIndex,
+                    delta: { type: 'thinking_delta', thinking: thinkChunk },
+                  }
+                }
+                // Close thinking block
+                yield { type: 'content_block_stop', index: contentBlockIndex }
+                contentBlockIndex++
+                hasClosedThinking = true
+                insideThinkTag = false
+                remaining = remaining.slice(closeIdx + 8) // skip '</think>'
+                continue
+              }
+              // No closing tag yet — might be split across chunks
+              // Buffer potential partial '</think>' at the end
+              const partialClose = remaining.match(/<\/?t?h?i?n?k?>?$/)
+              if (partialClose) {
+                const safeChunk = remaining.slice(0, partialClose.index)
+                thinkTagBuffer = partialClose[0]
+                if (safeChunk) {
+                  yield {
+                    type: 'content_block_delta',
+                    index: contentBlockIndex,
+                    delta: { type: 'thinking_delta', thinking: safeChunk },
+                  }
+                }
+              } else {
+                // Flush any buffered partial tag that wasn't a real close
+                if (thinkTagBuffer) {
+                  yield {
+                    type: 'content_block_delta',
+                    index: contentBlockIndex,
+                    delta: { type: 'thinking_delta', thinking: thinkTagBuffer },
+                  }
+                  thinkTagBuffer = ''
+                }
+                yield {
+                  type: 'content_block_delta',
+                  index: contentBlockIndex,
+                  delta: { type: 'thinking_delta', thinking: remaining },
+                }
+              }
+              remaining = ''
+            } else {
+              // Not inside think tag — check for opening <think>
+              const openIdx = remaining.indexOf('<think>')
+              if (openIdx !== -1) {
+                // Emit text before <think> as regular content
+                const textBefore = remaining.slice(0, openIdx)
+                if (textBefore) {
+                  // Close reasoning thinking if open from reasoning_content
+                  if (hasEmittedThinkingStart && !hasClosedThinking) {
+                    yield { type: 'content_block_stop', index: contentBlockIndex }
+                    contentBlockIndex++
+                    hasClosedThinking = true
+                  }
+                  if (!hasEmittedContentStart) {
+                    yield {
+                      type: 'content_block_start',
+                      index: contentBlockIndex,
+                      content_block: { type: 'text', text: '' },
+                    }
+                    hasEmittedContentStart = true
+                  }
+                  yield {
+                    type: 'content_block_delta',
+                    index: contentBlockIndex,
+                    delta: { type: 'text_delta', text: textBefore },
+                  }
+                }
+                // Start thinking block
+                if (!hasEmittedThinkingStart) {
+                  yield {
+                    type: 'content_block_start',
+                    index: contentBlockIndex,
+                    content_block: { type: 'thinking', thinking: '' },
+                  }
+                  hasEmittedThinkingStart = true
+                  hasClosedThinking = false
+                } else if (hasClosedThinking) {
+                  // Re-open a new thinking block (model may think multiple times)
+                  contentBlockIndex++
+                  yield {
+                    type: 'content_block_start',
+                    index: contentBlockIndex,
+                    content_block: { type: 'thinking', thinking: '' },
+                  }
+                  hasClosedThinking = false
+                }
+                insideThinkTag = true
+                remaining = remaining.slice(openIdx + 7) // skip '<think>'
+                continue
+              }
+              // No <think> tag — process as regular text content
+              // Close thinking block if transitioning from reasoning to content
+              if (hasEmittedThinkingStart && !hasClosedThinking) {
+                yield { type: 'content_block_stop', index: contentBlockIndex }
+                contentBlockIndex++
+                hasClosedThinking = true
+              }
+              activeTextBuffer += remaining
+              if (!hasEmittedContentStart) {
+                yield {
+                  type: 'content_block_start',
+                  index: contentBlockIndex,
+                  content_block: { type: 'text', text: '' },
+                }
+                hasEmittedContentStart = true
+              }
 
-          if (
-            textBufferMode === 'strip' ||
-            looksLikeLeakedReasoningPrefix(activeTextBuffer)
-          ) {
-            textBufferMode = 'strip'
-            continue
-          }
+              if (
+                textBufferMode === 'strip' ||
+                looksLikeLeakedReasoningPrefix(activeTextBuffer)
+              ) {
+                textBufferMode = 'strip'
+                remaining = ''
+                continue
+              }
 
-          if (textBufferMode === 'pending') {
-            if (shouldBufferPotentialReasoningPrefix(activeTextBuffer)) {
-              continue
-            }
-            yield {
-              type: 'content_block_delta',
-              index: contentBlockIndex,
-              delta: {
-                type: 'text_delta',
-                text: activeTextBuffer,
-              },
-            }
-            textBufferMode = 'none'
-            continue
-          }
+              if (textBufferMode === 'pending') {
+                if (shouldBufferPotentialReasoningPrefix(activeTextBuffer)) {
+                  remaining = ''
+                  continue
+                }
+                yield {
+                  type: 'content_block_delta',
+                  index: contentBlockIndex,
+                  delta: {
+                    type: 'text_delta',
+                    text: activeTextBuffer,
+                  },
+                }
+                textBufferMode = 'none'
+                remaining = ''
+                continue
+              }
 
-          if (shouldBufferPotentialReasoningPrefix(activeTextBuffer)) {
-            textBufferMode = 'pending'
-            continue
-          }
-          yield {
-            type: 'content_block_delta',
-            index: contentBlockIndex,
-            delta: { type: 'text_delta', text: delta.content },
+              if (shouldBufferPotentialReasoningPrefix(activeTextBuffer)) {
+                textBufferMode = 'pending'
+                remaining = ''
+                continue
+              }
+              yield {
+                type: 'content_block_delta',
+                index: contentBlockIndex,
+                delta: { type: 'text_delta', text: remaining },
+              }
+              remaining = ''
+            }
           }
         }
 
