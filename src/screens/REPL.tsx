@@ -1605,6 +1605,7 @@ export function REPL({
     apiMetricsRef.current = [];
     setStreamingText(null);
     setStreamingToolUses([]);
+    setStreamingThinking(null);
     setSpinnerMessage(null);
     setSpinnerColor(null);
     setSpinnerShimmerColor(null);
@@ -2820,6 +2821,7 @@ export function REPL({
     });
     toolUseContext.renderedSystemPrompt = systemPrompt;
     queryCheckpoint('query_query_start');
+    setStreamingThinking(null);
     resetTurnHookDuration();
     resetTurnToolDuration();
     resetTurnClassifierDuration();
@@ -2834,6 +2836,7 @@ export function REPL({
     })) {
       onQueryEvent(event);
     }
+    setStreamingThinking(null);
     if (isBuddyEnabled()) {
       void fireCompanionObserver(messagesRef.current, reaction => setAppState(prev => prev.companionReaction === reaction ? prev : {
         ...prev,
@@ -2930,6 +2933,7 @@ export function REPL({
       apiMetricsRef.current = [];
       setStreamingToolUses([]);
       setStreamingText(null);
+      setStreamingThinking(null);
 
       // messagesRef is updated synchronously by the setMessages wrapper
       // above, so it already includes newMessages from the append at the

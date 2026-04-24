@@ -2965,18 +2965,12 @@ export function handleMessageFromStream(
     if (message.type === 'tool_use_summary') {
       return
     }
-    // Capture complete thinking blocks for real-time display in transcript mode
+    // Clear streaming thinking overlay — the complete message already contains
+    // the thinking block and will render it in the message list. Re-populating
+    // streamingThinking here would cause duplication (shown both as a streaming
+    // overlay AND in the message list).
     if (message.type === 'assistant') {
-      const thinkingBlock = message.message.content.find(
-        block => block.type === 'thinking',
-      )
-      if (thinkingBlock && thinkingBlock.type === 'thinking') {
-        onStreamingThinking?.(() => ({
-          thinking: thinkingBlock.thinking,
-          isStreaming: false,
-          streamingEndedAt: Date.now(),
-        }))
-      }
+      onStreamingThinking?.(() => null)
     }
     // Clear streaming text NOW so the render can switch displayedMessages
     // from deferredMessages to messages in the same batch, making the

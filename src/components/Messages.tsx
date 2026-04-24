@@ -712,11 +712,20 @@ const MessagesImpl = ({
           </Box>
         </Box>}
 
-      {isStreamingThinkingVisible && streamingThinking && <Box marginTop={1}>
-          <AssistantThinkingMessage param={{
-        type: 'thinking',
-        thinking: streamingThinking.thinking
-      }} addMargin={false} isTranscriptMode={true} verbose={verbose} hideInTranscript={false} />
+      {isStreamingThinkingVisible && streamingThinking && <Box marginTop={1} flexShrink={1}>
+          {(() => {
+            // Limit streaming thinking to last ~15 lines to prevent it from
+            // overflowing the terminal and pushing the input prompt off-screen.
+            const MAX_LINES = 15;
+            const lines = streamingThinking.thinking.split('\n');
+            const truncatedThinking = lines.length > MAX_LINES
+              ? '…\n' + lines.slice(-MAX_LINES).join('\n')
+              : streamingThinking.thinking;
+            return <AssistantThinkingMessage param={{
+              type: 'thinking',
+              thinking: truncatedThinking
+            }} addMargin={false} isTranscriptMode={true} verbose={verbose} hideInTranscript={false} />;
+          })()}
         </Box>}
     </>;
 };
