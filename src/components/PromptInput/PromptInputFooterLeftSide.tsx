@@ -315,11 +315,11 @@ function ModeIndicator({
   // Match the same logic as TeamStatus to avoid trailing separator
   // In-process mode uses Shift+Down/Up navigation, not footer teams menu
   const hasTeams = isAgentSwarmsEnabled() && !isInProcessEnabled() && teamContext !== undefined && count(Object.values(teamContext.teammates), t_0 => t_0.name !== 'team-lead') > 0;
-  if (mode === 'bash') {
-    return <Text color="bashBorder">! for bash mode</Text>;
-  }
   const currentMode = toolPermissionContext?.mode;
   const autonomyMode = useAppState(s_8 => s_8.settings.autonomyMode ?? 'off');
+  if (mode === 'bash') {
+    return <Text color="bashBorder"><Text bold>SHELL MODE</Text> <Text dimColor>[Ctrl+P to exit]</Text></Text>;
+  }
   const hasActiveMode = !isDefaultMode(currentMode);
   const viewedTask = viewingAgentTaskId ? tasks[viewingAgentTaskId] : undefined;
   const isViewingTeammate = viewSelectionMode === 'viewing-agent' && viewedTask?.type === 'in_process_teammate';

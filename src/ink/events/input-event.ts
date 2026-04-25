@@ -172,7 +172,14 @@ function parseKey(keypress: ParsedKey): [Key, string] {
     keypress.name &&
     nonAlphanumericKeys.includes(keypress.name)
   ) {
-    input = ''
+    // Preserve function key names (f1-f24) so the keybinding resolver can
+    // identify them via getKeyName(). Other non-alphanumeric keys (arrows,
+    // escape, etc.) have dedicated boolean flags on Key and don't need input.
+    if (/^f\d+$/.test(keypress.name)) {
+      input = keypress.name
+    } else {
+      input = ''
+    }
   }
 
   // Set shift=true for uppercase letters (A-Z)

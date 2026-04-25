@@ -42,6 +42,9 @@ export function getKeyName(input: string, key: Key): string | null {
   if (key.wheelDown) return 'wheeldown'
   if (key.home) return 'home'
   if (key.end) return 'end'
+  // Function keys (f1-f24): key.fn is true but there's no individual boolean
+  // flag. The input may carry the key name if input-event.ts preserved it.
+  if (key.fn && /^f\d+$/.test(input)) return input
   if (input.length === 1) return input.toLowerCase()
   return null
 }

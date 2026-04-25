@@ -141,6 +141,7 @@ type Props = {
   onInputChange: (value: string) => void;
   mode: PromptInputMode;
   onModeChange: (mode: PromptInputMode) => void;
+  onToggleShellMode?: () => void;
   stashedPrompt: {
     text: string;
     cursorOffset: number;
@@ -211,6 +212,7 @@ function PromptInput({
   onInputChange,
   mode,
   onModeChange,
+  onToggleShellMode,
   stashedPrompt,
   setStashedPrompt,
   submitCount,
@@ -1949,6 +1951,22 @@ function PromptInput({
   }, {
     context: 'Footer',
     isActive: !!footerItemSelected && !isModalOverlayActive
+  });
+  // F4 toggles Shell Command Mode — persistent bash mode without ! prefix.
+  // Registered via the keybinding system so it fires before other handlers.
+  useKeybinding('chat:shellMode', () => {
+    const nextMode = mode === 'bash' ? 'prompt' : 'bash';
+    onModeChange(nextMode);
+    if (onToggleShellMode) onToggleShellMode();
+    addNotification({
+      key: 'shell-mode-toggle',
+      text: nextMode === 'bash' ? '\u26A1 Shell Mode \u2014 commands go directly to OS' : '\uD83E\uDD16 Agent Mode \u2014 input goes to LLM',
+      priority: 'immediate',
+      timeoutMs: 2000,
+    });
+  }, {
+    context: 'Chat',
+    isActive: !isModalOverlayActive,
   });
   useInput((char, key) => {
     // Skip all input handling when a full-screen dialog is open. These dialogs

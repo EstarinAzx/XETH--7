@@ -86,6 +86,8 @@ export const DEFAULT_BINDINGS: KeybindingBlock[] = [
       'ctrl+s': 'chat:stash',
       // Image paste shortcut (platform-specific key defined above)
       [IMAGE_PASTE_KEY]: 'chat:imagePaste',
+      // Ctrl+P toggles persistent Shell Command Mode (bash without ! prefix)
+      'ctrl+p': 'chat:shellMode',
       ...(feature('MESSAGE_ACTIONS')
         ? { 'shift+up': 'chat:messageActions' as const }
         : {}),
