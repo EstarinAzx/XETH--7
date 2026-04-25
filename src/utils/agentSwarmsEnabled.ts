@@ -1,30 +1,7 @@
-import { isEnvTruthy } from './envUtils.js'
-
-/**
- * Check if --agent-teams flag is provided via CLI.
- * Checks process.argv directly to avoid import cycles with bootstrap/state.
- * Note: The flag is only shown in help for ant users, but if external users
- * pass it anyway, it will work (subject to the killswitch).
- */
-function isAgentTeamsFlagSet(): boolean {
-  return process.argv.includes('--agent-teams')
-}
-
 /**
  * Centralized runtime check for agent teams/teammate features.
- * This is the single gate that should be checked everywhere teammates
- * are referenced (prompts, code, tools isEnabled, UI, etc.).
- *
- * Ant builds: always enabled.
- * External builds require both:
- * 1. Opt-in via CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS env var OR --agent-teams flag
- * 2. GrowthBook gate 'tengu_amber_flint' enabled (killswitch)
+ * Stratagem: agent teams are always available — no feature gate needed.
  */
 export function isAgentSwarmsEnabled(): boolean {
-  // Stratagem: enable if opt-in via env var or --agent-teams flag.
-  // GrowthBook killswitch removed — not connected to Anthropic infrastructure.
-  return (
-    isEnvTruthy(process.env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS) ||
-    isAgentTeamsFlagSet()
-  )
+  return true
 }
