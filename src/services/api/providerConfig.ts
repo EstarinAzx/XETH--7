@@ -465,10 +465,9 @@ export function getAdditionalModelOptionsCacheScope(): string | null {
     return null
   }
 
-  if (!isLocalProviderUrl(request.baseUrl)) {
-    return null
-  }
-
+  // Enable model discovery for ALL OpenAI-compatible providers
+  // (both local and cloud like Kimi, OpenCode Go, Wima, etc.)
+  // so users can select models from a list instead of typing names.
   return `openai:${request.baseUrl.toLowerCase()}`
 }
 
