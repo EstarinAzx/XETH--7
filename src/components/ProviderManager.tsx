@@ -1,3 +1,4 @@
+import axios from 'axios'
 import figures from 'figures'
 import * as React from 'react'
 import { DEFAULT_CODEX_BASE_URL } from '../services/api/providerConfig.js'
@@ -108,17 +109,17 @@ const FORM_STEPS: Array<{
     helpText: 'API base URL used for this provider profile.',
   },
   {
-    key: 'model',
-    label: 'Default model',
-    placeholder: 'e.g. llama3.1:8b or glm-4.7, glm-4.7-flash',
-    helpText: 'Model name(s) to use. Separate multiple with commas; first is default.',
-  },
-  {
     key: 'apiKey',
     label: 'API key',
     placeholder: 'Leave empty if your provider does not require one',
     helpText: 'Optional. Press Enter with empty value to skip.',
     optional: true,
+  },
+  {
+    key: 'model',
+    label: 'Default model',
+    placeholder: 'e.g. llama3.1:8b or glm-4.7, glm-4.7-flash',
+    helpText: 'Model name(s) to use. Separate multiple with commas; first is default.',
   },
 ]
 
@@ -369,6 +370,8 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
   const [ollamaSelection, setOllamaSelection] = React.useState<OllamaSelectionState>({
     state: 'idle',
   })
+  const [discoveredModels, setDiscoveredModels] = React.useState<string[] | null>(null)
+  const [modelDiscoveryLoading, setModelDiscoveryLoading] = React.useState(false)
 
   const currentStep = FORM_STEPS[formStepIndex] ?? FORM_STEPS[0]
   const currentStepKey = currentStep.key
@@ -975,6 +978,49 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
     returnToMenu()
   }
 
+  // Fetch available models when entering the model step (formStepIndex === 3)
+  React.useEffect(() => {
+    if (screen !== 'form' || formStepIndex !== 3) {
+      return
+    }
+    const baseUrl = draft.baseUrl?.trim()
+    if (!baseUrl) {
+      setDiscoveredModels(null)
+      return
+    }
+    let cancelled = false
+    setModelDiscoveryLoading(true)
+    setDiscoveredModels(null)
+
+    void (async () => {
+      try {
+        const normalizedBase = baseUrl.replace(/\/+$/, '')
+        const modelsUrl = normalizedBase.endsWith('/v1')
+          ? `${normalizedBase}/models`
+          : `${normalizedBase}/v1/models`
+        const headers: Record<string, string> = {}
+        if (draft.apiKey?.trim()) {
+          headers.Authorization = `Bearer ${draft.apiKey.trim()}`
+        }
+        const response = await axios.get(modelsUrl, {
+          headers,
+          timeout: 5000,
+        })
+        if (cancelled) return
+        const models: string[] = (response.data?.data ?? [])
+          .map((m: { id?: string }) => m.id ?? '')
+          .filter((id: string) => id.length > 0)
+        setDiscoveredModels(models.length > 0 ? models : null)
+      } catch {
+        if (!cancelled) setDiscoveredModels(null)
+      } finally {
+        if (!cancelled) setModelDiscoveryLoading(false)
+      }
+    })()
+
+    return () => { cancelled = true }
+  }, [screen, formStepIndex, draft.baseUrl, draft.apiKey])
+
   useKeybinding('confirm:no', handleBackFromForm, {
     context: 'Settings',
     isActive: screen === 'form',
@@ -1179,6 +1225,10 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
   }
 
   function renderForm(): React.ReactNode {
+    // Model step with discovery: show a selectable list of models
+    const isModelStep = formStepIndex === 3 && currentStepKey === 'model'
+    const showModelPicker = isModelStep && discoveredModels && discoveredModels.length > 0
+
     return (
       <Box flexDirection="column" gap={1}>
         <Text color="remember" bold>
@@ -1194,28 +1244,58 @@ export function ProviderManager({ mode, onDone }: Props): React.ReactNode {
         <Text dimColor>
           Step {formStepIndex + 1} of {FORM_STEPS.length}: {currentStep.label}
         </Text>
-        <Box flexDirection="row" gap={1}>
-          <Text>{figures.pointer}</Text>
-          <TextInput
-            value={currentValue}
-            onChange={value =>
-              setDraft(prev => ({
-                ...prev,
-                [currentStepKey]: value,
-              }))
-            }
-            onSubmit={handleFormSubmit}
-            focus={true}
-            showCursor={true}
-            placeholder={`${currentStep.placeholder}${figures.ellipsis}`}
-            columns={80}
-            cursorOffset={cursorOffset}
-            onChangeCursorOffset={setCursorOffset}
-          />
-        </Box>
+        {isModelStep && modelDiscoveryLoading ? (
+          <Text dimColor>Fetching available models from endpoint…</Text>
+        ) : showModelPicker ? (
+          <Box flexDirection="column">
+            <Select
+              options={[
+                ...discoveredModels.map(m => ({
+                  value: m,
+                  label: m,
+                })),
+                {
+                  value: '__manual__',
+                  label: '✎ Enter manually…',
+                  description: 'Type a model name instead',
+                },
+              ]}
+              onChange={(value: string) => {
+                if (value === '__manual__') {
+                  // Switch to text input mode by clearing discovered models
+                  setDiscoveredModels(null)
+                  return
+                }
+                handleFormSubmit(value)
+              }}
+              onCancel={handleBackFromForm}
+              visibleOptionCount={Math.min(12, discoveredModels.length + 1)}
+            />
+          </Box>
+        ) : (
+          <Box flexDirection="row" gap={1}>
+            <Text>{figures.pointer}</Text>
+            <TextInput
+              value={currentValue}
+              onChange={value =>
+                setDraft(prev => ({
+                  ...prev,
+                  [currentStepKey]: value,
+                }))
+              }
+              onSubmit={handleFormSubmit}
+              focus={true}
+              showCursor={true}
+              placeholder={`${currentStep.placeholder}${figures.ellipsis}`}
+              columns={80}
+              cursorOffset={cursorOffset}
+              onChangeCursorOffset={setCursorOffset}
+            />
+          </Box>
+        )}
         {errorMessage && <Text color="error">{errorMessage}</Text>}
         <Text dimColor>
-          Press Enter to continue. Press Esc to go back.
+          {showModelPicker ? 'Select a model. Press Esc to go back.' : 'Press Enter to continue. Press Esc to go back.'}
         </Text>
       </Box>
     )
