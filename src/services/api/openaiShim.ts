@@ -300,6 +300,16 @@ function isGeminiMode(): boolean {
   )
 }
 
+/**
+ * Sanitize tool call IDs to only contain characters accepted by all providers.
+ * OpenAI requires IDs to match [a-zA-Z0-9_-]+. Other providers like Kimi/Moonshot
+ * may generate IDs with colons (e.g. "fc_Write:0") which get rejected when
+ * replayed to OpenAI after a mid-session model switch.
+ */
+function sanitizeToolId(id: string): string {
+  return id.replace(/[^a-zA-Z0-9_-]/g, '_')
+}
+
 function convertMessages(
   messages: Array<{ role: string; message?: { role?: string; content?: unknown }; content?: unknown }>,
   system: unknown,
@@ -328,7 +338,7 @@ function convertMessages(
         for (const tr of toolResults) {
           result.push({
             role: 'tool',
-            tool_call_id: tr.tool_use_id ?? 'unknown',
+            tool_call_id: sanitizeToolId(tr.tool_use_id ?? 'unknown'),
             content: convertToolResultContent(tr.content, tr.is_error),
           })
         }
@@ -382,7 +392,7 @@ function convertMessages(
               signature?: string
             }, index) => {
               const toolCall: NonNullable<OpenAIMessage['tool_calls']>[number] = {
-                id: tu.id ?? `call_${crypto.randomUUID().replace(/-/g, '')}`,
+                id: sanitizeToolId(tu.id ?? `call_${crypto.randomUUID().replace(/-/g, '')}`),
                 type: 'function' as const,
                 function: {
                   name: tu.name ?? 'unknown',
