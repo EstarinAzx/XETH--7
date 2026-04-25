@@ -469,7 +469,7 @@ export function getDefaultAppState(): AppState {
     settings: getInitialSettings(),
     tasks: {},
     agentNameRegistry: new Map(),
-    verbose: false,
+    verbose: true,
     mainLoopModel: null, // alias, full name (as with --model or env var), or null (default)
     mainLoopModelForSession: null,
     statusLineText: undefined,

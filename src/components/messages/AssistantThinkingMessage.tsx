@@ -36,7 +36,7 @@ export function AssistantThinkingMessage(t0) {
   if (hideInTranscript) {
     return null;
   }
-  const shouldShowFullThinking = true;
+  const shouldShowFullThinking = isTranscriptMode || verbose;
   if (!shouldShowFullThinking) {
     const t4 = addMargin ? 1 : 0;
     let t5;
