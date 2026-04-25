@@ -15,6 +15,35 @@ import { logError } from './log.js'
 import { getPlatform } from './platform.js'
 import { countCharInString } from './stringUtils.js'
 
+// @vscode/ripgrep provides a platform-specific rg binary via npm install.
+// We resolve its known binary path as a fallback when the vendored binary
+// is missing and system rg isn't on PATH.
+function getVscodeRipgrepPath(): string | null {
+  try {
+    // Resolve the @vscode/ripgrep binary at its known location.
+    // In production __dirname = dist/, package root is one level up.
+    // In tests __dirname goes deeper, so check multiple levels.
+    const rgBin = process.platform === 'win32' ? 'rg.exe' : 'rg'
+    const candidates = [
+      // dist/ → package root
+      path.resolve(__dirname, 'node_modules', '@vscode', 'ripgrep', 'bin', rgBin),
+      // dist/ → one up (package root with hoisted deps)
+      path.resolve(__dirname, '..', 'node_modules', '@vscode', 'ripgrep', 'bin', rgBin),
+      // deeper nesting (monorepo / test paths)
+      path.resolve(__dirname, '..', '..', 'node_modules', '@vscode', 'ripgrep', 'bin', rgBin),
+      path.resolve(__dirname, '..', '..', '..', 'node_modules', '@vscode', 'ripgrep', 'bin', rgBin),
+    ]
+    for (const candidate of candidates) {
+      if (existsSync(candidate)) {
+        return candidate
+      }
+    }
+    return null
+  } catch {
+    return null
+  }
+}
+
 const __filename = fileURLToPath(import.meta.url)
 // we use node:path.join instead of node:url.resolve because the former doesn't encode spaces
 const __dirname = path.join(
@@ -41,6 +70,7 @@ type ResolveRipgrepConfigArgs = {
   builtinCommand: string
   builtinExists: boolean
   systemExecutablePath: string
+  vscodeRipgrepPath?: string | null
   processExecPath?: string
 }
 
@@ -50,6 +80,7 @@ export function resolveRipgrepConfig({
   builtinCommand,
   builtinExists,
   systemExecutablePath,
+  vscodeRipgrepPath,
   processExecPath = process.execPath,
 }: ResolveRipgrepConfigArgs): RipgrepConfig {
   if (userWantsSystemRipgrep && systemExecutablePath !== 'rg') {
@@ -70,8 +101,19 @@ export function resolveRipgrepConfig({
     return { mode: 'builtin', command: builtinCommand, args: [] }
   }
 
+  // Try @vscode/ripgrep package binary before falling back to system rg
+  if (vscodeRipgrepPath && existsSync(vscodeRipgrepPath)) {
+    return { mode: 'builtin', command: vscodeRipgrepPath, args: [] }
+  }
+
   if (systemExecutablePath !== 'rg') {
     return { mode: 'system', command: 'rg', args: [] }
+  }
+
+  // Last resort: try @vscode/ripgrep path even without existence check
+  // (it may have been installed after initial check)
+  if (vscodeRipgrepPath) {
+    return { mode: 'builtin', command: vscodeRipgrepPath, args: [] }
   }
 
   return { mode: 'builtin', command: builtinCommand, args: [] }
@@ -89,6 +131,7 @@ const getRipgrepConfig = memoize((): RipgrepConfig => {
       : path.resolve(rgRoot, `${process.arch}-${process.platform}`, 'rg')
   const builtinExists = existsSync(builtinCommand)
   const { cmd: systemExecutablePath } = findExecutable('rg', [])
+  const vscodeRipgrepPath = getVscodeRipgrepPath()
 
   return resolveRipgrepConfig({
     userWantsSystemRipgrep,
@@ -96,6 +139,7 @@ const getRipgrepConfig = memoize((): RipgrepConfig => {
     builtinCommand,
     builtinExists,
     systemExecutablePath,
+    vscodeRipgrepPath,
   })
 })
 
