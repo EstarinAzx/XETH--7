@@ -1021,7 +1021,7 @@ async function* openaiStreamToAnthropic(
               const initialArguments = tc.function.arguments ?? ''
               const normalizeAtStop = hasToolFieldMapping(tc.function.name)
               activeToolCalls.set(tc.index, {
-                id: tc.id,
+                id: sanitizeToolId(tc.id),
                 name: tc.function.name,
                 index: toolBlockIndex,
                 jsonBuffer: initialArguments,
@@ -1033,7 +1033,7 @@ async function* openaiStreamToAnthropic(
                 index: toolBlockIndex,
                 content_block: {
                   type: 'tool_use',
-                  id: tc.id,
+                  id: sanitizeToolId(tc.id),
                   name: tc.function.name,
                   input: {},
                   ...(tc.extra_content ? { extra_content: tc.extra_content } : {}),
@@ -1783,7 +1783,7 @@ class OpenAIShimMessages {
         )
         content.push({
           type: 'tool_use',
-          id: tc.id,
+          id: sanitizeToolId(tc.id),
           name: tc.function.name,
           input,
           ...(tc.extra_content ? { extra_content: tc.extra_content } : {}),
