@@ -12,14 +12,20 @@ import { Box, Text } from '../ink.js';
 import { getStartupLines } from './StartupScreen.js';
 
 export function BreachHeader(): React.ReactNode {
-  const { columns } = useTerminalSize();
+  const { columns, rows } = useTerminalSize();
   const lines = React.useMemo(() => getStartupLines(columns), [columns]);
   const logoLines = lines.slice(2, 8);
   const taglineLines = lines.slice(9, 11);
   const protocolLines = lines.slice(13, 23);
 
+  // Push header toward vertical center: ~19 lines of content,
+  // subtract footer (~6 lines for input + status), center the rest.
+  const headerHeight = logoLines.length + taglineLines.length + protocolLines.length + 2;
+  const availableSpace = rows - headerHeight - 6;
+  const topPad = Math.max(1, Math.floor(availableSpace / 3));
+
   return (
-    <Box flexDirection="column" paddingTop={1}>
+    <Box flexDirection="column" paddingTop={topPad}>
       {logoLines.map((line, i) => (
         <Text key={i}>{line}</Text>
       ))}
