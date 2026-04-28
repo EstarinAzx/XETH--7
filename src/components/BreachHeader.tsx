@@ -19,11 +19,10 @@ export function BreachHeader(): React.ReactNode {
   const protocolLines = lines.slice(13, 23);
 
   return (
-    <Box flexDirection="column" paddingTop={3}>
+    <Box flexDirection="column" paddingTop={1}>
       {logoLines.map((line, i) => (
         <Text key={i}>{line}</Text>
       ))}
-      <Box height={1} />
       {taglineLines.map((line, i) => (
         <Text key={`tag-${i}`}>{line}</Text>
       ))}
